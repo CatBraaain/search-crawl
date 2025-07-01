@@ -26,6 +26,7 @@ engines_map: dict[EngineType, list[str]] = {
 
 @overload
 async def search(
+    *,
     q: str,
     engine_type: Literal["general"],
     language: Optional[str],
@@ -37,6 +38,7 @@ async def search(
 
 @overload
 async def search(
+    *,
     q: str,
     engine_type: Literal["images"],
     language: Optional[str],
@@ -47,6 +49,7 @@ async def search(
 
 
 async def search(
+    *,
     q: str,
     engine_type: EngineType,
     language: Optional[str],
