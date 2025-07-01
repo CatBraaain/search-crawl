@@ -1,2 +1,5 @@
 searxng/*
 !searxng/settings.yml
+
+.venv
+__pycache__
