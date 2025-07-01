@@ -24,7 +24,7 @@ engines_map: dict[EngineType, list[str]] = {
 
 
 @overload
-async def fetch_results(
+async def search(
     q: str,
     engine_type: Literal["general"],
     language: Optional[str],
@@ -35,7 +35,7 @@ async def fetch_results(
 
 
 @overload
-async def fetch_results(
+async def search(
     q: str,
     engine_type: Literal["images"],
     language: Optional[str],
@@ -45,7 +45,7 @@ async def fetch_results(
 ) -> List[ImageSearchResult]: ...
 
 
-async def fetch_results(
+async def search(
     q: str,
     engine_type: EngineType,
     language: Optional[str],
