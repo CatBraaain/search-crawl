@@ -1,6 +1,7 @@
 from typing import List, Literal, Optional
 
 from fastapi import FastAPI
+
 from .schemas import GeneralSearchResult, ImageSearchResult
 from .services import search
 
