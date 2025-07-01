@@ -1,7 +1,7 @@
 from typing import List, Literal, Optional, overload
 
 import httpx
-from schemas import GeneralSearchResult, ImageSearchResult
+from .schemas import GeneralSearchResult, ImageSearchResult
 
 EngineType = Literal["general", "images"]
 

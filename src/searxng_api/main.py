@@ -1,8 +1,8 @@
 from typing import List, Literal, Optional
 
 from fastapi import FastAPI
-from schemas import GeneralSearchResult, ImageSearchResult
-from services import fetch_results
+from .schemas import GeneralSearchResult, ImageSearchResult
+from .services import fetch_results
 
 app = FastAPI()
 
