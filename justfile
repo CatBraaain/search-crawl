@@ -7,4 +7,4 @@ _:
 
 dev:
   docker compose up -d
-  fastapi dev src/searxng_api/main.py
+  uv run fastapi dev src/searxng_api/main.py
