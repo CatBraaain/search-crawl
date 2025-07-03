@@ -1,7 +1,6 @@
 ﻿services:
   searxng:
     image: searxng/searxng
-    container_name: searxng
     healthcheck:
       test:
         [
@@ -20,10 +19,9 @@
     networks:
       - searxng-net
 
-  api:
+  searxng-api:
     build:
       context: .
-    container_name: searxng-api
     ports:
       - "8000:8000"
     healthcheck:
