@@ -1,11 +1,17 @@
 from typing import List, Literal, Optional
 
 from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 
 from .schemas import GeneralSearchResult, ImageSearchResult
 from .services import search
 
 app = FastAPI()
+
+
+@app.get("/healthz", response_class=PlainTextResponse)
+def health_check():
+    return "OK"
 
 
 @app.get("/search/general", response_model=List[GeneralSearchResult])
