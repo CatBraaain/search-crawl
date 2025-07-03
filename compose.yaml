@@ -17,3 +17,31 @@
       retries: 15
     volumes:
       - ./searxng:/etc/searxng
+    networks:
+      - searxng-net
+
+  api:
+    build:
+      context: .
+    container_name: searxng-api
+    ports:
+      - "8000:80"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--tries=1",
+          "--spider",
+          "--quiet",
+          "http://127.0.0.1:80/healthz",
+        ]
+      interval: 1s
+      timeout: 1s
+      retries: 15
+    networks:
+      - searxng-net
+
+networks:
+  searxng-net:
+    driver: bridge
