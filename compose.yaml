@@ -2,7 +2,18 @@
   searxng:
     image: searxng/searxng
     container_name: searxng
-    ports:
-      - "8080:8080"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:8080/healthz",
+        ]
+      interval: 1s
+      timeout: 1s
+      retries: 15
     volumes:
       - ./searxng:/etc/searxng
