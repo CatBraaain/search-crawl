@@ -1,8 +1,11 @@
+import os
 from typing import List, Literal, Optional, overload
 
 import httpx
 
 from .schemas import GeneralSearchResult, ImageSearchResult
+
+SEARXNG_BASE_URL = os.environ.get("SEARXNG_BASE_URL", "http://localhost:8080")
 
 EngineType = Literal["general", "images"]
 
@@ -60,7 +63,7 @@ async def search(
     engines = engines_map[engine_type]
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            "http://localhost:8080/search",
+            f"{SEARXNG_BASE_URL}/search",
             params={
                 "q": q,
                 "engines": ",".join(engines),

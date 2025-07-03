@@ -26,6 +26,8 @@
     container_name: searxng-api
     ports:
       - "8000:80"
+    environment:
+      - SEARXNG_BASE_URL=http://searxng:8080
     healthcheck:
       test:
         [
