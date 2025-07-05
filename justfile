@@ -16,9 +16,7 @@ run:
   # curl "http://localhost:8000/search/general?q=ping" -s -o /dev/null  # warm-up request
   curl "http://localhost:8000/search/general?q=ping" -s -o nul  # warm-up request
 
-prepare:
-  just run
-  uvx openapi-generator-cli[jdk4py] generate -i http://localhost:8000/openapi.json -g python -o ./openapi_client
+gen: run
+  uv run openapi-generator-cli[jdk4py] generate -i http://localhost:8000/openapi.json -g python -o ./openapi_client
   sed -i "s/license = \"NoLicense\"/license = \"MIT\"/" ./openapi_client/pyproject.toml
-  uv sync
-  uv pip install ./openapi_client
+

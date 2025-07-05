@@ -1,4 +1,6 @@
-openapi_client
+openapi_client/*
+!openapi_client/openapi_client
+!openapi_client/pyproject.toml
 searxng
 tests
 
