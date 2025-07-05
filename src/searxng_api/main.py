@@ -2,6 +2,7 @@ from typing import List, Literal, Optional
 
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
+from fastapi.routing import APIRoute
 
 from .schemas import GeneralSearchResult, ImageSearchResult
 from .services import search
@@ -48,3 +49,12 @@ async def search_images(
         time_range=time_range,
         format=format,
     )
+
+
+def simplify_client_method_names(app: FastAPI) -> None:
+    for route in app.routes:
+        if isinstance(route, APIRoute):
+            route.operation_id = route.name
+
+
+simplify_client_method_names(app)
