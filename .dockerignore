@@ -1,0 +1,14 @@
+searxng
+tests
+
+.dockerignore
+.git
+.gitignore
+.pytest_cache
+.venv
+__pycache__
+*.egg-info
+
+compose.yaml
+Dockerfile
+justfile
