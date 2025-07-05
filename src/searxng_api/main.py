@@ -11,7 +11,7 @@ app = FastAPI()
 
 
 @app.get("/healthz", response_class=PlainTextResponse)
-def health_check():
+def healthz():
     return "OK"
 
 
