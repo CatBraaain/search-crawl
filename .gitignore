@@ -1,3 +1,4 @@
+openapi_client
 searxng/*
 !searxng/settings.yml
 

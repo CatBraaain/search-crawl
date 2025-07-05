@@ -1,18 +1,21 @@
-import httpx
+from openapi_client import ApiClient, Configuration
+from openapi_client.api.default_api import DefaultApi
+
+config = Configuration(host="http://localhost:8000")
+with ApiClient(config) as client:
+    api = DefaultApi(client)
 
 
 def test_healthz():
-    res = httpx.get("http://localhost:8000/healthz")
-    assert res.status_code == 200
+    res = api.healthz()
+    assert res == "OK"
 
 
 def test_search_general():
-    res = httpx.get("http://localhost:8000/search/general", params={"q": "ping"})
-    assert res.status_code == 200
-    assert isinstance(res.json(), list) and len(res.json()) > 0
+    res = api.search_general(q="ping")
+    assert isinstance(res, list) and len(res) > 0
 
 
 def test_search_images():
-    res = httpx.get("http://localhost:8000/search/images", params={"q": "ping"})
-    assert res.status_code == 200
-    assert isinstance(res.json(), list) and len(res.json()) > 0
+    res = api.search_images(q="ping")
+    assert isinstance(res, list) and len(res) > 0
