@@ -16,6 +16,7 @@
       retries: 15
     volumes:
       - ./searxng:/etc/searxng
+    pull_policy: always
     networks:
       - searxng-net
 

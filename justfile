@@ -11,7 +11,6 @@ dev:
   uv run fastapi dev src/searxng_api/main.py
 
 run:
-  docker compose pull
   docker compose up --build --wait
   # curl "http://localhost:8000/search/general?q=ping" -s -o /dev/null  # warm-up request
   curl "http://localhost:8000/search/general?q=ping" -s -o nul  # warm-up request
