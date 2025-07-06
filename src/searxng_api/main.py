@@ -15,7 +15,7 @@ def healthz():
     return "OK"
 
 
-@app.get("/search/general", response_model=List[GeneralSearchResult])
+@app.get("/general", response_model=List[GeneralSearchResult])
 async def search_general(
     q: str,
     language: Optional[str] = "ja",
@@ -33,7 +33,7 @@ async def search_general(
     )
 
 
-@app.get("/search/images", response_model=List[ImageSearchResult])
+@app.get("/images", response_model=List[ImageSearchResult])
 async def search_images(
     q: str,
     language: Optional[str] = "ja",
