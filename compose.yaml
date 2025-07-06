@@ -23,6 +23,7 @@
   searxng-api:
     build:
       context: .
+    command: uv run --no-sync fastapi run src/searxng_api/main.py --host 0.0.0.0
     ports:
       - "8000:8000"
     healthcheck:

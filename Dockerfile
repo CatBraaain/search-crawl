@@ -12,5 +12,3 @@ COPY . /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --locked --no-install-project --no-dev
-
-CMD ["uv", "run", "--no-sync", "fastapi", "run", "src/searxng_api/main.py", "--host", "0.0.0.0"]
