@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from searxng_api.main import search_general, search_images
+from search_crawl.main import search_general, search_images
 
 
 class ArgsPattern:
@@ -32,7 +32,7 @@ def args_pattern() -> ArgsPattern:
 
 
 @pytest.mark.asyncio
-@patch("searxng_api.main.search", new_callable=AsyncMock)
+@patch("search_crawl.main.search", new_callable=AsyncMock)
 async def test_arguments(mock_search: AsyncMock, args_pattern: ArgsPattern):
     query = "query"
     for example in args_pattern.examples:

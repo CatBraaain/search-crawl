@@ -8,7 +8,7 @@ _:
 dev:
   docker compose pull
   docker compose up -d
-  uv run fastapi dev src/searxng_api/main.py
+  uv run fastapi dev src/search_crawl/main.py
 
 run:
   docker compose up --build --wait

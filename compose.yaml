@@ -20,10 +20,10 @@
     networks:
       - searxng-net
 
-  searxng-api:
+  search-crawl:
     build:
       context: .
-    command: uv run --no-sync fastapi run src/searxng_api/main.py --root-path /search --host 0.0.0.0
+    command: uv run --no-sync fastapi run src/search_crawl/main.py --root-path /search --host 0.0.0.0
     ports:
       - "8000:8000"
     depends_on:
