@@ -18,3 +18,4 @@ run:
 gen: run
   uv run openapi-generator-cli generate -i http://localhost:8000/openapi.json -g python -o ./openapi_client
   sed -i "s/license = \"NoLicense\"/license = \"MIT\"/" ./openapi_client/pyproject.toml
+  uv sync
