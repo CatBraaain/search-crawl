@@ -473,7 +473,6 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
-    { name = "httpx" },
 ]
 
 [package.dev-dependencies]
@@ -485,10 +484,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "fastapi", extras = ["standard"], specifier = ">=0.115.14" },
-    { name = "httpx", specifier = ">=0.28.1" },
-]
+requires-dist = [{ name = "fastapi", extras = ["standard"], specifier = ">=0.115.14" }]
 
 [package.metadata.requires-dev]
 dev = [
