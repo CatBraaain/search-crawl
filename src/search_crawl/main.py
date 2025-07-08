@@ -1,9 +1,10 @@
-from typing import List, Literal, Optional
+from typing import Annotated, List, Literal, Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
+from .crawl import ScrapeResult, acrawl
 from .schemas import GeneralSearchResult, ImageSearchResult
 from .services import search
 
@@ -49,6 +50,11 @@ async def search_images(
         time_range=time_range,
         format=format,
     )
+
+
+@app.get("/crawl", response_model=list[list[ScrapeResult]])
+async def crawl(urls: Annotated[list[str], Query()]) -> list[list[ScrapeResult]]:
+    return await acrawl(urls)
 
 
 def simplify_client_method_names(app: FastAPI) -> None:

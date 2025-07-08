@@ -19,3 +19,14 @@ def test_search_general():
 def test_search_images():
     res = api.search_images(q="ping")
     assert isinstance(res, list) and len(res) > 0
+
+
+def test_crawl():
+    res = api.crawl(
+        urls=[
+            "https://example.com",
+            "https://example.net",
+            "https://example.org",
+        ]
+    )
+    assert res

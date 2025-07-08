@@ -16,6 +16,9 @@
 # import models into model package
 from openapi_client.models.general_search_result import GeneralSearchResult
 from openapi_client.models.http_validation_error import HTTPValidationError
+from openapi_client.models.image import Image
 from openapi_client.models.image_search_result import ImageSearchResult
+from openapi_client.models.link import Link
+from openapi_client.models.scrape_result import ScrapeResult
 from openapi_client.models.validation_error import ValidationError
 from openapi_client.models.validation_error_loc_inner import ValidationErrorLocInner
