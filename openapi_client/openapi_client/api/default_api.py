@@ -859,7 +859,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/general',
+            resource_path='/search/general',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1189,7 +1189,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/images',
+            resource_path='/search/images',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
