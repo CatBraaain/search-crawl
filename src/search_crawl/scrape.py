@@ -136,7 +136,16 @@ class Scraper:
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         await self._camoufox.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def run(self, requested_url: str) -> ScrapeResult:
+    async def run(self, requested_urls: list[str]) -> list[ScrapeResult]:
+        sem = asyncio.Semaphore(2)
+
+        async def bound_scrape(url: str) -> ScrapeResult:
+            async with sem:
+                return await self.run_one(url)
+
+        return await asyncio.gather(*(bound_scrape(url) for url in requested_urls))
+
+    async def run_one(self, requested_url: str) -> ScrapeResult:
         url, raw_html = await self.request_html(requested_url)
 
         readable = Readable(raw_html, self._markitdown)

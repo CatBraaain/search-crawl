@@ -73,9 +73,9 @@ async def crawl(urls: Annotated[list[str], Query()]) -> list[list[ScrapeResult]]
     # return await acrawl(urls)
 
 
-@app.get("/scrape", response_model=ScrapeResult)
-async def scrape(url: str) -> ScrapeResult:
-    return await scraper.run(url)
+@app.get("/scrape", response_model=list[ScrapeResult])
+async def scrape(urls: Annotated[list[str], Query()]) -> list[ScrapeResult]:
+    return await scraper.run(urls)
 
 
 def simplify_client_method_names(app: FastAPI) -> None:
