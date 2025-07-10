@@ -1,7 +1,8 @@
+import asyncio
 import io
 import os
 import re
-from typing import TypedDict, cast
+from typing import Any, TypedDict, cast
 from urllib.parse import (
     parse_qsl,
     urlencode,
@@ -10,7 +11,7 @@ from urllib.parse import (
     urlunsplit,
 )
 
-from camoufox.async_api import Browser, BrowserContext
+from camoufox.async_api import AsyncCamoufox, Browser, BrowserContext
 from cashews import cache
 from lxml import html
 from markitdown import MarkItDown, StreamInfo
@@ -118,11 +119,22 @@ class ScrapeResult(TypedDict):
 
 class Scraper:
     _browser: Browser | BrowserContext | None
+    _camoufox: AsyncCamoufox
+    _camoufox_options: dict[str, Any]
     _markitdown: MarkItDown
 
-    def __init__(self, browser) -> None:
-        self._browser = browser
+    def __init__(self, **camoufox_options) -> None:
+        self._browser = None
+        self._camoufox_options = camoufox_options
         self._markitdown = MarkItDown()
+
+    async def __aenter__(self) -> "Scraper":
+        self._camoufox = AsyncCamoufox(**self._camoufox_options)
+        self._browser = await self._camoufox.__aenter__()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        await self._camoufox.__aexit__(exc_type, exc_val, exc_tb)
 
     async def run(self, requested_url: str) -> ScrapeResult:
         url, raw_html = await self.request_html(requested_url)

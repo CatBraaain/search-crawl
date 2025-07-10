@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import Annotated, List, Literal, Optional
 
-from camoufox.async_api import AsyncCamoufox
 from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
@@ -16,12 +15,11 @@ scraper: Scraper
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global scraper
-    async with AsyncCamoufox(
+    async with Scraper(
         i_know_what_im_doing=True,
         headless=True,
         block_images=True,
-    ) as browser:
-        scraper = Scraper(browser)
+    ) as scraper:
         yield
 
 
