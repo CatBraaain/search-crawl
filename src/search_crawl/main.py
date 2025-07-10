@@ -5,9 +5,8 @@ from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
-from .schemas import GeneralSearchResult, ImageSearchResult
 from .scrape import Scraper, ScrapeResult
-from .services import search
+from .search import GeneralSearchResult, ImageSearchResult, search
 
 scraper: Scraper
 
