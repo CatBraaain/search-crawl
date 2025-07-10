@@ -1,11 +1,16 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from search_crawl.main import app
 
-client = TestClient(app)
+
+@pytest.fixture(scope="module")
+def client():
+    with TestClient(app) as c:
+        yield c
 
 
-def test_crawl():
+def test_crawl(client):
     res = client.get(
         "/crawl",
         params={
@@ -16,4 +21,15 @@ def test_crawl():
             ]
         },
     )
+    assert res.content
+
+
+def test_scrape(client):
+    urls = [
+        "https://example.com",
+        "https://example.net",
+        "https://example.org",
+    ]
+
+    res = client.get("/scrape", params={"urls": urls})
     assert res.content

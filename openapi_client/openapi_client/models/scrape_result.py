@@ -19,8 +19,6 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
-from openapi_client.models.image import Image
-from openapi_client.models.link import Link
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -28,13 +26,18 @@ class ScrapeResult(BaseModel):
     """
     ScrapeResult
     """ # noqa: E501
+    requested_url: StrictStr
     url: StrictStr
+    title: StrictStr
+    short_title: StrictStr
+    author: StrictStr
     html: StrictStr
-    links: List[Link]
-    images: List[Image]
-    markdown: StrictStr
-    metadata: Dict[str, Any]
-    __properties: ClassVar[List[str]] = ["url", "html", "links", "images", "markdown", "metadata"]
+    content: StrictStr
+    summary_html: StrictStr
+    summary_md: StrictStr
+    links: List[StrictStr]
+    pagination_links: List[StrictStr]
+    __properties: ClassVar[List[str]] = ["requested_url", "url", "title", "short_title", "author", "html", "content", "summary_html", "summary_md", "links", "pagination_links"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -75,20 +78,6 @@ class ScrapeResult(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in links (list)
-        _items = []
-        if self.links:
-            for _item_links in self.links:
-                if _item_links:
-                    _items.append(_item_links.to_dict())
-            _dict['links'] = _items
-        # override the default output from pydantic by calling `to_dict()` of each item in images (list)
-        _items = []
-        if self.images:
-            for _item_images in self.images:
-                if _item_images:
-                    _items.append(_item_images.to_dict())
-            _dict['images'] = _items
         return _dict
 
     @classmethod
@@ -101,12 +90,17 @@ class ScrapeResult(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "requested_url": obj.get("requested_url"),
             "url": obj.get("url"),
+            "title": obj.get("title"),
+            "short_title": obj.get("short_title"),
+            "author": obj.get("author"),
             "html": obj.get("html"),
-            "links": [Link.from_dict(_item) for _item in obj["links"]] if obj.get("links") is not None else None,
-            "images": [Image.from_dict(_item) for _item in obj["images"]] if obj.get("images") is not None else None,
-            "markdown": obj.get("markdown"),
-            "metadata": obj.get("metadata")
+            "content": obj.get("content"),
+            "summary_html": obj.get("summary_html"),
+            "summary_md": obj.get("summary_md"),
+            "links": obj.get("links"),
+            "pagination_links": obj.get("pagination_links")
         })
         return _obj
 

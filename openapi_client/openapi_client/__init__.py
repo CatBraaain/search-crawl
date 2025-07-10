@@ -30,9 +30,7 @@ __all__ = [
     "ApiException",
     "GeneralSearchResult",
     "HTTPValidationError",
-    "Image",
     "ImageSearchResult",
-    "Link",
     "ScrapeResult",
     "ValidationError",
     "ValidationErrorLocInner",
@@ -55,9 +53,7 @@ from openapi_client.exceptions import ApiException as ApiException
 # import models into sdk package
 from openapi_client.models.general_search_result import GeneralSearchResult as GeneralSearchResult
 from openapi_client.models.http_validation_error import HTTPValidationError as HTTPValidationError
-from openapi_client.models.image import Image as Image
 from openapi_client.models.image_search_result import ImageSearchResult as ImageSearchResult
-from openapi_client.models.link import Link as Link
 from openapi_client.models.scrape_result import ScrapeResult as ScrapeResult
 from openapi_client.models.validation_error import ValidationError as ValidationError
 from openapi_client.models.validation_error_loc_inner import ValidationErrorLocInner as ValidationErrorLocInner
