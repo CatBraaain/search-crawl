@@ -4,6 +4,7 @@ openapi_client/*
 searxng/*
 !searxng/settings.yml
 
+.cache
 .pytest_cache
 .venv
 __pycache__

@@ -1,14 +1,31 @@
+from contextlib import asynccontextmanager
 from typing import Annotated, List, Literal, Optional
 
+from camoufox.async_api import AsyncCamoufox
 from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
-from .crawl import ScrapeResult, acrawl
 from .schemas import GeneralSearchResult, ImageSearchResult
+from .scrape import Scraper, ScrapeResult
 from .services import search
 
-app = FastAPI()
+scraper: Scraper
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global scraper
+    async with AsyncCamoufox(
+        i_know_what_im_doing=True,
+        headless=True,
+        block_images=True,
+    ) as browser:
+        scraper = Scraper(browser)
+        yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/healthz", response_class=PlainTextResponse)
@@ -54,7 +71,13 @@ async def search_images(
 
 @app.get("/crawl", response_model=list[list[ScrapeResult]])
 async def crawl(urls: Annotated[list[str], Query()]) -> list[list[ScrapeResult]]:
-    return await acrawl(urls)
+    return [[]]
+    # return await acrawl(urls)
+
+
+@app.get("/scrape", response_model=ScrapeResult)
+async def scrape(url: str) -> ScrapeResult:
+    return await scraper.run(url)
 
 
 def simplify_client_method_names(app: FastAPI) -> None:
