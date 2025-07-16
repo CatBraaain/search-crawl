@@ -6,8 +6,8 @@ from search_crawl.main import app
 
 @pytest.fixture(scope="module")
 def client():
-    with TestClient(app) as c:
-        yield c
+    with TestClient(app) as client:
+        yield client
 
 
 def test_crawl(client):
