@@ -2,7 +2,7 @@ import asyncio
 import io
 import os
 import re
-from typing import Any, TypedDict, cast
+from typing import Any, Awaitable, Self, Sequence, TypedDict, cast
 from urllib.parse import (
     parse_qsl,
     urlencode,
@@ -117,38 +117,46 @@ class ScrapeResult(TypedDict):
     pagination_links: list[str]
 
 
-class Scraper:
-    _browser: Browser | BrowserContext | None
-    _camoufox: AsyncCamoufox
-    _camoufox_options: dict[str, Any]
-    _markitdown: MarkItDown
+class Crawler:
+    browser: Browser | BrowserContext
+    markitdown: MarkItDown
+    visited: list[str]
+    results: list[ScrapeResult]
 
-    def __init__(self, **camoufox_options) -> None:
-        self._browser = None
-        self._camoufox_options = camoufox_options
-        self._markitdown = MarkItDown()
+    def __init__(
+        self, browser: Browser | BrowserContext, markitdown: MarkItDown
+    ) -> None:
+        self.browser = browser
+        self.markitdown = markitdown
+        self.visited = []
+        self.results = []
 
-    async def __aenter__(self) -> "Scraper":
-        self._camoufox = AsyncCamoufox(**self._camoufox_options)
-        self._browser = await self._camoufox.__aenter__()
-        return self
+    async def crawl(
+        self,
+        requested_url: str,
+        sem: asyncio.Semaphore,
+    ) -> list[ScrapeResult]:
+        if requested_url in self.visited:
+            return []
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
-        await self._camoufox.__aexit__(exc_type, exc_val, exc_tb)
+        self.visited.append(requested_url)
+        async with sem:
+            scrape_result = await self.scrape(requested_url)
+            self.results.append(scrape_result)
+            await gather_with_sem(
+                [
+                    self.crawl(pagination_link, sem)
+                    for pagination_link in scrape_result["pagination_links"]
+                ],
+                sem,
+            )
 
-    async def run(self, requested_urls: list[str]) -> list[ScrapeResult]:
-        sem = asyncio.Semaphore(2)
+        return self.results
 
-        async def bound_scrape(url: str) -> ScrapeResult:
-            async with sem:
-                return await self.run_one(url)
+    async def scrape(self, requested_url: str) -> ScrapeResult:
+        url, raw_html = await self.scrape_raw(requested_url)
 
-        return await asyncio.gather(*(bound_scrape(url) for url in requested_urls))
-
-    async def run_one(self, requested_url: str) -> ScrapeResult:
-        url, raw_html = await self.request_html(requested_url)
-
-        readable = Readable(raw_html, self._markitdown)
+        readable = Readable(raw_html, self.markitdown)
         navigation = Navigation(raw_html, url)
 
         return {
@@ -166,12 +174,45 @@ class Scraper:
         }
 
     @cache(ttl="24h", key="{requested_url}")
-    async def request_html(self, requested_url: str) -> tuple[URL, str]:
-        if not self._browser:
-            raise Exception("Scraper is not initialized with `__aenter__`")
-
-        page = await self._browser.new_page()
+    async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
+        page = await self.browser.new_page()
         await page.goto(requested_url, wait_until="load")
         raw_html = await page.content()
         await page.close()
         return URL(page.url), raw_html
+
+
+class CrawlerService:
+    camoufox: AsyncCamoufox
+    camoufox_options: dict[str, Any]
+    browser: Browser | BrowserContext
+    markitdown: MarkItDown
+
+    def __init__(self, **camoufox_options) -> None:
+        self.camoufox_options = camoufox_options
+        self.markitdown = MarkItDown()
+
+    async def __aenter__(self) -> Self:
+        self.camoufox = AsyncCamoufox(**self.camoufox_options)
+        self.browser = await self.camoufox.__aenter__()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
+        await self.camoufox.__aexit__(exc_type, exc_val, exc_tb)
+
+    async def crawl_many(self, requested_urls: list[str]) -> list[list[ScrapeResult]]:
+        crawler = Crawler(self.browser, self.markitdown)
+        sem = asyncio.Semaphore(2)
+        return await asyncio.gather(
+            *(crawler.crawl(requested_url, sem) for requested_url in requested_urls)
+        )
+
+
+async def gather_with_sem[T](
+    coros: Sequence[Awaitable[T]], sem: asyncio.Semaphore
+) -> list[T]:
+    async def with_sem(sem, coro):
+        async with sem:
+            return await coro
+
+    return await asyncio.gather(*(with_sem(sem, c) for c in coros))

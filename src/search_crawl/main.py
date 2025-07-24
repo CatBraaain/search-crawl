@@ -5,20 +5,20 @@ from fastapi import FastAPI, Query
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
-from .scrape import Scraper, ScrapeResult
+from .scrape import CrawlerService, ScrapeResult
 from .search import GeneralSearchResult, ImageSearchResult, search
 
-scraper: Scraper
+crawler_service: CrawlerService
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global scraper
-    async with Scraper(
+    global crawler_service
+    async with CrawlerService(
         i_know_what_im_doing=True,
         headless=True,
         block_images=True,
-    ) as scraper:
+    ) as crawler_service:
         yield
 
 
@@ -68,8 +68,7 @@ async def search_images(
 
 @app.get("/crawl", response_model=list[list[ScrapeResult]])
 async def crawl(urls: Annotated[list[str], Query()]) -> list[list[ScrapeResult]]:
-    return [[]]
-    # return await acrawl(urls)
+    return await crawler_service.crawl_many(urls)
 
 
 @app.get("/scrape", response_model=list[ScrapeResult])
