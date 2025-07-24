@@ -21,7 +21,7 @@ def test_crawl(client):
             ]
         },
     )
-    assert res.content
+    assert res.json()
 
 
 # def test_scrape(client):
@@ -32,4 +32,4 @@ def test_crawl(client):
 #     ]
 
 #     res = client.get("/scrape", params={"urls": urls})
-#     assert res.content
+#     assert res.json()
