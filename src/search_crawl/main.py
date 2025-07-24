@@ -66,15 +66,9 @@ async def search_images(
     )
 
 
-@app.get("/crawl", response_model=list[list[ScrapeResult]])
-async def crawl(urls: Annotated[list[str], Query()]) -> list[list[ScrapeResult]]:
-    return await crawler_service.crawl_many(urls)
-
-
-@app.get("/scrape", response_model=list[ScrapeResult])
-async def scrape(urls: Annotated[list[str], Query()]) -> list[ScrapeResult]:
-    # return await crawler_service.crawl_many(urls)
-    return []
+@app.get("/crawl", response_model=list[ScrapeResult])
+async def crawl(url: str) -> list[ScrapeResult]:
+    return await crawler_service.crawl(url)
 
 
 def simplify_client_method_names(app: FastAPI) -> None:

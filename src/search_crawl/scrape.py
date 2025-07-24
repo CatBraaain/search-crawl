@@ -207,12 +207,10 @@ class CrawlerService:
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         await self.camoufox.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def crawl_many(self, requested_urls: list[str]) -> list[list[ScrapeResult]]:
+    async def crawl(self, requested_url: str) -> list[ScrapeResult]:
         crawler = Crawler(self.browser, self.markitdown)
         sem = asyncio.Semaphore(2)
-        return await asyncio.gather(
-            *(crawler.crawl(requested_url, sem) for requested_url in requested_urls)
-        )
+        return await crawler.crawl(requested_url, sem)
 
 
 async def gather_with_sem[T](

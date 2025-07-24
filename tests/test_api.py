@@ -13,23 +13,6 @@ def client():
 def test_crawl(client):
     res = client.get(
         "/crawl",
-        params={
-            "urls": [
-                "https://example.com",
-                "https://example.net",
-                "https://example.org",
-            ]
-        },
+        params={"url": "https://example.com"},
     )
     assert res.json()
-
-
-# def test_scrape(client):
-#     urls = [
-#         "https://example.com",
-#         "https://example.net",
-#         "https://example.org",
-#     ]
-
-#     res = client.get("/scrape", params={"urls": urls})
-#     assert res.json()

@@ -22,22 +22,5 @@ def test_search_images():
 
 
 def test_crawl():
-    res = api.crawl(
-        urls=[
-            "https://example.com",
-            "https://example.net",
-            "https://example.org",
-        ]
-    )
+    res = api.crawl(url="https://example.com")
     assert res
-
-
-# def test_scrape():
-#     res = api.scrape(
-#         urls=[
-#             "https://example.com",
-#             "https://example.net",
-#             "https://example.org",
-#         ]
-#     )
-#     assert res
