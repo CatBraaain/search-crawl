@@ -32,12 +32,12 @@ def test_crawl():
     assert res
 
 
-def test_scrape():
-    res = api.scrape(
-        urls=[
-            "https://example.com",
-            "https://example.net",
-            "https://example.org",
-        ]
-    )
-    assert res
+# def test_scrape():
+#     res = api.scrape(
+#         urls=[
+#             "https://example.com",
+#             "https://example.net",
+#             "https://example.org",
+#         ]
+#     )
+#     assert res

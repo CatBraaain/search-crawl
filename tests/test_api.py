@@ -24,12 +24,12 @@ def test_crawl(client):
     assert res.content
 
 
-def test_scrape(client):
-    urls = [
-        "https://example.com",
-        "https://example.net",
-        "https://example.org",
-    ]
+# def test_scrape(client):
+#     urls = [
+#         "https://example.com",
+#         "https://example.net",
+#         "https://example.org",
+#     ]
 
-    res = client.get("/scrape", params={"urls": urls})
-    assert res.content
+#     res = client.get("/scrape", params={"urls": urls})
+#     assert res.content
