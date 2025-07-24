@@ -51,6 +51,13 @@ class URL:
     def __str__(self) -> str:
         return self.with_params
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, URL):
+            return self.with_params == other.with_params
+        if isinstance(other, str):
+            return self.with_params == other
+        return NotImplemented
+
 
 class Readable(Document):
     markitdown: MarkItDown
@@ -120,7 +127,7 @@ class ScrapeResult(TypedDict):
 class Crawler:
     browser: Browser | BrowserContext
     markitdown: MarkItDown
-    visited: list[str]
+    visited: list[URL]
     results: list[ScrapeResult]
 
     def __init__(
@@ -139,7 +146,7 @@ class Crawler:
         if requested_url in self.visited:
             return []
 
-        self.visited.append(requested_url)
+        self.visited.append(URL(requested_url))
         async with sem:
             scrape_result = await self.scrape(requested_url)
             self.results.append(scrape_result)
