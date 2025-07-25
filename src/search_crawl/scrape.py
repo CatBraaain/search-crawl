@@ -24,7 +24,7 @@ class URL:
     with_domain: str
     with_dirpath: str
     with_path: str
-    with_params: str
+    normalized: str
     pagination_regex: re.Pattern
 
     def __init__(self, url: str) -> None:
@@ -38,7 +38,7 @@ class URL:
         self.with_path = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
 
         normalized_query = self.normalize_query(parsed.query)
-        self.with_params = urlunsplit(
+        self.normalized = urlunsplit(
             (parsed.scheme, parsed.netloc, parsed.path, normalized_query, "")
         )
 
@@ -58,13 +58,13 @@ class URL:
         return normalized_query
 
     def __str__(self) -> str:
-        return self.with_params
+        return self.normalized
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, URL):
-            return self.with_params == other.with_params
+            return self.normalized == other.normalized
         if isinstance(other, str):
-            return self.with_params == URL(other).with_params
+            return self.normalized == URL(other).normalized
         return NotImplemented
 
 
