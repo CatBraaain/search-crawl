@@ -45,6 +45,8 @@
       retries: 15
     networks:
       - searxng-net
+    volumes:
+      - ./.cache:/app/.cache
 
 networks:
   searxng-net:
