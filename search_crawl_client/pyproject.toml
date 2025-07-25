@@ -1,5 +1,5 @@
 [project]
-name = "openapi_client"
+name = "search_crawl_client"
 version = "1.0.0"
 description = "FastAPI"
 authors = [
@@ -41,7 +41,7 @@ extension-pkg-whitelist = "pydantic"
 
 [tool.mypy]
 files = [
-  "openapi_client",
+  "search_crawl_client",
   #"test",  # auto-generated tests
   "tests", # hand-written tests
 ]
@@ -79,7 +79,7 @@ disallow_any_generics = true
 
 [[tool.mypy.overrides]]
 module = [
-  "openapi_client.configuration",
+  "search_crawl_client.configuration",
 ]
 warn_unused_ignores = true
 strict_equality = true

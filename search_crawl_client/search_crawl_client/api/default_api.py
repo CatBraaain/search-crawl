@@ -18,13 +18,13 @@ from typing_extensions import Annotated
 
 from pydantic import StrictInt, StrictStr, field_validator
 from typing import List, Optional
-from openapi_client.models.general_search_result import GeneralSearchResult
-from openapi_client.models.image_search_result import ImageSearchResult
-from openapi_client.models.scrape_result import ScrapeResult
+from search_crawl_client.models.general_search_result import GeneralSearchResult
+from search_crawl_client.models.image_search_result import ImageSearchResult
+from search_crawl_client.models.scrape_result import ScrapeResult
 
-from openapi_client.api_client import ApiClient, RequestSerialized
-from openapi_client.api_response import ApiResponse
-from openapi_client.rest import RESTResponseType
+from search_crawl_client.api_client import ApiClient, RequestSerialized
+from search_crawl_client.api_response import ApiResponse
+from search_crawl_client.rest import RESTResponseType
 
 
 class DefaultApi:

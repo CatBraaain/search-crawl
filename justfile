@@ -16,6 +16,6 @@ run:
   curl "http://localhost:8000/search/general?q=ping" -s -o nul  # warm-up request
 
 gen: run
-  uv run openapi-generator-cli generate -i http://localhost:8000/openapi.json -g python -o ./openapi_client
-  sed -i "s/license = \"NoLicense\"/license = \"MIT\"/" ./openapi_client/pyproject.toml
+  uv run openapi-generator-cli generate -i http://localhost:8000/openapi.json -g python -o ./search_crawl_client --package-name search_crawl_client
+  sed -i "s/license = \"NoLicense\"/license = \"MIT\"/" ./search_crawl_client/pyproject.toml
   uv sync

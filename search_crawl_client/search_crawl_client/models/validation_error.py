@@ -19,17 +19,18 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
+from search_crawl_client.models.validation_error_loc_inner import ValidationErrorLocInner
 from typing import Optional, Set
 from typing_extensions import Self
 
-class Image(BaseModel):
+class ValidationError(BaseModel):
     """
-    Image
+    ValidationError
     """ # noqa: E501
-    src: StrictStr
-    alt: StrictStr
-    desc: StrictStr
-    __properties: ClassVar[List[str]] = ["src", "alt", "desc"]
+    loc: List[ValidationErrorLocInner]
+    msg: StrictStr
+    type: StrictStr
+    __properties: ClassVar[List[str]] = ["loc", "msg", "type"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -49,7 +50,7 @@ class Image(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Image from a JSON string"""
+        """Create an instance of ValidationError from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,11 +71,18 @@ class Image(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in loc (list)
+        _items = []
+        if self.loc:
+            for _item_loc in self.loc:
+                if _item_loc:
+                    _items.append(_item_loc.to_dict())
+            _dict['loc'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Image from a dict"""
+        """Create an instance of ValidationError from a dict"""
         if obj is None:
             return None
 
@@ -82,9 +90,9 @@ class Image(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "src": obj.get("src"),
-            "alt": obj.get("alt"),
-            "desc": obj.get("desc")
+            "loc": [ValidationErrorLocInner.from_dict(_item) for _item in obj["loc"]] if obj.get("loc") is not None else None,
+            "msg": obj.get("msg"),
+            "type": obj.get("type")
         })
         return _obj
 

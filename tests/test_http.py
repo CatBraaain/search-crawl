@@ -1,5 +1,5 @@
-from openapi_client import ApiClient, Configuration
-from openapi_client.api.default_api import DefaultApi
+from search_crawl_client import ApiClient, Configuration
+from search_crawl_client.api.default_api import DefaultApi
 
 config = Configuration(host="http://localhost:8000")
 with ApiClient(config) as client:

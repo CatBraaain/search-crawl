@@ -613,25 +613,6 @@ wheels = [
 ]
 
 [[package]]
-name = "openapi-client"
-version = "1.0.0"
-source = { directory = "openapi_client" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "python-dateutil" },
-    { name = "typing-extensions" },
-    { name = "urllib3" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pydantic", specifier = ">=2" },
-    { name = "python-dateutil", specifier = ">=2.8.2" },
-    { name = "typing-extensions", specifier = ">=4.7.1" },
-    { name = "urllib3", specifier = ">=2.1.0,<3.0.0" },
-]
-
-[[package]]
 name = "openapi-generator-cli"
 version = "7.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -998,10 +979,10 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "httpx" },
-    { name = "openapi-client" },
     { name = "openapi-generator-cli", extra = ["jdk4py"] },
     { name = "pytest" },
     { name = "pytest-asyncio" },
+    { name = "search-crawl-client" },
     { name = "types-lxml" },
 ]
 
@@ -1019,11 +1000,30 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "openapi-client", directory = "openapi_client" },
     { name = "openapi-generator-cli", extras = ["jdk4py"], specifier = ">=7.14.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-asyncio", specifier = ">=1.0.0" },
+    { name = "search-crawl-client", directory = "search_crawl_client" },
     { name = "types-lxml", specifier = ">=2025.3.30" },
+]
+
+[[package]]
+name = "search-crawl-client"
+version = "1.0.0"
+source = { directory = "search_crawl_client" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
+    { name = "urllib3" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2" },
+    { name = "python-dateutil", specifier = ">=2.8.2" },
+    { name = "typing-extensions", specifier = ">=4.7.1" },
+    { name = "urllib3", specifier = ">=2.1.0,<3.0.0" },
 ]
 
 [[package]]

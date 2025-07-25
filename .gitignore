@@ -1,6 +1,6 @@
-openapi_client/*
-!openapi_client/openapi_client
-!openapi_client/pyproject.toml
+search_crawl_client/*
+!search_crawl_client/search_crawl_client
+!search_crawl_client/pyproject.toml
 searxng/*
 !searxng/settings.yml
 

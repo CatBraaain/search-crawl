@@ -16,12 +16,12 @@ dependencies = [
 package = true
 
 [tool.uv.sources]
-openapi-client = { path = "openapi_client" }
+search-crawl-client = { path = "search_crawl_client" }
 
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
-    "openapi-client",
+    "search-crawl-client",
     "openapi-generator-cli[jdk4py]>=7.14.0",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.0.0",
