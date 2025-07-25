@@ -16,3 +16,11 @@ def test_crawl(client):
         params={"url": "https://example.com"},
     )
     assert res.json()
+
+
+def test_crawl_pagination(client):
+    res = client.get(
+        "/crawl",
+        params={"url": "https://web-scraping.dev/products"},
+    )
+    assert len(res.json()) == 6
