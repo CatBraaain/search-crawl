@@ -183,7 +183,7 @@ class Crawler:
     @cache(ttl="24h", key="{requested_url}")
     async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
         page = await self.browser.new_page()
-        await page.goto(requested_url, wait_until="load")
+        await page.goto(requested_url, timeout=10000, wait_until="load")
         raw_html = await page.content()
         await page.close()
         return URL(page.url), raw_html
