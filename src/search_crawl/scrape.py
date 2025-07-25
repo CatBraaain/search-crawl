@@ -145,18 +145,19 @@ class Crawler:
     ) -> list[ScrapeResult]:
         if requested_url in self.visited:
             return []
+        else:
+            self.visited.append(URL(requested_url))
 
-        self.visited.append(URL(requested_url))
         async with sem:
             scrape_result = await self.scrape(requested_url)
             self.results.append(scrape_result)
-            await gather_with_sem(
-                [
-                    self.crawl(pagination_link, sem)
-                    for pagination_link in scrape_result["pagination_links"]
-                ],
-                sem,
-            )
+
+        await asyncio.gather(
+            *[
+                self.crawl(pagination_link, sem)
+                for pagination_link in scrape_result["pagination_links"]
+            ]
+        )
 
         return self.results
 
@@ -213,13 +214,3 @@ class CrawlerService:
         # see: https://github.com/daijro/camoufox/issues/279
         sem = asyncio.Semaphore(1)
         return await crawler.crawl(requested_url, sem)
-
-
-async def gather_with_sem[T](
-    coros: Sequence[Awaitable[T]], sem: asyncio.Semaphore
-) -> list[T]:
-    async def with_sem(sem, coro):
-        async with sem:
-            return await coro
-
-    return await asyncio.gather(*(with_sem(sem, c) for c in coros))
