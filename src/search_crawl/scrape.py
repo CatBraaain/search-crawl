@@ -37,16 +37,25 @@ class URL:
 
         self.with_path = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
 
-        query_params = parse_qsl(parsed.query, keep_blank_values=True)
-        sorted_query = urlencode(sorted(query_params))
+        normalized_query = self.normalize_query(parsed.query)
         self.with_params = urlunsplit(
-            (parsed.scheme, parsed.netloc, parsed.path, sorted_query, "")
+            (parsed.scheme, parsed.netloc, parsed.path, normalized_query, "")
         )
 
         pagination_pattern = r".*(p|page)[=\/]?\d+.*"
         self.pagination_regex = re.compile(
             rf"{re.escape(self.with_path)}{pagination_pattern}", re.IGNORECASE
         )
+
+    def normalize_query(self, query: str) -> str:
+        query_params = parse_qsl(query, keep_blank_values=True)
+        filtered = [
+            (k, v)
+            for k, v in query_params
+            if not (k.lower() in {"p", "page"} and v == "1")
+        ]
+        normalized_query = urlencode(sorted(filtered))
+        return normalized_query
 
     def __str__(self) -> str:
         return self.with_params
@@ -55,7 +64,7 @@ class URL:
         if isinstance(other, URL):
             return self.with_params == other.with_params
         if isinstance(other, str):
-            return self.with_params == other
+            return self.with_params == URL(other).with_params
         return NotImplemented
 
 

@@ -23,4 +23,4 @@ def test_crawl_pagination(client):
         "/crawl",
         params={"url": "https://web-scraping.dev/products"},
     )
-    assert len(res.json()) == 6
+    assert len(res.json()) == 5

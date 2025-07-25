@@ -29,4 +29,4 @@ def test_crawl():
 def test_crawl_pagination():
     res = api.crawl(url="https://web-scraping.dev/products")
     print([r.url for r in res])
-    assert len(res) == 6
+    assert len(res) == 5
