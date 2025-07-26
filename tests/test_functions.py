@@ -7,7 +7,7 @@ from search_crawl.main import search_general, search_images
 
 class ArgsPattern:
     default = {
-        "language": "ja",
+        "language": "en",
         "page": 1,
         "time_range": None,
         "format": "json",
@@ -15,7 +15,7 @@ class ArgsPattern:
     examples = [
         {},
         {
-            "language": "en",
+            "language": "ja",
             "page": 2,
         },
         {

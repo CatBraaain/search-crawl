@@ -33,7 +33,7 @@ def healthz():
 @app.get("/search/general", response_model=List[GeneralSearchResult])
 async def search_general(
     q: str,
-    language: Optional[str] = "ja",
+    language: Optional[str] = "en",
     page: int = 1,
     time_range: Optional[Literal["day", "month", "year"]] = None,
     format: Optional[Literal["json", "csv", "rss"]] = "json",
@@ -51,7 +51,7 @@ async def search_general(
 @app.get("/search/images", response_model=List[ImageSearchResult])
 async def search_images(
     q: str,
-    language: Optional[str] = "ja",
+    language: Optional[str] = "en",
     page: int = 1,
     time_range: Optional[Literal["day", "month", "year"]] = None,
     format: Optional[Literal["json", "csv", "rss"]] = "json",
