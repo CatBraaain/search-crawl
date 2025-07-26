@@ -2,7 +2,7 @@ import asyncio
 import io
 import os
 import re
-from typing import Any, Awaitable, Self, Sequence, TypedDict, cast
+from typing import Any, Self, TypedDict, cast
 from urllib.parse import (
     parse_qsl,
     urlencode,

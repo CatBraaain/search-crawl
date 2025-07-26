@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
-from typing import Annotated, List, Literal, Optional
+from typing import List, Literal, Optional
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
