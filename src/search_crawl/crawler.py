@@ -5,22 +5,20 @@ from camoufox.async_api import AsyncCamoufox, Browser, BrowserContext
 from cashews import cache
 from markitdown import MarkItDown
 
-from .scraper import URL, Navigation, Readable, ScrapeResult
+from .scraper import URL, Scraper, ScrapeResult
 
 cache.setup("disk://?directory=.cache&shards=0")
 
 
 class Crawler:
-    browser: Browser | BrowserContext
-    markitdown: MarkItDown
+    scraper: Scraper
     visited: list[URL]
     results: list[ScrapeResult]
 
     def __init__(
         self, browser: Browser | BrowserContext, markitdown: MarkItDown
     ) -> None:
-        self.browser = browser
-        self.markitdown = markitdown
+        self.scraper = Scraper(browser, markitdown)
         self.visited = []
         self.results = []
 
@@ -35,7 +33,7 @@ class Crawler:
             self.visited.append(URL(requested_url))
 
         async with sem:
-            scrape_result = await self.scrape(requested_url)
+            scrape_result = await self.scraper.scrape(requested_url)
             self.results.append(scrape_result)
 
         await asyncio.gather(
@@ -47,40 +45,13 @@ class Crawler:
 
         return self.results
 
-    async def scrape(self, requested_url: str) -> ScrapeResult:
-        url, raw_html = await self.scrape_raw(requested_url)
-
-        readable = Readable(raw_html, self.markitdown)
-        navigation = Navigation(raw_html, url)
-
-        return {
-            "requested_url": requested_url,
-            "url": str(url),
-            "title": readable.title(),
-            "short_title": readable.short_title(),
-            "author": readable.author(),
-            "html": raw_html,
-            "content": readable.content(),
-            "summary_html": readable.summary_html(),
-            "summary_md": readable.summary_md(),
-            "links": navigation.links,
-            "pagination_links": navigation.pagination_links,
-        }
-
-    @cache(ttl="24h", key="{requested_url}")
-    async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
-        page = await self.browser.new_page()
-        await page.goto(requested_url, timeout=10000, wait_until="load")
-        raw_html = await page.content()
-        await page.close()
-        return URL(page.url), raw_html
-
 
 class CrawlerService:
     camoufox: AsyncCamoufox
     camoufox_options: dict[str, Any]
     browser: Browser | BrowserContext
     markitdown: MarkItDown
+    scraper: Scraper
 
     def __init__(self, **camoufox_options) -> None:
         self.camoufox_options = camoufox_options
@@ -89,6 +60,7 @@ class CrawlerService:
     async def __aenter__(self) -> Self:
         self.camoufox = AsyncCamoufox(**self.camoufox_options)
         self.browser = await self.camoufox.__aenter__()
+        self.scraper = Scraper(self.browser, self.markitdown)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
