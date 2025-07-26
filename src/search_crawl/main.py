@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
-from .scrape import CrawlerService, ScrapeResult
+from .crawler import CrawlerService, ScrapeResult
 from .search import GeneralSearchResult, ImageSearchResult, search
 
 crawler_service: CrawlerService
