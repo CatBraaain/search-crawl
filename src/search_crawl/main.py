@@ -67,8 +67,8 @@ async def search_images(
 
 
 @app.get("/crawl", response_model=list[ScrapeResult])
-async def crawl(url: str) -> list[ScrapeResult]:
-    return await crawler_service.crawl(url)
+async def crawl(url: str, concurrently: int = 2) -> list[ScrapeResult]:
+    return await crawler_service.crawl(url, concurrently=concurrently)
 
 
 def simplify_client_method_names(app: FastAPI) -> None:

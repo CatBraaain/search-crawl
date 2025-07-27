@@ -66,9 +66,10 @@ class CrawlerService:
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
         await self.camoufox.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def crawl(self, requested_url: str) -> list[ScrapeResult]:
+    async def crawl(self, requested_url: str, concurrently: int) -> list[ScrapeResult]:
         crawler = Crawler(self.browser, self.markitdown)
         # workaround for Camoufox freezing when opening multiple pages concurrently
         # see: https://github.com/daijro/camoufox/issues/279
-        sem = asyncio.Semaphore(1)
+        concurrently = 1
+        sem = asyncio.Semaphore(concurrently)
         return await crawler.crawl(requested_url, sem)
