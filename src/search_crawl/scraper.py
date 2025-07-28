@@ -19,6 +19,7 @@ from readability import Document
 class URL:
     with_domain: str
     with_basepath: str
+    page: int | None
     with_path: str
     normalized: str
     pagination_regex: re.Pattern
@@ -29,13 +30,17 @@ class URL:
         self.with_domain = urlunsplit((parsed.scheme, parsed.netloc, "", "", ""))
 
         pagination_pattern = (
-            r"(p|pa|pag|page|pg|paging|pagination)([-_]?num)?(=|/|-)?(\d{1,3})"
+            r"(p|pa|pag|page|pg|paging|pagination)([-_]?num)?(=|/|-)?(?P<num>\d{1,3})"
         )
         path = parsed.path.removesuffix("/")
         basepath = re.sub(f"{pagination_pattern}$", "", path).removesuffix("/")
         self.with_basepath = urlunsplit(
             (parsed.scheme, parsed.netloc, basepath, "", "")
         )
+        if matched := re.search(f"{pagination_pattern}$", url):
+            self.page = int(matched.group("num"))
+        else:
+            self.page = None
 
         self.with_path = urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
@@ -50,22 +55,28 @@ class URL:
 
     def normalize_query(self, query: str) -> str:
         query_params = parse_qsl(query, keep_blank_values=True)
-        filtered = [
-            (k, v)
-            for k, v in query_params
-            if not (k.lower() in {"p", "page"} and v == "1")
-        ]
-        normalized_query = urlencode(sorted(filtered))
+        normalized_query = urlencode(sorted(query_params))
         return normalized_query
 
     def __str__(self) -> str:
         return self.normalized
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, URL):
-            return self.normalized == other.normalized
-        if isinstance(other, str):
-            return self.normalized == URL(other).normalized
+        if isinstance(other, URL) or isinstance(other, str):
+            other_url = other if isinstance(other, URL) else URL(other)
+            if (
+                self.page == 1
+                and other_url.page is None
+                and self.with_basepath == other_url.with_path
+            ) or (
+                other_url.page == 1
+                and self.page is None
+                and other_url.with_basepath == self.with_path
+            ):
+                return True
+            else:
+                return self.normalized == other_url.normalized
+
         return NotImplemented
 
 
