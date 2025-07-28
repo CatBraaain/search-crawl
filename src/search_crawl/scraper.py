@@ -32,11 +32,12 @@ class URL:
         dirpath = os.path.dirname(parsed.path).removesuffix("/") + "/"
         self.with_dirpath = urlunsplit((parsed.scheme, parsed.netloc, dirpath, "", ""))
 
-        self.with_path = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
+        path = parsed.path.removesuffix("/")
+        self.with_path = urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
         normalized_query = self.normalize_query(parsed.query)
         self.normalized = urlunsplit(
-            (parsed.scheme, parsed.netloc, parsed.path, normalized_query, "")
+            (parsed.scheme, parsed.netloc, path, normalized_query, "")
         )
 
         pagination_pattern = r".*(p|page)[=\/]?\d+.*"
