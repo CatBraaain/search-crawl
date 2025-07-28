@@ -19,7 +19,7 @@ from readability import Document
 
 class URL:
     with_domain: str
-    with_dirpath: str
+    with_basepath: str
     with_path: str
     normalized: str
     pagination_regex: re.Pattern
@@ -29,8 +29,14 @@ class URL:
 
         self.with_domain = urlunsplit((parsed.scheme, parsed.netloc, "", "", ""))
 
-        dirpath = os.path.dirname(parsed.path).removesuffix("/") + "/"
-        self.with_dirpath = urlunsplit((parsed.scheme, parsed.netloc, dirpath, "", ""))
+        pagination_pattern = (
+            r"(p|pa|pag|page|pg|paging|pagination)([-_]?num)?(=|/|-)?(\d{1,3})"
+        )
+        dirpath = os.path.dirname(parsed.path).removesuffix("/")
+        basepath = re.sub(f"{pagination_pattern}$", "", dirpath).removesuffix("/")
+        self.with_basepath = urlunsplit(
+            (parsed.scheme, parsed.netloc, basepath, "", "")
+        )
 
         path = parsed.path.removesuffix("/")
         self.with_path = urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
@@ -40,9 +46,8 @@ class URL:
             (parsed.scheme, parsed.netloc, path, normalized_query, "")
         )
 
-        pagination_pattern = r".*(p|page)[=\/]?\d+.*"
         self.pagination_regex = re.compile(
-            rf"{re.escape(self.with_path)}{pagination_pattern}", re.IGNORECASE
+            rf"{re.escape(self.with_basepath)}.*{pagination_pattern}.*", re.IGNORECASE
         )
 
     def normalize_query(self, query: str) -> str:
@@ -102,7 +107,7 @@ class Navigation:
 
     def extract_links(self, tree: html.HtmlElement, current_url: URL) -> list[str]:
         all_links = [
-            urljoin(current_url.with_dirpath, a.get("href"))
+            urljoin(current_url.normalized, a.get("href"))
             for a in tree.cssselect("a[href]")
         ]
         inner_links = sorted(
