@@ -16,11 +16,15 @@ class Crawler:
     results: list[ScrapeResult]
 
     def __init__(
-        self, browser: Browser | BrowserContext, markitdown: MarkItDown
+        self,
+        browser: Browser | BrowserContext,
+        markitdown: MarkItDown,
+        ttl: str = "24h",
     ) -> None:
         self.scraper = Scraper(browser, markitdown)
         self.visited = []
         self.results = []
+        self.ttl = ttl
 
     async def crawl(
         self,
@@ -33,7 +37,7 @@ class Crawler:
             self.visited.append(URL(requested_url))
 
         async with sem:
-            scrape_result = await self.scraper.scrape(requested_url)
+            scrape_result = await self.scraper.scrape(requested_url, self.ttl)
             self.results.append(scrape_result)
 
         await asyncio.gather(
@@ -67,9 +71,9 @@ class CrawlerService:
         await self.camoufox.__aexit__(exc_type, exc_val, exc_tb)
 
     async def launch_crawl(
-        self, requested_url: str, concurrently: int
+        self, requested_url: str, concurrently: int, ttl: str
     ) -> list[ScrapeResult]:
-        crawler = Crawler(self.browser, self.markitdown)
+        crawler = Crawler(self.browser, self.markitdown, ttl)
         # workaround for Camoufox freezing when opening multiple pages concurrently
         # see: https://github.com/daijro/camoufox/issues/279
         concurrently = 1

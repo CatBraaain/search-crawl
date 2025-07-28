@@ -31,8 +31,8 @@ class Scraper:
         self.browser = browser
         self.markitdown = markitdown
 
-    async def scrape(self, requested_url: str) -> ScrapeResult:
-        url, raw_html = await self.scrape_raw(requested_url)
+    async def scrape(self, requested_url: str, ttl: str) -> ScrapeResult:
+        url, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
 
         readable = Readable(raw_html, self.markitdown)
         navigation = Navigation(raw_html, url)
@@ -51,7 +51,15 @@ class Scraper:
             "pagination_links": navigation.pagination_links,
         }
 
-    @cache(ttl="24h", key="{requested_url}")
+    async def scrape_raw_wrapper(self, requested_url: str, ttl: str) -> tuple[URL, str]:
+        cached = await cache.get(requested_url)
+        if cached:
+            return cached
+        else:
+            value = await self.scrape_raw(requested_url)
+            await cache.set(requested_url, value, expire=ttl)
+            return value
+
     async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
         page = await self.browser.new_page()
         await page.goto(requested_url, timeout=10000, wait_until="load")
