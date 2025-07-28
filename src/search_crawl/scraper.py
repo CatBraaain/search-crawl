@@ -1,5 +1,4 @@
 import io
-import os
 import re
 from typing import TypedDict, cast
 from urllib.parse import (
@@ -32,13 +31,12 @@ class URL:
         pagination_pattern = (
             r"(p|pa|pag|page|pg|paging|pagination)([-_]?num)?(=|/|-)?(\d{1,3})"
         )
-        dirpath = os.path.dirname(parsed.path).removesuffix("/")
-        basepath = re.sub(f"{pagination_pattern}$", "", dirpath).removesuffix("/")
+        path = parsed.path.removesuffix("/")
+        basepath = re.sub(f"{pagination_pattern}$", "", path).removesuffix("/")
         self.with_basepath = urlunsplit(
             (parsed.scheme, parsed.netloc, basepath, "", "")
         )
 
-        path = parsed.path.removesuffix("/")
         self.with_path = urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
         normalized_query = self.normalize_query(parsed.query)
