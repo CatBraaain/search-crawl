@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from search_crawl.main import search_general, search_images
+from search_crawl.routers.search import search_general, search_images
 
 
 def get_param_set():
@@ -30,7 +30,7 @@ def get_param_set():
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("input, expected", get_param_set())
-@patch("search_crawl.main.search", new_callable=AsyncMock)
+@patch("search_crawl.routers.search.search", new_callable=AsyncMock)
 async def test_arguments(mock_search: AsyncMock, input: dict, expected: dict):
     query = "query"
     await search_general(query, **input)

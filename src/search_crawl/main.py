@@ -1,76 +1,16 @@
-from contextlib import asynccontextmanager
-from typing import List, Literal, Optional
-
 from fastapi import FastAPI
-from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 
-from .crawler import CrawlerService, ScrapeResult
-from .search import GeneralSearchResult, ImageSearchResult, search
-
-crawler_service: CrawlerService
+from .routers import crawl, healthz, search
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    global crawler_service
-    async with CrawlerService(
-        i_know_what_im_doing=True,
-        headless=True,
-        block_images=True,
-    ) as crawler_service:
-        yield
-
-
-app = FastAPI(lifespan=lifespan)
-
-
-@app.get("/healthz", response_class=PlainTextResponse)
-def healthz():
-    return "OK"
-
-
-@app.get("/search/general", response_model=List[GeneralSearchResult])
-async def search_general(
-    q: str,
-    language: Optional[str] = "en",
-    page: int = 1,
-    time_range: Optional[Literal["day", "month", "year"]] = None,
-    format: Optional[Literal["json", "csv", "rss"]] = "json",
-) -> List[GeneralSearchResult]:
-    return await search(
-        q=q,
-        engine_type="general",
-        language=language,
-        page=page,
-        time_range=time_range,
-        format=format,
-    )
-
-
-@app.get("/search/images", response_model=List[ImageSearchResult])
-async def search_images(
-    q: str,
-    language: Optional[str] = "en",
-    page: int = 1,
-    time_range: Optional[Literal["day", "month", "year"]] = None,
-    format: Optional[Literal["json", "csv", "rss"]] = "json",
-) -> List[ImageSearchResult]:
-    return await search(
-        q=q,
-        engine_type="images",
-        language=language,
-        page=page,
-        time_range=time_range,
-        format=format,
-    )
-
-
-@app.get("/crawl", response_model=list[ScrapeResult])
-async def crawl(
-    url: str, concurrently: int = 2, ttl: str = "24h"
-) -> list[ScrapeResult]:
-    return await crawler_service.launch_crawl(url, concurrently=concurrently, ttl=ttl)
+def main() -> FastAPI:
+    app = FastAPI()
+    app.include_router(healthz.router)
+    app.include_router(search.router)
+    app.include_router(crawl.router)
+    simplify_client_method_names(app)
+    return app
 
 
 def simplify_client_method_names(app: FastAPI) -> None:
@@ -79,4 +19,4 @@ def simplify_client_method_names(app: FastAPI) -> None:
             route.operation_id = route.name
 
 
-simplify_client_method_names(app)
+app = main()
