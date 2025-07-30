@@ -25,4 +25,4 @@ async def crawl(
     url: str, concurrently: int = 2, ttl: str = "24h"
 ) -> list[ScrapeResult]:
     sem = asyncio.Semaphore(concurrently)
-    return await Crawler(browser, ttl).crawl(url, sem)
+    return await Crawler(browser).crawl(url, sem, ttl)

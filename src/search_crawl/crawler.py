@@ -13,17 +13,16 @@ class Crawler:
     def __init__(
         self,
         browser: Browser,
-        ttl: str = "24h",
     ) -> None:
         self.scraper = Scraper(browser)
         self.visited = []
         self.results = []
-        self.ttl = ttl
 
     async def crawl(
         self,
         requested_url: str,
         sem: asyncio.Semaphore,
+        ttl: str = "24h",
     ) -> list[ScrapeResult]:
         if requested_url in self.visited:
             return []
@@ -31,12 +30,12 @@ class Crawler:
             self.visited.append(URL(requested_url))
 
         async with sem:
-            scrape_result = await self.scraper.scrape(requested_url, self.ttl)
+            scrape_result = await self.scraper.scrape(requested_url, ttl)
             self.results.append(scrape_result)
 
         await asyncio.gather(
             *[
-                self.crawl(pagination_link, sem)
+                self.crawl(pagination_link, sem, ttl)
                 for pagination_link in scrape_result["pagination_links"]
             ]
         )
