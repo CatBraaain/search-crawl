@@ -3,7 +3,6 @@ from typing import Any, Self
 
 from camoufox.async_api import AsyncCamoufox, Browser, BrowserContext
 from cashews import cache
-from markitdown import MarkItDown
 
 from .scraper import URL, Scraper, ScrapeResult
 
@@ -18,10 +17,9 @@ class Crawler:
     def __init__(
         self,
         browser: Browser | BrowserContext,
-        markitdown: MarkItDown,
         ttl: str = "24h",
     ) -> None:
-        self.scraper = Scraper(browser, markitdown)
+        self.scraper = Scraper(browser)
         self.visited = []
         self.results = []
         self.ttl = ttl
@@ -54,17 +52,15 @@ class CrawlerService:
     camoufox: AsyncCamoufox
     camoufox_options: dict[str, Any]
     browser: Browser | BrowserContext
-    markitdown: MarkItDown
     scraper: Scraper
 
     def __init__(self, **camoufox_options) -> None:
         self.camoufox_options = camoufox_options
-        self.markitdown = MarkItDown()
 
     async def __aenter__(self) -> Self:
         self.camoufox = AsyncCamoufox(**self.camoufox_options)
         self.browser = await self.camoufox.__aenter__()
-        self.scraper = Scraper(self.browser, self.markitdown)
+        self.scraper = Scraper(self.browser)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
@@ -73,9 +69,9 @@ class CrawlerService:
     async def launch_crawl(
         self, requested_url: str, concurrently: int, ttl: str
     ) -> list[ScrapeResult]:
-        crawler = Crawler(self.browser, self.markitdown, ttl)
+        crawler = Crawler(self.browser, ttl)
         # workaround for Camoufox freezing when opening multiple pages concurrently
         # see: https://github.com/daijro/camoufox/issues/279
-        concurrently = 1
+        concurrently = 2
         sem = asyncio.Semaphore(concurrently)
         return await crawler.crawl(requested_url, sem)

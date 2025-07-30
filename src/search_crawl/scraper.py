@@ -23,13 +23,10 @@ class ScrapeResult(TypedDict):
 
 class Scraper:
     browser: Browser | BrowserContext
-    markitdown: MarkItDown
 
-    def __init__(
-        self, browser: Browser | BrowserContext, markitdown: MarkItDown
-    ) -> None:
+    def __init__(self, browser: Browser | BrowserContext) -> None:
         self.browser = browser
-        self.markitdown = markitdown
+        self.markitdown = MarkItDown()
 
     async def scrape(self, requested_url: str, ttl: str) -> ScrapeResult:
         url, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
