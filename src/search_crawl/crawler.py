@@ -52,7 +52,6 @@ class CrawlerService:
     camoufox: AsyncCamoufox
     camoufox_options: dict[str, Any]
     browser: Browser | BrowserContext
-    scraper: Scraper
 
     def __init__(self, **camoufox_options) -> None:
         self.camoufox_options = camoufox_options
@@ -60,7 +59,6 @@ class CrawlerService:
     async def __aenter__(self) -> Self:
         self.camoufox = AsyncCamoufox(**self.camoufox_options)
         self.browser = await self.camoufox.__aenter__()
-        self.scraper = Scraper(self.browser)
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
