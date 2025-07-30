@@ -1,10 +1,12 @@
 from typing import TypedDict
 
-from camoufox.async_api import Browser, BrowserContext
 from cashews import cache
 from markitdown import MarkItDown
+from patchright.async_api import Browser
 
 from .page_parser import URL, Navigation, Readable
+
+cache.setup("disk://?directory=.cache&shards=0")
 
 
 class ScrapeResult(TypedDict):
@@ -22,16 +24,15 @@ class ScrapeResult(TypedDict):
 
 
 class Scraper:
-    browser: Browser | BrowserContext
+    browser: Browser
 
-    def __init__(self, browser: Browser | BrowserContext) -> None:
+    def __init__(self, browser: Browser) -> None:
         self.browser = browser
-        self.markitdown = MarkItDown()
 
     async def scrape(self, requested_url: str, ttl: str) -> ScrapeResult:
         url, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
 
-        readable = Readable(raw_html, self.markitdown)
+        readable = Readable(raw_html)
         navigation = Navigation(raw_html, url)
 
         return {
@@ -59,7 +60,7 @@ class Scraper:
 
     async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
         page = await self.browser.new_page()
-        await page.goto(requested_url, timeout=10000, wait_until="load")
+        await page.goto(requested_url, timeout=10000, wait_until="networkidle")
         raw_html = await page.content()
         await page.close()
         return URL(page.url), raw_html

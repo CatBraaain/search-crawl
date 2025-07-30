@@ -1,12 +1,8 @@
 import asyncio
-from typing import Any, Self
 
-from camoufox.async_api import AsyncCamoufox, Browser, BrowserContext
-from cashews import cache
+from patchright.async_api import Browser
 
 from .scraper import URL, Scraper, ScrapeResult
-
-cache.setup("disk://?directory=.cache&shards=0")
 
 
 class Crawler:
@@ -16,7 +12,7 @@ class Crawler:
 
     def __init__(
         self,
-        browser: Browser | BrowserContext,
+        browser: Browser,
         ttl: str = "24h",
     ) -> None:
         self.scraper = Scraper(browser)
@@ -46,30 +42,3 @@ class Crawler:
         )
 
         return self.results
-
-
-class CrawlerService:
-    camoufox: AsyncCamoufox
-    camoufox_options: dict[str, Any]
-    browser: Browser | BrowserContext
-
-    def __init__(self, **camoufox_options) -> None:
-        self.camoufox_options = camoufox_options
-
-    async def __aenter__(self) -> Self:
-        self.camoufox = AsyncCamoufox(**self.camoufox_options)
-        self.browser = await self.camoufox.__aenter__()
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
-        await self.camoufox.__aexit__(exc_type, exc_val, exc_tb)
-
-    async def launch_crawl(
-        self, requested_url: str, concurrently: int, ttl: str
-    ) -> list[ScrapeResult]:
-        crawler = Crawler(self.browser, ttl)
-        # workaround for Camoufox freezing when opening multiple pages concurrently
-        # see: https://github.com/daijro/camoufox/issues/279
-        concurrently = 2
-        sem = asyncio.Semaphore(concurrently)
-        return await crawler.crawl(requested_url, sem)

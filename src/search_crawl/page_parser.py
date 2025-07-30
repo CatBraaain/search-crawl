@@ -79,11 +79,9 @@ class URL:
 
 
 class Readable(Document):
-    markitdown: MarkItDown
-
-    def __init__(self, raw_html: str, markitdown: MarkItDown) -> None:
+    def __init__(self, raw_html: str) -> None:
         super().__init__(raw_html)
-        self.markitdown = markitdown
+        self.markitdown = MarkItDown()
 
     def content(self) -> str:
         return cast(str, super().content())
