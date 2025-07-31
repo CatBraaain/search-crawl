@@ -1,7 +1,6 @@
 from typing import TypedDict
 
 from cashews import cache
-from markitdown import MarkItDown
 from patchright.async_api import Browser
 
 from .page_parser import URL, Navigation, Readable
