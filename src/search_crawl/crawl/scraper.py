@@ -29,7 +29,8 @@ class Scraper:
         self.browser = browser
 
     async def scrape(self, requested_url: str, ttl: str) -> ScrapeResult:
-        url, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
+        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
+        url = URL(url_str)
 
         readable = Readable(raw_html)
         navigation = Navigation(raw_html, url)
@@ -48,14 +49,14 @@ class Scraper:
             "pagination_links": navigation.pagination_links,
         }
 
-    async def scrape_raw_wrapper(self, requested_url: str, ttl: str) -> tuple[URL, str]:
+    async def scrape_raw_wrapper(self, requested_url: str, ttl: str) -> tuple[str, str]:
         cached = await cache.get(requested_url)
         if cached:
             return cached
         else:
-            url_str, html = await self.scrape_raw(requested_url)
-            await cache.set(requested_url, (url_str, html), expire=ttl)
-            return URL(url_str), html
+            value = await self.scrape_raw(requested_url)
+            await cache.set(requested_url, value, expire=ttl)
+            return value
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()
