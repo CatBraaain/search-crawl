@@ -36,7 +36,7 @@ class Scraper:
 
         return {
             "requested_url": requested_url,
-            "url": str(url),
+            "url": url.normalized,
             "title": readable.title(),
             "short_title": readable.short_title(),
             "author": readable.author(),

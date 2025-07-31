@@ -56,9 +56,6 @@ class URL:
         normalized_query = urlencode(sorted(query_params))
         return normalized_query
 
-    def __str__(self) -> str:
-        return self.normalized
-
     def __eq__(self, other: object) -> bool:
         if isinstance(other, URL) or isinstance(other, str):
             other_url = other if isinstance(other, URL) else URL(other)
