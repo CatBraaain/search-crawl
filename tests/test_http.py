@@ -1,5 +1,5 @@
 from search_crawl_client import ApiClient, Configuration
-from search_crawl_client.api.default_api import DefaultApi
+from search_crawl_client.api.default_api import CacheStrategy, DefaultApi
 
 config = Configuration(host="http://localhost:8000")
 with ApiClient(config) as client:
@@ -22,11 +22,17 @@ def test_search_images():
 
 
 def test_crawl():
-    res = api.crawl(url="https://example.com")
+    res = api.crawl(
+        url="https://example.com",
+        cache_strategy=CacheStrategy(readable=False, writable=False),
+    )
     assert res
 
 
 def test_crawl_pagination():
-    res = api.crawl(url="https://web-scraping.dev/products")
+    res = api.crawl(
+        url="https://web-scraping.dev/products",
+        cache_strategy=CacheStrategy(readable=False, writable=False),
+    )
     print([r.url for r in res])
     assert len(res) == 5
