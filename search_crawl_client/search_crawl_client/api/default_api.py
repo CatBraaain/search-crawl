@@ -18,6 +18,7 @@ from typing_extensions import Annotated
 
 from pydantic import StrictInt, StrictStr, field_validator
 from typing import List, Optional
+from search_crawl_client.models.cache_strategy import CacheStrategy
 from search_crawl_client.models.general_search_result import GeneralSearchResult
 from search_crawl_client.models.image_search_result import ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult
@@ -45,7 +46,7 @@ class DefaultApi:
         self,
         url: StrictStr,
         concurrently: Optional[StrictInt] = None,
-        ttl: Optional[StrictStr] = None,
+        cache_strategy: Optional[CacheStrategy] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -66,8 +67,8 @@ class DefaultApi:
         :type url: str
         :param concurrently:
         :type concurrently: int
-        :param ttl:
-        :type ttl: str
+        :param cache_strategy:
+        :type cache_strategy: CacheStrategy
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -93,7 +94,7 @@ class DefaultApi:
         _param = self._crawl_serialize(
             url=url,
             concurrently=concurrently,
-            ttl=ttl,
+            cache_strategy=cache_strategy,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -120,7 +121,7 @@ class DefaultApi:
         self,
         url: StrictStr,
         concurrently: Optional[StrictInt] = None,
-        ttl: Optional[StrictStr] = None,
+        cache_strategy: Optional[CacheStrategy] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -141,8 +142,8 @@ class DefaultApi:
         :type url: str
         :param concurrently:
         :type concurrently: int
-        :param ttl:
-        :type ttl: str
+        :param cache_strategy:
+        :type cache_strategy: CacheStrategy
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -168,7 +169,7 @@ class DefaultApi:
         _param = self._crawl_serialize(
             url=url,
             concurrently=concurrently,
-            ttl=ttl,
+            cache_strategy=cache_strategy,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -195,7 +196,7 @@ class DefaultApi:
         self,
         url: StrictStr,
         concurrently: Optional[StrictInt] = None,
-        ttl: Optional[StrictStr] = None,
+        cache_strategy: Optional[CacheStrategy] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -216,8 +217,8 @@ class DefaultApi:
         :type url: str
         :param concurrently:
         :type concurrently: int
-        :param ttl:
-        :type ttl: str
+        :param cache_strategy:
+        :type cache_strategy: CacheStrategy
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -243,7 +244,7 @@ class DefaultApi:
         _param = self._crawl_serialize(
             url=url,
             concurrently=concurrently,
-            ttl=ttl,
+            cache_strategy=cache_strategy,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -265,7 +266,7 @@ class DefaultApi:
         self,
         url,
         concurrently,
-        ttl,
+        cache_strategy,
         _request_auth,
         _content_type,
         _headers,
@@ -296,13 +297,11 @@ class DefaultApi:
             
             _query_params.append(('concurrently', concurrently))
             
-        if ttl is not None:
-            
-            _query_params.append(('ttl', ttl))
-            
         # process the header parameters
         # process the form parameters
         # process the body parameter
+        if cache_strategy is not None:
+            _body_params = cache_strategy
 
 
         # set the HTTP header `Accept`
@@ -313,13 +312,26 @@ class DefaultApi:
                 ]
             )
 
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = [
         ]
 
         return self.api_client.param_serialize(
-            method='GET',
+            method='POST',
             resource_path='/crawl',
             path_params=_path_params,
             query_params=_query_params,

@@ -11,7 +11,7 @@ def client():
 
 
 def test_crawl(client):
-    res = client.get(
+    res = client.post(
         "/crawl",
         params={"url": "https://example.com"},
     )
@@ -19,7 +19,7 @@ def test_crawl(client):
 
 
 def test_crawl_pagination(client):
-    res = client.get(
+    res = client.post(
         "/crawl",
         params={"url": "https://web-scraping.dev/products"},
     )

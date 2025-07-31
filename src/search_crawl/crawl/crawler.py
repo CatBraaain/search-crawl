@@ -2,7 +2,7 @@ import asyncio
 
 from patchright.async_api import Browser
 
-from .scraper import URL, Scraper, ScrapeResult
+from .scraper import URL, CacheStrategy, Scraper, ScrapeResult
 
 
 class Crawler:
@@ -18,7 +18,7 @@ class Crawler:
         self,
         requested_url: str,
         sem: asyncio.Semaphore,
-        ttl: str = "24h",
+        cache_strategy: CacheStrategy,
     ) -> list[ScrapeResult]:
         visited: list[URL] = []
         results: list[ScrapeResult] = []
@@ -29,7 +29,7 @@ class Crawler:
             visited.append(URL(_url))
 
             async with sem:
-                result = await self.scraper.scrape(_url, ttl)
+                result = await self.scraper.scrape(_url, cache_strategy)
                 results.append(result)
 
             await asyncio.gather(

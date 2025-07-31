@@ -1,11 +1,19 @@
 from typing import TypedDict
 
 from cashews import cache
+from cashews.ttl import TTL
 from patchright.async_api import Browser
+from pydantic import BaseModel
 
 from .page_parser import URL, Navigation, Readable
 
 cache.setup("disk://?directory=.cache&shards=0")
+
+
+class CacheStrategy(BaseModel):
+    readable: bool = True
+    writable: bool = True
+    ttl: TTL = "24h"
 
 
 class ScrapeResult(TypedDict):
@@ -28,8 +36,10 @@ class Scraper:
     def __init__(self, browser: Browser) -> None:
         self.browser = browser
 
-    async def scrape(self, requested_url: str, ttl: str) -> ScrapeResult:
-        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, ttl)
+    async def scrape(
+        self, requested_url: str, cache_strategy: CacheStrategy
+    ) -> ScrapeResult:
+        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, cache_strategy)
         url = URL(url_str)
 
         readable = Readable(raw_html)
@@ -49,13 +59,16 @@ class Scraper:
             "pagination_links": navigation.pagination_links,
         }
 
-    async def scrape_raw_wrapper(self, requested_url: str, ttl: str) -> tuple[str, str]:
-        cached = await cache.get(requested_url)
+    async def scrape_raw_wrapper(
+        self, requested_url: str, cache_strategy: CacheStrategy
+    ) -> tuple[str, str]:
+        cached = cache_strategy.readable and await cache.get(requested_url)
         if cached:
             return cached
         else:
             value = await self.scrape_raw(requested_url)
-            await cache.set(requested_url, value, expire=ttl)
+            if cache_strategy.writable:
+                await cache.set(requested_url, value, expire=cache_strategy.ttl)
             return value
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:

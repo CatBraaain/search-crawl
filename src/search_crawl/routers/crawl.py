@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
 
-from ..crawl.crawler import Crawler, ScrapeResult
+from ..crawl.crawler import CacheStrategy, Crawler, ScrapeResult
 
 crawler: Crawler
 
@@ -21,9 +21,11 @@ async def lifespan(app: FastAPI):
 router = APIRouter(lifespan=lifespan)
 
 
-@router.get("/crawl", response_model=list[ScrapeResult])
+@router.post("/crawl", response_model=list[ScrapeResult])
 async def crawl(
-    url: str, concurrently: int = 2, ttl: str = "24h"
+    url: str,
+    cache_strategy: CacheStrategy = CacheStrategy(),
+    concurrently: int = 2,
 ) -> list[ScrapeResult]:
     sem = asyncio.Semaphore(concurrently)
-    return await crawler.crawl(url, sem, ttl)
+    return await crawler.crawl(url, sem, cache_strategy)
