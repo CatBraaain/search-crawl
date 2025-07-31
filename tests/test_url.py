@@ -1,6 +1,6 @@
 import pytest
 
-from search_crawl.scraper import URL
+from search_crawl.crawl.scraper import URL
 
 
 def test_with_domain() -> None:

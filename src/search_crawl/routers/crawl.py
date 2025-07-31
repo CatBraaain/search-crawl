@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from patchright.async_api import Browser, async_playwright
 
-from ..crawler import Crawler, ScrapeResult
+from ..crawl.crawler import Crawler, ScrapeResult
 
 browser: Browser
 
