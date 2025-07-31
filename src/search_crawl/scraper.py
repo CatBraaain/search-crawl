@@ -54,13 +54,13 @@ class Scraper:
         if cached:
             return cached
         else:
-            value = await self.scrape_raw(requested_url)
-            await cache.set(requested_url, value, expire=ttl)
-            return value
+            url_str, html = await self.scrape_raw(requested_url)
+            await cache.set(requested_url, (url_str, html), expire=ttl)
+            return URL(url_str), html
 
-    async def scrape_raw(self, requested_url: str) -> tuple[URL, str]:
+    async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()
         await page.goto(requested_url, timeout=10000, wait_until="networkidle")
         raw_html = await page.content()
         await page.close()
-        return URL(page.url), raw_html
+        return page.url, raw_html
