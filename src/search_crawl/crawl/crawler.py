@@ -7,16 +7,12 @@ from .scraper import URL, Scraper, ScrapeResult
 
 class Crawler:
     scraper: Scraper
-    visited: list[URL]
-    results: list[ScrapeResult]
 
     def __init__(
         self,
         browser: Browser,
     ) -> None:
         self.scraper = Scraper(browser)
-        self.visited = []
-        self.results = []
 
     async def crawl(
         self,
@@ -24,20 +20,24 @@ class Crawler:
         sem: asyncio.Semaphore,
         ttl: str = "24h",
     ) -> list[ScrapeResult]:
-        if requested_url in self.visited:
-            return []
-        else:
-            self.visited.append(URL(requested_url))
+        visited: list[URL] = []
+        results: list[ScrapeResult] = []
 
-        async with sem:
-            scrape_result = await self.scraper.scrape(requested_url, ttl)
-            self.results.append(scrape_result)
+        async def _crawl(_url: str) -> None:
+            if _url in visited:
+                return
+            visited.append(URL(_url))
 
-        await asyncio.gather(
-            *[
-                self.crawl(pagination_link, sem, ttl)
-                for pagination_link in scrape_result["pagination_links"]
-            ]
-        )
+            async with sem:
+                result = await self.scraper.scrape(_url, ttl)
+                results.append(result)
 
-        return self.results
+            await asyncio.gather(
+                *[
+                    _crawl(pagination_link)
+                    for pagination_link in result["pagination_links"]
+                ]
+            )
+
+        await _crawl(requested_url)
+        return results

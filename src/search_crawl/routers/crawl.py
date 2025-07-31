@@ -2,18 +2,19 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
-from patchright.async_api import Browser, async_playwright
+from patchright.async_api import async_playwright
 
 from ..crawl.crawler import Crawler, ScrapeResult
 
-browser: Browser
+crawler: Crawler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global browser
+    global crawler
     async with async_playwright() as p:
         browser = await p.chromium.launch()
+        crawler = Crawler(browser)
         yield
 
 
@@ -25,4 +26,4 @@ async def crawl(
     url: str, concurrently: int = 2, ttl: str = "24h"
 ) -> list[ScrapeResult]:
     sem = asyncio.Semaphore(concurrently)
-    return await Crawler(browser).crawl(url, sem, ttl)
+    return await crawler.crawl(url, sem, ttl)

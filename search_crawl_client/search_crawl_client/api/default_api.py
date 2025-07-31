@@ -44,6 +44,8 @@ class DefaultApi:
     def crawl(
         self,
         url: StrictStr,
+        concurrently: Optional[StrictInt] = None,
+        ttl: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -62,6 +64,10 @@ class DefaultApi:
 
         :param url: (required)
         :type url: str
+        :param concurrently:
+        :type concurrently: int
+        :param ttl:
+        :type ttl: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -86,6 +92,8 @@ class DefaultApi:
 
         _param = self._crawl_serialize(
             url=url,
+            concurrently=concurrently,
+            ttl=ttl,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -111,6 +119,8 @@ class DefaultApi:
     def crawl_with_http_info(
         self,
         url: StrictStr,
+        concurrently: Optional[StrictInt] = None,
+        ttl: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -129,6 +139,10 @@ class DefaultApi:
 
         :param url: (required)
         :type url: str
+        :param concurrently:
+        :type concurrently: int
+        :param ttl:
+        :type ttl: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -153,6 +167,8 @@ class DefaultApi:
 
         _param = self._crawl_serialize(
             url=url,
+            concurrently=concurrently,
+            ttl=ttl,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -178,6 +194,8 @@ class DefaultApi:
     def crawl_without_preload_content(
         self,
         url: StrictStr,
+        concurrently: Optional[StrictInt] = None,
+        ttl: Optional[StrictStr] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -196,6 +214,10 @@ class DefaultApi:
 
         :param url: (required)
         :type url: str
+        :param concurrently:
+        :type concurrently: int
+        :param ttl:
+        :type ttl: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -220,6 +242,8 @@ class DefaultApi:
 
         _param = self._crawl_serialize(
             url=url,
+            concurrently=concurrently,
+            ttl=ttl,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -240,6 +264,8 @@ class DefaultApi:
     def _crawl_serialize(
         self,
         url,
+        concurrently,
+        ttl,
         _request_auth,
         _content_type,
         _headers,
@@ -265,6 +291,14 @@ class DefaultApi:
         if url is not None:
             
             _query_params.append(('url', url))
+            
+        if concurrently is not None:
+            
+            _query_params.append(('concurrently', concurrently))
+            
+        if ttl is not None:
+            
+            _query_params.append(('ttl', ttl))
             
         # process the header parameters
         # process the form parameters
