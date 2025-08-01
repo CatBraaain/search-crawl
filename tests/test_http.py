@@ -58,5 +58,4 @@ def test_crawl_pagination():
             cache_strategy=CacheStrategy(readable=False, writable=False),
         )
     )
-    print([r.url for r in res])
     assert len(res) == 5
