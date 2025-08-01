@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
+from pydantic import BaseModel
 
 from ..crawl.crawler import CacheStrategy, Crawler, ScrapeResult
 
@@ -21,11 +22,33 @@ async def lifespan(app: FastAPI):
 router = APIRouter(lifespan=lifespan)
 
 
+class BaseCrawlApiArg(BaseModel):
+    cache_strategy: CacheStrategy = CacheStrategy()
+    concurrently: int = 2
+
+
+class CrawlApiArg(BaseCrawlApiArg):
+    url: str
+
+
+class CrawlManyApiArg(BaseCrawlApiArg):
+    urls: list[str]
+
+
 @router.post("/crawl", response_model=list[ScrapeResult])
 async def crawl(
-    url: str,
-    cache_strategy: CacheStrategy = CacheStrategy(),
-    concurrently: int = 2,
+    crawl_arg: CrawlApiArg,
 ) -> list[ScrapeResult]:
-    sem = asyncio.Semaphore(concurrently)
-    return await crawler.crawl(url, sem, cache_strategy)
+    sem = asyncio.Semaphore(crawl_arg.concurrently)
+    return await crawler.crawl(crawl_arg.url, sem, crawl_arg.cache_strategy)
+
+
+@router.post("/crawl-many", response_model=list[list[ScrapeResult]])
+async def crawl_many(crawl_many_arg: CrawlManyApiArg) -> list[list[ScrapeResult]]:
+    sem = asyncio.Semaphore(crawl_many_arg.concurrently)
+    return await asyncio.gather(
+        *(
+            crawler.crawl(url, sem, crawl_many_arg.cache_strategy)
+            for url in crawl_many_arg.urls
+        )
+    )

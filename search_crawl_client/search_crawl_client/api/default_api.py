@@ -18,7 +18,8 @@ from typing_extensions import Annotated
 
 from pydantic import StrictInt, StrictStr, field_validator
 from typing import List, Optional
-from search_crawl_client.models.cache_strategy import CacheStrategy
+from search_crawl_client.models.crawl_api_arg import CrawlApiArg
+from search_crawl_client.models.crawl_many_api_arg import CrawlManyApiArg
 from search_crawl_client.models.general_search_result import GeneralSearchResult
 from search_crawl_client.models.image_search_result import ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult
@@ -44,9 +45,7 @@ class DefaultApi:
     @validate_call
     def crawl(
         self,
-        url: StrictStr,
-        concurrently: Optional[StrictInt] = None,
-        cache_strategy: Optional[CacheStrategy] = None,
+        crawl_api_arg: CrawlApiArg,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -63,12 +62,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param url: (required)
-        :type url: str
-        :param concurrently:
-        :type concurrently: int
-        :param cache_strategy:
-        :type cache_strategy: CacheStrategy
+        :param crawl_api_arg: (required)
+        :type crawl_api_arg: CrawlApiArg
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -92,9 +87,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            url=url,
-            concurrently=concurrently,
-            cache_strategy=cache_strategy,
+            crawl_api_arg=crawl_api_arg,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -119,9 +112,7 @@ class DefaultApi:
     @validate_call
     def crawl_with_http_info(
         self,
-        url: StrictStr,
-        concurrently: Optional[StrictInt] = None,
-        cache_strategy: Optional[CacheStrategy] = None,
+        crawl_api_arg: CrawlApiArg,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -138,12 +129,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param url: (required)
-        :type url: str
-        :param concurrently:
-        :type concurrently: int
-        :param cache_strategy:
-        :type cache_strategy: CacheStrategy
+        :param crawl_api_arg: (required)
+        :type crawl_api_arg: CrawlApiArg
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -167,9 +154,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            url=url,
-            concurrently=concurrently,
-            cache_strategy=cache_strategy,
+            crawl_api_arg=crawl_api_arg,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -194,9 +179,7 @@ class DefaultApi:
     @validate_call
     def crawl_without_preload_content(
         self,
-        url: StrictStr,
-        concurrently: Optional[StrictInt] = None,
-        cache_strategy: Optional[CacheStrategy] = None,
+        crawl_api_arg: CrawlApiArg,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -213,12 +196,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param url: (required)
-        :type url: str
-        :param concurrently:
-        :type concurrently: int
-        :param cache_strategy:
-        :type cache_strategy: CacheStrategy
+        :param crawl_api_arg: (required)
+        :type crawl_api_arg: CrawlApiArg
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -242,9 +221,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            url=url,
-            concurrently=concurrently,
-            cache_strategy=cache_strategy,
+            crawl_api_arg=crawl_api_arg,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -264,9 +241,7 @@ class DefaultApi:
 
     def _crawl_serialize(
         self,
-        url,
-        concurrently,
-        cache_strategy,
+        crawl_api_arg,
         _request_auth,
         _content_type,
         _headers,
@@ -289,19 +264,11 @@ class DefaultApi:
 
         # process the path parameters
         # process the query parameters
-        if url is not None:
-            
-            _query_params.append(('url', url))
-            
-        if concurrently is not None:
-            
-            _query_params.append(('concurrently', concurrently))
-            
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if cache_strategy is not None:
-            _body_params = cache_strategy
+        if crawl_api_arg is not None:
+            _body_params = crawl_api_arg
 
 
         # set the HTTP header `Accept`
@@ -333,6 +300,279 @@ class DefaultApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/crawl',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def crawl_many(
+        self,
+        crawl_many_api_arg: CrawlManyApiArg,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[List[ScrapeResult]]:
+        """Crawl Many
+
+
+        :param crawl_many_api_arg: (required)
+        :type crawl_many_api_arg: CrawlManyApiArg
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._crawl_many_serialize(
+            crawl_many_api_arg=crawl_many_api_arg,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[List[ScrapeResult]]",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def crawl_many_with_http_info(
+        self,
+        crawl_many_api_arg: CrawlManyApiArg,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[List[ScrapeResult]]]:
+        """Crawl Many
+
+
+        :param crawl_many_api_arg: (required)
+        :type crawl_many_api_arg: CrawlManyApiArg
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._crawl_many_serialize(
+            crawl_many_api_arg=crawl_many_api_arg,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[List[ScrapeResult]]",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def crawl_many_without_preload_content(
+        self,
+        crawl_many_api_arg: CrawlManyApiArg,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Crawl Many
+
+
+        :param crawl_many_api_arg: (required)
+        :type crawl_many_api_arg: CrawlManyApiArg
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._crawl_many_serialize(
+            crawl_many_api_arg=crawl_many_api_arg,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[List[ScrapeResult]]",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _crawl_many_serialize(
+        self,
+        crawl_many_api_arg,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if crawl_many_api_arg is not None:
+            _body_params = crawl_many_api_arg
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/crawl-many',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
