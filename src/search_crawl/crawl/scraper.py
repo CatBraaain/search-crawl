@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from cashews import cache
 from cashews.ttl import TTL
-from patchright.async_api import Browser
+from patchright.async_api import Browser, TimeoutError
 from pydantic import BaseModel
 
 from .page_parser import URL, Navigation, Readable
@@ -73,7 +73,10 @@ class Scraper:
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()
-        await page.goto(requested_url, timeout=10000, wait_until="networkidle")
+        try:
+            await page.goto(requested_url, timeout=5000, wait_until="networkidle")
+        except TimeoutError:
+            pass
         raw_html = await page.content()
         await page.close()
         return page.url, raw_html
