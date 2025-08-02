@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter
 
@@ -7,14 +7,14 @@ from ..search.search import GeneralSearchResult, ImageSearchResult, search
 router = APIRouter()
 
 
-@router.get("/search/general", response_model=List[GeneralSearchResult])
+@router.get("/search/general", response_model=list[GeneralSearchResult])
 async def search_general(
     q: str,
     language: Optional[str] = "en",
     page: int = 1,
     time_range: Optional[Literal["day", "month", "year"]] = None,
     format: Optional[Literal["json", "csv", "rss"]] = "json",
-) -> List[GeneralSearchResult]:
+) -> list[GeneralSearchResult]:
     return await search(
         q=q,
         engine_type="general",
@@ -25,14 +25,14 @@ async def search_general(
     )
 
 
-@router.get("/search/images", response_model=List[ImageSearchResult])
+@router.get("/search/images", response_model=list[ImageSearchResult])
 async def search_images(
     q: str,
     language: Optional[str] = "en",
     page: int = 1,
     time_range: Optional[Literal["day", "month", "year"]] = None,
     format: Optional[Literal["json", "csv", "rss"]] = "json",
-) -> List[ImageSearchResult]:
+) -> list[ImageSearchResult]:
     return await search(
         q=q,
         engine_type="images",

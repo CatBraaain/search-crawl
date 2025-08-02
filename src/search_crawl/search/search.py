@@ -1,4 +1,4 @@
-from typing import List, Literal, Optional, overload
+from typing import Literal, Optional, overload
 
 import httpx
 from typing_extensions import TypedDict
@@ -11,8 +11,8 @@ class GeneralSearchResult(TypedDict):
     thumbnail: Optional[str]
     engine: str
     template: Literal["default.html", "videos.html", "images.html"]
-    parsed_url: List[str]
-    engines: List[str]
+    parsed_url: list[str]
+    engines: list[str]
     score: float
 
 
@@ -23,8 +23,8 @@ class ImageSearchResult(TypedDict):
     content: str
     engine: str
     template: Literal["default.html", "videos.html", "images.html"]
-    parsed_url: List[str]
-    engines: List[str]
+    parsed_url: list[str]
+    engines: list[str]
     score: float
 
 
@@ -57,7 +57,7 @@ async def search(
     page: int,
     time_range: Optional[Literal["day", "month", "year"]],
     format: Optional[Literal["json", "csv", "rss"]],
-) -> List[GeneralSearchResult]: ...
+) -> list[GeneralSearchResult]: ...
 
 
 @overload
@@ -69,7 +69,7 @@ async def search(
     page: int,
     time_range: Optional[Literal["day", "month", "year"]],
     format: Optional[Literal["json", "csv", "rss"]],
-) -> List[ImageSearchResult]: ...
+) -> list[ImageSearchResult]: ...
 
 
 async def search(
@@ -80,7 +80,7 @@ async def search(
     page: int,
     time_range: Optional[Literal["day", "month", "year"]],
     format: Optional[Literal["json", "csv", "rss"]],
-) -> List[GeneralSearchResult] | List[ImageSearchResult]:
+) -> list[GeneralSearchResult] | list[ImageSearchResult]:
     engines = engines_map[engine_type]
     async with httpx.AsyncClient() as client:
         response = await client.get(
