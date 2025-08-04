@@ -39,7 +39,7 @@ class Navigation:
         links = self.extract_links(tree, url)
         self.links = links
         self.pagination_links = [
-            link for link in links if re.match(url.pagination_regex, link)
+            link for link in links if URL(link).is_pagination_of(url)
         ]
 
     def extract_links(self, tree: html.HtmlElement, current_url: URL) -> list[str]:

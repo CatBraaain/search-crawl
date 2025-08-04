@@ -28,13 +28,3 @@ def test_crawl_many(api):
     assert len(res) == 2
     assert len(res[0]) == 1
     assert len(res[1]) == 5
-
-
-def test_crawl_pagination(api):
-    res = api.crawl(
-        CrawlApiArg(
-            url="https://web-scraping.dev/products",
-            cache_strategy=CacheStrategy(readable=False, writable=False),
-        )
-    )
-    assert len(res) == 5

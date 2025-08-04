@@ -16,30 +16,30 @@ def test_with_domain() -> None:
 
 def test_with_basepath() -> None:
     example_path = "https://example.com"
-    assert URL(f"{example_path}").with_basepath == example_path
-    assert URL(f"{example_path}/").with_basepath == example_path
-    assert URL(f"{example_path}/a").with_basepath == example_path + "/a"
-    assert URL(f"{example_path}/a/").with_basepath == example_path + "/a"
+    assert URL(f"{example_path}").with_pagination_base == example_path
+    assert URL(f"{example_path}/").with_pagination_base == example_path
+    assert URL(f"{example_path}/a").with_pagination_base == example_path + "/a"
+    assert URL(f"{example_path}/a/").with_pagination_base == example_path + "/a"
 
-    assert URL(f"{example_path}?p=2").with_basepath == example_path
-    assert URL(f"{example_path}?pa=2").with_basepath == example_path
-    assert URL(f"{example_path}?pag=2").with_basepath == example_path
-    assert URL(f"{example_path}?page=2").with_basepath == example_path
-    assert URL(f"{example_path}?pg=2").with_basepath == example_path
-    assert URL(f"{example_path}?paging=2").with_basepath == example_path
-    assert URL(f"{example_path}?pagination=2").with_basepath == example_path
-    assert URL(f"{example_path}?pagenum=2").with_basepath == example_path
-    assert URL(f"{example_path}?p-num=2").with_basepath == example_path
-    assert URL(f"{example_path}?page-num=2").with_basepath == example_path
-    assert URL(f"{example_path}/p/2").with_basepath == example_path
-    assert URL(f"{example_path}/page/2").with_basepath == example_path
-    assert URL(f"{example_path}/page-num/2").with_basepath == example_path
-    assert URL(f"{example_path}/p2").with_basepath == example_path
-    assert URL(f"{example_path}/p-2").with_basepath == example_path
-    assert URL(f"{example_path}/p-num-2").with_basepath == example_path
-    assert URL(f"{example_path}/page-num-2").with_basepath == example_path
-    assert URL(f"{example_path}/a/b?p=2").with_basepath == example_path + "/a/b"
-    assert URL(f"{example_path}/a/b/p/2").with_basepath == example_path + "/a/b"
+    assert URL(f"{example_path}?p=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?pa=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?pag=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?page=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?pg=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?paging=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?pagination=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?pagenum=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?p-num=2").with_pagination_base == example_path
+    assert URL(f"{example_path}?page-num=2").with_pagination_base == example_path
+    assert URL(f"{example_path}/p/2").with_pagination_base == example_path
+    assert URL(f"{example_path}/page/2").with_pagination_base == example_path
+    assert URL(f"{example_path}/page-num/2").with_pagination_base == example_path
+    assert URL(f"{example_path}/p2").with_pagination_base == example_path
+    assert URL(f"{example_path}/p-2").with_pagination_base == example_path
+    assert URL(f"{example_path}/p-num-2").with_pagination_base == example_path
+    assert URL(f"{example_path}/page-num-2").with_pagination_base == example_path
+    assert URL(f"{example_path}/a/b?p=2").with_pagination_base == example_path + "/a/b"
+    assert URL(f"{example_path}/a/b/p/2").with_pagination_base == example_path + "/a/b"
 
 
 def test_with_path() -> None:
