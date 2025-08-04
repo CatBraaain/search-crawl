@@ -31,7 +31,7 @@ def get_param_set():
 @pytest.mark.asyncio
 @pytest.mark.parametrize("input, expected", get_param_set())
 @patch("search_crawl.routers.search.search", new_callable=AsyncMock)
-async def test_arguments(mock_search: AsyncMock, input: dict, expected: dict):
+async def test_default_args(mock_search: AsyncMock, input: dict, expected: dict):
     query = "query"
     await search_general(query, **input)
     mock_search.assert_awaited_with(

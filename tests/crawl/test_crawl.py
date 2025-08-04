@@ -1,32 +1,11 @@
-from search_crawl_client import ApiClient, Configuration
-from search_crawl_client.api.default_api import DefaultApi
 from search_crawl_client.models import (
     CacheStrategy,
     CrawlApiArg,
     CrawlManyApiArg,
 )
 
-config = Configuration(host="http://localhost:8000")
-with ApiClient(config) as client:
-    api = DefaultApi(client)
 
-
-def test_healthz():
-    res = api.healthz()
-    assert res == "OK"
-
-
-def test_search_general():
-    res = api.search_general(q="ping")
-    assert isinstance(res, list) and len(res) > 0
-
-
-def test_search_images():
-    res = api.search_images(q="ping")
-    assert isinstance(res, list) and len(res) > 0
-
-
-def test_crawl():
+def test_crawl(api):
     res = api.crawl(
         CrawlApiArg(
             url="https://example.com",
@@ -36,7 +15,7 @@ def test_crawl():
     assert res
 
 
-def test_crawl_many():
+def test_crawl_many(api):
     res = api.crawl_many(
         CrawlManyApiArg(
             urls=[
@@ -51,7 +30,7 @@ def test_crawl_many():
     assert len(res[1]) == 5
 
 
-def test_crawl_pagination():
+def test_crawl_pagination(api):
     res = api.crawl(
         CrawlApiArg(
             url="https://web-scraping.dev/products",
