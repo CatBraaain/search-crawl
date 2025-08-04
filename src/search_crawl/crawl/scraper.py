@@ -5,7 +5,7 @@ from cashews.ttl import TTL
 from patchright.async_api import Browser, TimeoutError
 from pydantic import BaseModel
 
-from .page_parser import URL, Navigation, Readable
+from .parser import URL, Navigation, Readable
 
 cache.setup("disk://?directory=.cache&shards=0")
 
