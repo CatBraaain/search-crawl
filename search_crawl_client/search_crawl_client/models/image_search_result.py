@@ -17,8 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List, Union
+from pydantic import BaseModel, ConfigDict, StrictStr
+from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,23 +26,11 @@ class ImageSearchResult(BaseModel):
     """
     ImageSearchResult
     """ # noqa: E501
-    img_src: StrictStr
     url: StrictStr
     title: StrictStr
     content: StrictStr
-    engine: StrictStr
-    template: StrictStr
-    parsed_url: List[StrictStr]
-    engines: List[StrictStr]
-    score: Union[StrictFloat, StrictInt]
-    __properties: ClassVar[List[str]] = ["img_src", "url", "title", "content", "engine", "template", "parsed_url", "engines", "score"]
-
-    @field_validator('template')
-    def template_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(['default.html', 'videos.html', 'images.html']):
-            raise ValueError("must be one of enum values ('default.html', 'videos.html', 'images.html')")
-        return value
+    img_src: StrictStr
+    __properties: ClassVar[List[str]] = ["url", "title", "content", "img_src"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -95,15 +83,10 @@ class ImageSearchResult(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "img_src": obj.get("img_src"),
             "url": obj.get("url"),
             "title": obj.get("title"),
             "content": obj.get("content"),
-            "engine": obj.get("engine"),
-            "template": obj.get("template"),
-            "parsed_url": obj.get("parsed_url"),
-            "engines": obj.get("engines"),
-            "score": obj.get("score")
+            "img_src": obj.get("img_src")
         })
         return _obj
 

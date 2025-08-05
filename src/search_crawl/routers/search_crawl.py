@@ -33,7 +33,7 @@ async def search_crawl(
     crawl_results = await crawl_many(
         CrawlManyRequest(
             **search_crawl_request.crawl.model_dump(),
-            urls=[search_result["url"] for search_result in search_results],
+            urls=[search_result.url for search_result in search_results],
         )
     )
     return crawl_results

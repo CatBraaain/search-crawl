@@ -1,31 +1,21 @@
-from typing import Literal, Optional, overload
+from typing import Annotated, Literal, Optional, overload
 
 import httpx
-from typing_extensions import TypedDict
+from pydantic import BaseModel, BeforeValidator
 
 
-class GeneralSearchResult(TypedDict):
+class BaseSearchResult(BaseModel):
     url: str
     title: str
-    content: str
+    content: Annotated[str, BeforeValidator(lambda v: "" if v is None else v)]
+
+
+class GeneralSearchResult(BaseSearchResult):
     thumbnail: Optional[str]
-    engine: str
-    template: Literal["default.html", "videos.html", "images.html"]
-    parsed_url: list[str]
-    engines: list[str]
-    score: float
 
 
-class ImageSearchResult(TypedDict):
+class ImageSearchResult(BaseSearchResult):
     img_src: str
-    url: str
-    title: str
-    content: str
-    engine: str
-    template: Literal["default.html", "videos.html", "images.html"]
-    parsed_url: list[str]
-    engines: list[str]
-    score: float
 
 
 EngineType = Literal["general", "images"]
