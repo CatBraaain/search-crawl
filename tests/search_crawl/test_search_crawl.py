@@ -1,4 +1,4 @@
-from search_crawl_client.models import (
+from search_crawl_client import (
     BaseCrawlRequest,
     CacheStrategy,
     SearchCrawlRequest,

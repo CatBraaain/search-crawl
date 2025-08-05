@@ -2,8 +2,7 @@ from typing import Generator
 
 import pytest
 
-from search_crawl_client import ApiClient, Configuration
-from search_crawl_client.api.default_api import DefaultApi
+from search_crawl_client import ApiClient, Configuration, DefaultApi
 
 
 @pytest.fixture
