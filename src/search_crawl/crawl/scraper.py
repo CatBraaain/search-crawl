@@ -2,7 +2,8 @@ from typing import TypedDict
 
 from cashews import cache
 from cashews.ttl import TTL
-from patchright.async_api import Browser, TimeoutError
+from patchright.async_api import Browser
+from patchright.async_api import Error as PlaywrightError
 from pydantic import BaseModel
 
 from .parser import URL, Navigation, Readable
@@ -75,7 +76,7 @@ class Scraper:
         page = await self.browser.new_page()
         try:
             await page.goto(requested_url, timeout=5000, wait_until="networkidle")
-        except TimeoutError:
+        except PlaywrightError:
             pass
         raw_html = await page.content()
         await page.close()
