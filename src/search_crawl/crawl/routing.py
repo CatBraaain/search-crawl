@@ -5,7 +5,7 @@ from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
 from pydantic import BaseModel
 
-from ..crawl.crawler import CacheStrategy, Crawler, ScrapeResult
+from .crawler import CacheStrategy, Crawler, ScrapeResult
 
 crawler: Crawler
 

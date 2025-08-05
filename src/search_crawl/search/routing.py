@@ -2,7 +2,7 @@ from typing import Literal, Optional
 
 from fastapi import APIRouter
 
-from ..search.search import GeneralSearchResult, ImageSearchResult, search
+from .search import GeneralSearchResult, ImageSearchResult, search
 
 router = APIRouter()
 

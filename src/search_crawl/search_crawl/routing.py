@@ -3,8 +3,8 @@ from typing import Literal, Optional
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from ..crawl.routing import BaseCrawlRequest, CrawlManyRequest, ScrapeResult, crawl_many
 from ..search.search import search
-from .crawl import BaseCrawlRequest, CrawlManyRequest, ScrapeResult, crawl_many
 
 router = APIRouter()
 
