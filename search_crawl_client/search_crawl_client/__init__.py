@@ -28,6 +28,7 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "BaseCrawlRequest",
     "CacheStrategy",
     "CrawlManyRequest",
     "CrawlRequest",
@@ -35,6 +36,8 @@ __all__ = [
     "HTTPValidationError",
     "ImageSearchResult",
     "ScrapeResult",
+    "SearchCrawlRequest",
+    "SearchRequest",
     "Ttl",
     "ValidationError",
     "ValidationErrorLocInner",
@@ -55,6 +58,7 @@ from search_crawl_client.exceptions import ApiAttributeError as ApiAttributeErro
 from search_crawl_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
+from search_crawl_client.models.base_crawl_request import BaseCrawlRequest as BaseCrawlRequest
 from search_crawl_client.models.cache_strategy import CacheStrategy as CacheStrategy
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
@@ -62,6 +66,8 @@ from search_crawl_client.models.general_search_result import GeneralSearchResult
 from search_crawl_client.models.http_validation_error import HTTPValidationError as HTTPValidationError
 from search_crawl_client.models.image_search_result import ImageSearchResult as ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult as ScrapeResult
+from search_crawl_client.models.search_crawl_request import SearchCrawlRequest as SearchCrawlRequest
+from search_crawl_client.models.search_request import SearchRequest as SearchRequest
 from search_crawl_client.models.ttl import Ttl as Ttl
 from search_crawl_client.models.validation_error import ValidationError as ValidationError
 from search_crawl_client.models.validation_error_loc_inner import ValidationErrorLocInner as ValidationErrorLocInner

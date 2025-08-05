@@ -14,6 +14,7 @@
 
 
 # import models into model package
+from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
 from search_crawl_client.models.cache_strategy import CacheStrategy
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest
@@ -21,6 +22,8 @@ from search_crawl_client.models.general_search_result import GeneralSearchResult
 from search_crawl_client.models.http_validation_error import HTTPValidationError
 from search_crawl_client.models.image_search_result import ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult
+from search_crawl_client.models.search_crawl_request import SearchCrawlRequest
+from search_crawl_client.models.search_request import SearchRequest
 from search_crawl_client.models.ttl import Ttl
 from search_crawl_client.models.validation_error import ValidationError
 from search_crawl_client.models.validation_error_loc_inner import ValidationErrorLocInner
