@@ -1,13 +1,13 @@
 from search_crawl_client.models import (
     CacheStrategy,
-    CrawlApiArg,
-    CrawlManyApiArg,
+    CrawlManyRequest,
+    CrawlRequest,
 )
 
 
 def test_crawl(api):
     res = api.crawl(
-        CrawlApiArg(
+        CrawlRequest(
             url="https://example.com",
             cache_strategy=CacheStrategy(readable=False, writable=False),
         )
@@ -17,7 +17,7 @@ def test_crawl(api):
 
 def test_crawl_many(api):
     res = api.crawl_many(
-        CrawlManyApiArg(
+        CrawlManyRequest(
             urls=[
                 "https://example.com",
                 "https://web-scraping.dev/products",

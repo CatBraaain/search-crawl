@@ -2,7 +2,7 @@ import pytest
 
 from search_crawl_client.models import (
     CacheStrategy,
-    CrawlApiArg,
+    CrawlRequest,
 )
 
 
@@ -17,7 +17,7 @@ from search_crawl_client.models import (
 )
 def test_crawl_pagination(api, url, page_length):
     res = api.crawl(
-        CrawlApiArg(
+        CrawlRequest(
             url=url,
             cache_strategy=CacheStrategy(readable=True, writable=True),
         )

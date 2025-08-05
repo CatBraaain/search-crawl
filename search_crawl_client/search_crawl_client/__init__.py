@@ -29,8 +29,8 @@ __all__ = [
     "ApiAttributeError",
     "ApiException",
     "CacheStrategy",
-    "CrawlApiArg",
-    "CrawlManyApiArg",
+    "CrawlManyRequest",
+    "CrawlRequest",
     "GeneralSearchResult",
     "HTTPValidationError",
     "ImageSearchResult",
@@ -56,8 +56,8 @@ from search_crawl_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
 from search_crawl_client.models.cache_strategy import CacheStrategy as CacheStrategy
-from search_crawl_client.models.crawl_api_arg import CrawlApiArg as CrawlApiArg
-from search_crawl_client.models.crawl_many_api_arg import CrawlManyApiArg as CrawlManyApiArg
+from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
+from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
 from search_crawl_client.models.general_search_result import GeneralSearchResult as GeneralSearchResult
 from search_crawl_client.models.http_validation_error import HTTPValidationError as HTTPValidationError
 from search_crawl_client.models.image_search_result import ImageSearchResult as ImageSearchResult

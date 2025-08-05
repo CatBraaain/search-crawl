@@ -18,8 +18,8 @@ from typing_extensions import Annotated
 
 from pydantic import StrictInt, StrictStr, field_validator
 from typing import List, Optional
-from search_crawl_client.models.crawl_api_arg import CrawlApiArg
-from search_crawl_client.models.crawl_many_api_arg import CrawlManyApiArg
+from search_crawl_client.models.crawl_many_request import CrawlManyRequest
+from search_crawl_client.models.crawl_request import CrawlRequest
 from search_crawl_client.models.general_search_result import GeneralSearchResult
 from search_crawl_client.models.image_search_result import ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult
@@ -45,7 +45,7 @@ class DefaultApi:
     @validate_call
     def crawl(
         self,
-        crawl_api_arg: CrawlApiArg,
+        crawl_request: CrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -62,8 +62,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param crawl_api_arg: (required)
-        :type crawl_api_arg: CrawlApiArg
+        :param crawl_request: (required)
+        :type crawl_request: CrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -87,7 +87,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            crawl_api_arg=crawl_api_arg,
+            crawl_request=crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -112,7 +112,7 @@ class DefaultApi:
     @validate_call
     def crawl_with_http_info(
         self,
-        crawl_api_arg: CrawlApiArg,
+        crawl_request: CrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -129,8 +129,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param crawl_api_arg: (required)
-        :type crawl_api_arg: CrawlApiArg
+        :param crawl_request: (required)
+        :type crawl_request: CrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -154,7 +154,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            crawl_api_arg=crawl_api_arg,
+            crawl_request=crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -179,7 +179,7 @@ class DefaultApi:
     @validate_call
     def crawl_without_preload_content(
         self,
-        crawl_api_arg: CrawlApiArg,
+        crawl_request: CrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -196,8 +196,8 @@ class DefaultApi:
         """Crawl
 
 
-        :param crawl_api_arg: (required)
-        :type crawl_api_arg: CrawlApiArg
+        :param crawl_request: (required)
+        :type crawl_request: CrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -221,7 +221,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_serialize(
-            crawl_api_arg=crawl_api_arg,
+            crawl_request=crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -241,7 +241,7 @@ class DefaultApi:
 
     def _crawl_serialize(
         self,
-        crawl_api_arg,
+        crawl_request,
         _request_auth,
         _content_type,
         _headers,
@@ -267,8 +267,8 @@ class DefaultApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if crawl_api_arg is not None:
-            _body_params = crawl_api_arg
+        if crawl_request is not None:
+            _body_params = crawl_request
 
 
         # set the HTTP header `Accept`
@@ -318,7 +318,7 @@ class DefaultApi:
     @validate_call
     def crawl_many(
         self,
-        crawl_many_api_arg: CrawlManyApiArg,
+        crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -335,8 +335,8 @@ class DefaultApi:
         """Crawl Many
 
 
-        :param crawl_many_api_arg: (required)
-        :type crawl_many_api_arg: CrawlManyApiArg
+        :param crawl_many_request: (required)
+        :type crawl_many_request: CrawlManyRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -360,7 +360,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_many_serialize(
-            crawl_many_api_arg=crawl_many_api_arg,
+            crawl_many_request=crawl_many_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -385,7 +385,7 @@ class DefaultApi:
     @validate_call
     def crawl_many_with_http_info(
         self,
-        crawl_many_api_arg: CrawlManyApiArg,
+        crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -402,8 +402,8 @@ class DefaultApi:
         """Crawl Many
 
 
-        :param crawl_many_api_arg: (required)
-        :type crawl_many_api_arg: CrawlManyApiArg
+        :param crawl_many_request: (required)
+        :type crawl_many_request: CrawlManyRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -427,7 +427,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_many_serialize(
-            crawl_many_api_arg=crawl_many_api_arg,
+            crawl_many_request=crawl_many_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -452,7 +452,7 @@ class DefaultApi:
     @validate_call
     def crawl_many_without_preload_content(
         self,
-        crawl_many_api_arg: CrawlManyApiArg,
+        crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -469,8 +469,8 @@ class DefaultApi:
         """Crawl Many
 
 
-        :param crawl_many_api_arg: (required)
-        :type crawl_many_api_arg: CrawlManyApiArg
+        :param crawl_many_request: (required)
+        :type crawl_many_request: CrawlManyRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -494,7 +494,7 @@ class DefaultApi:
         """ # noqa: E501
 
         _param = self._crawl_many_serialize(
-            crawl_many_api_arg=crawl_many_api_arg,
+            crawl_many_request=crawl_many_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -514,7 +514,7 @@ class DefaultApi:
 
     def _crawl_many_serialize(
         self,
-        crawl_many_api_arg,
+        crawl_many_request,
         _request_auth,
         _content_type,
         _headers,
@@ -540,8 +540,8 @@ class DefaultApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if crawl_many_api_arg is not None:
-            _body_params = crawl_many_api_arg
+        if crawl_many_request is not None:
+            _body_params = crawl_many_request
 
 
         # set the HTTP header `Accept`
