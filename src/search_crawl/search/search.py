@@ -1,7 +1,7 @@
 from typing import Annotated, Literal, Optional, overload
 
 import httpx
-from pydantic import BaseModel, BeforeValidator, parse_obj_as
+from pydantic import BaseModel, BeforeValidator
 
 
 class SearchRequest(BaseModel):
