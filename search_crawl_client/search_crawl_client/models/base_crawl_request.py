@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.cache_strategy import CacheStrategy
+from search_crawl_client.models.cache_config import CacheConfig
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,9 +27,9 @@ class BaseCrawlRequest(BaseModel):
     """
     BaseCrawlRequest
     """ # noqa: E501
-    cache_strategy: Optional[CacheStrategy] = None
+    cache_config: Optional[CacheConfig] = None
     concurrently: Optional[StrictInt] = 2
-    __properties: ClassVar[List[str]] = ["cache_strategy", "concurrently"]
+    __properties: ClassVar[List[str]] = ["cache_config", "concurrently"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -70,9 +70,9 @@ class BaseCrawlRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of cache_strategy
-        if self.cache_strategy:
-            _dict['cache_strategy'] = self.cache_strategy.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of cache_config
+        if self.cache_config:
+            _dict['cache_config'] = self.cache_config.to_dict()
         return _dict
 
     @classmethod
@@ -85,7 +85,7 @@ class BaseCrawlRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "cache_strategy": CacheStrategy.from_dict(obj["cache_strategy"]) if obj.get("cache_strategy") is not None else None,
+            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
             "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2
         })
         return _obj

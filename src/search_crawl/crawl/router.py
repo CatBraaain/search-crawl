@@ -23,7 +23,7 @@ router = APIRouter(lifespan=lifespan)
 
 
 class BaseCrawlRequest(BaseModel):
-    cache_strategy: CacheConfig = CacheConfig()
+    cache_config: CacheConfig = CacheConfig()
     concurrently: int = 2
 
 
@@ -40,7 +40,7 @@ async def crawl(
     crawl_request: CrawlRequest,
 ) -> list[ScrapeResult]:
     sem = asyncio.Semaphore(crawl_request.concurrently)
-    return await crawler.crawl(crawl_request.url, sem, crawl_request.cache_strategy)
+    return await crawler.crawl(crawl_request.url, sem, crawl_request.cache_config)
 
 
 @router.post("/crawl-many", response_model=list[list[ScrapeResult]])
@@ -48,7 +48,7 @@ async def crawl_many(crawl_many_request: CrawlManyRequest) -> list[list[ScrapeRe
     sem = asyncio.Semaphore(crawl_many_request.concurrently)
     return await asyncio.gather(
         *(
-            crawler.crawl(url, sem, crawl_many_request.cache_strategy)
+            crawler.crawl(url, sem, crawl_many_request.cache_config)
             for url in crawl_many_request.urls
         )
     )

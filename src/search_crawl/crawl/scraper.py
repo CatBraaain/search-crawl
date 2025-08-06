@@ -1,20 +1,10 @@
 from typing import TypedDict
 
-from cashews import cache
-from cashews.ttl import TTL
 from patchright.async_api import Browser
 from patchright.async_api import Error as PlaywrightError
-from pydantic import BaseModel
 
+from ..cache import CacheConfig, cache
 from .parser import URL, Navigation, Readable
-
-cache.setup("disk://?directory=.cache&shards=0")
-
-
-class CacheConfig(BaseModel):
-    readable: bool = True
-    writable: bool = True
-    ttl: TTL = "24h"
 
 
 class ScrapeResult(TypedDict):
@@ -38,9 +28,9 @@ class Scraper:
         self.browser = browser
 
     async def scrape(
-        self, requested_url: str, cache_strategy: CacheConfig
+        self, requested_url: str, cache_config: CacheConfig
     ) -> ScrapeResult:
-        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, cache_strategy)
+        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, cache_config)
         url = URL(url_str)
 
         readable = Readable(raw_html)
@@ -61,15 +51,15 @@ class Scraper:
         }
 
     async def scrape_raw_wrapper(
-        self, requested_url: str, cache_strategy: CacheConfig
+        self, requested_url: str, cache_config: CacheConfig
     ) -> tuple[str, str]:
-        cached = cache_strategy.readable and await cache.get(requested_url)
+        cached = cache_config.readable and await cache.get(requested_url)
         if cached:
             return cached
         else:
             value = await self.scrape_raw(requested_url)
-            if cache_strategy.writable:
-                await cache.set(requested_url, value, expire=cache_strategy.ttl)
+            if cache_config.writable:
+                await cache.set(requested_url, value, expire=cache_config.ttl)
             return value
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:

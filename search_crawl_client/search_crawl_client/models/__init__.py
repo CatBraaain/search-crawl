@@ -15,7 +15,7 @@
 
 # import models into model package
 from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
-from search_crawl_client.models.cache_strategy import CacheStrategy
+from search_crawl_client.models.cache_config import CacheConfig
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest
 from search_crawl_client.models.general_search_crawl_request import GeneralSearchCrawlRequest

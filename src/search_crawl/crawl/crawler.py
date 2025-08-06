@@ -18,7 +18,7 @@ class Crawler:
         self,
         requested_url: str,
         sem: asyncio.Semaphore,
-        cache_strategy: CacheConfig,
+        cache_config: CacheConfig,
     ) -> list[ScrapeResult]:
         visited: list[URL] = []
         results: list[ScrapeResult] = []
@@ -29,7 +29,7 @@ class Crawler:
             visited.append(URL(_url))
 
             async with sem:
-                result = await self.scraper.scrape(_url, cache_strategy)
+                result = await self.scraper.scrape(_url, cache_config)
                 results.append(result)
 
             await asyncio.gather(

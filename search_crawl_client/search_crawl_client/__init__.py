@@ -29,7 +29,7 @@ __all__ = [
     "ApiAttributeError",
     "ApiException",
     "BaseCrawlRequest",
-    "CacheStrategy",
+    "CacheConfig",
     "CrawlManyRequest",
     "CrawlRequest",
     "GeneralSearchCrawlRequest",
@@ -63,7 +63,7 @@ from search_crawl_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
 from search_crawl_client.models.base_crawl_request import BaseCrawlRequest as BaseCrawlRequest
-from search_crawl_client.models.cache_strategy import CacheStrategy as CacheStrategy
+from search_crawl_client.models.cache_config import CacheConfig as CacheConfig
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
 from search_crawl_client.models.general_search_crawl_request import GeneralSearchCrawlRequest as GeneralSearchCrawlRequest

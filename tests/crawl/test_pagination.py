@@ -19,7 +19,7 @@ def test_crawl_pagination(api, url, page_length):
     res = api.crawl(
         CrawlRequest(
             url=url,
-            cache_strategy=CacheStrategy(readable=True, writable=True),
+            cache_config=CacheStrategy(readable=True, writable=True),
         )
     )
     assert len(res) == page_length
