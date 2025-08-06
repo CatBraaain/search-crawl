@@ -1,5 +1,5 @@
 from search_crawl_client import (
-    CacheStrategy,
+    CacheConfig,
     CrawlManyRequest,
     CrawlRequest,
 )
@@ -9,7 +9,7 @@ def test_crawl(api):
     res = api.crawl(
         CrawlRequest(
             url="https://example.com",
-            cache_config=CacheStrategy(readable=False, writable=False),
+            cache_config=CacheConfig(readable=False, writable=False),
         )
     )
     assert res
@@ -22,7 +22,7 @@ def test_crawl_many(api):
                 "https://example.com",
                 "https://web-scraping.dev/products",
             ],
-            cache_config=CacheStrategy(readable=False, writable=False),
+            cache_config=CacheConfig(readable=False, writable=False),
         )
     )
     assert len(res) == 2

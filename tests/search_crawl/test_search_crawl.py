@@ -1,6 +1,6 @@
 from search_crawl_client import (
     BaseCrawlRequest,
-    CacheStrategy,
+    CacheConfig,
     GeneralSearchCrawlRequest,
     GeneralSearchRequest,
     ImageSearchCrawlRequest,
@@ -13,7 +13,7 @@ def test_crawl_search_general(api):
         GeneralSearchCrawlRequest(
             search=GeneralSearchRequest(q="scraping test site"),
             crawl=BaseCrawlRequest(
-                cache_config=CacheStrategy(readable=True, writable=True),
+                cache_config=CacheConfig(readable=True, writable=True),
             ),
         )
     )
@@ -25,7 +25,7 @@ def test_crawl_search_image(api):
         ImageSearchCrawlRequest(
             search=ImageSearchRequest(q="scraping test site"),
             crawl=BaseCrawlRequest(
-                cache_config=CacheStrategy(readable=True, writable=True),
+                cache_config=CacheConfig(readable=True, writable=True),
             ),
         )
     )
