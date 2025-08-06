@@ -1,7 +1,7 @@
 from typing import Annotated, Literal, Optional, overload
 
 import httpx
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, parse_obj_as
 
 
 class SearchRequest(BaseModel):
@@ -67,4 +67,11 @@ async def search(
             "http://searxng:8080/search",
             params=search_param.model_dump(),
         )
-        return response.json()["results"]
+        results = response.json()["results"]
+
+    if isinstance(search_param, GeneralSearchRequest):
+        return [GeneralSearchResult(**result) for result in results]
+    elif isinstance(search_param, ImageSearchRequest):
+        return [ImageSearchResult(**result) for result in results]
+    else:
+        raise NotImplementedError
