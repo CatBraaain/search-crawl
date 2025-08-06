@@ -1,39 +1,69 @@
-from typing import Literal, Optional
-
 from fastapi import APIRouter
 from pydantic import BaseModel
 
 from ..crawl.routing import BaseCrawlRequest, CrawlManyRequest, ScrapeResult, crawl_many
-from ..search.search import search
+from ..search.search import (
+    GeneralSearchRequest,
+    GeneralSearchResult,
+    ImageSearchRequest,
+    ImageSearchResult,
+    search,
+)
 
 router = APIRouter()
 
 
-class SearchRequest(BaseModel):
-    q: str
-    language: Optional[str] = "en"
-    page: int = 1
-    time_range: Optional[Literal["day", "month", "year"]] = None
-    format: Optional[Literal["json", "csv", "rss"]] = "json"
-
-
-class SearchCrawlRequest(BaseModel):
-    search: SearchRequest
+class BaseSearchCrawlRequest(BaseModel):
     crawl: BaseCrawlRequest = BaseCrawlRequest()
 
 
-@router.post("/search-crawl", response_model=list[list[ScrapeResult]])
-async def search_crawl(
-    search_crawl_request: SearchCrawlRequest,
-) -> list[list[ScrapeResult]]:
-    search_results = await search(
-        **search_crawl_request.search.model_dump(),
-        engine_type="general",
-    )
+class GeneralSearchCrawlRequest(BaseSearchCrawlRequest):
+    search: GeneralSearchRequest
+
+
+class ImageSearchCrawlRequest(BaseSearchCrawlRequest):
+    search: ImageSearchRequest
+
+
+class GeneralSearchCrawlResult(BaseModel):
+    search: GeneralSearchResult
+    crawl: list[ScrapeResult]
+
+
+class ImageSearchCrawlResult(BaseModel):
+    search: ImageSearchResult
+    crawl: list[ScrapeResult]
+
+
+@router.post("/crawl/search/general", response_model=list[GeneralSearchCrawlResult])
+async def crawl_search_general(
+    param: GeneralSearchCrawlRequest,
+) -> list[GeneralSearchCrawlResult]:
+    search_results = await search(param.search)
     crawl_results = await crawl_many(
         CrawlManyRequest(
-            **search_crawl_request.crawl.model_dump(),
+            **param.crawl.model_dump(),
             urls=[search_result.url for search_result in search_results],
         )
     )
-    return crawl_results
+    return [
+        GeneralSearchCrawlResult(search=search_result, crawl=crawl_result)
+        for search_result, crawl_result in zip(search_results, crawl_results)
+    ]
+
+
+@router.post("/crawl/search/image", response_model=list[ImageSearchCrawlResult])
+async def crawl_search_image(
+    param: ImageSearchCrawlRequest,
+) -> list[ImageSearchCrawlResult]:
+    search_results = await search(param.search)
+    crawl_results = await crawl_many(
+        CrawlManyRequest(
+            **param.crawl.model_dump(),
+            urls=[search_result.url for search_result in search_results],
+        )
+    )
+    return [
+        ImageSearchCrawlResult(search=search_result, crawl=crawl_result)
+        for search_result, crawl_result in zip(search_results, crawl_results)
+    ]
