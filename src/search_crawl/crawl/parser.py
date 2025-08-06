@@ -11,6 +11,8 @@ from .url import URL
 
 
 class Readable(Document):
+    markitdown: MarkItDown
+
     def __init__(self, raw_html: str) -> None:
         super().__init__(raw_html)
         self.markitdown = MarkItDown()
