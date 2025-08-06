@@ -11,7 +11,7 @@ from .parser import URL, Navigation, Readable
 cache.setup("disk://?directory=.cache&shards=0")
 
 
-class CacheStrategy(BaseModel):
+class CacheConfig(BaseModel):
     readable: bool = True
     writable: bool = True
     ttl: TTL = "24h"
@@ -38,7 +38,7 @@ class Scraper:
         self.browser = browser
 
     async def scrape(
-        self, requested_url: str, cache_strategy: CacheStrategy
+        self, requested_url: str, cache_strategy: CacheConfig
     ) -> ScrapeResult:
         url_str, raw_html = await self.scrape_raw_wrapper(requested_url, cache_strategy)
         url = URL(url_str)
@@ -61,7 +61,7 @@ class Scraper:
         }
 
     async def scrape_raw_wrapper(
-        self, requested_url: str, cache_strategy: CacheStrategy
+        self, requested_url: str, cache_strategy: CacheConfig
     ) -> tuple[str, str]:
         cached = cache_strategy.readable and await cache.get(requested_url)
         if cached:

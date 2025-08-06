@@ -5,7 +5,7 @@ from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
 from pydantic import BaseModel
 
-from .crawler import CacheStrategy, Crawler, ScrapeResult
+from .crawler import CacheConfig, Crawler, ScrapeResult
 
 crawler: Crawler
 
@@ -23,7 +23,7 @@ router = APIRouter(lifespan=lifespan)
 
 
 class BaseCrawlRequest(BaseModel):
-    cache_strategy: CacheStrategy = CacheStrategy()
+    cache_strategy: CacheConfig = CacheConfig()
     concurrently: int = 2
 
 
