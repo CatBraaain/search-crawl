@@ -31,7 +31,7 @@ class ImageSearchRequest(BaseModel):
     page: Optional[StrictInt] = 1
     time_range: Optional[StrictStr] = None
     format: Optional[StrictStr] = 'json'
-    engines: Optional[StrictStr] = 'bing images,duckduckgo images,google images,startpage images'
+    engines: Optional[List[StrictStr]] = None
     __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format", "engines"]
 
     @field_validator('time_range')
@@ -115,7 +115,7 @@ class ImageSearchRequest(BaseModel):
             "page": obj.get("page") if obj.get("page") is not None else 1,
             "time_range": obj.get("time_range"),
             "format": obj.get("format") if obj.get("format") is not None else 'json',
-            "engines": obj.get("engines") if obj.get("engines") is not None else 'bing images,duckduckgo images,google images,startpage images'
+            "engines": obj.get("engines")
         })
         return _obj
 

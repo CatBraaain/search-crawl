@@ -1,7 +1,7 @@
 from typing import Annotated, Literal, Optional, overload
 
 import httpx
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, PlainSerializer
 
 
 class SearchRequest(BaseModel):
@@ -13,28 +13,29 @@ class SearchRequest(BaseModel):
 
 
 class GeneralSearchRequest(SearchRequest):
-    # Use string instead of list because OpenAPI does not support default values for object types
-    engines: str = ",".join(
-        [
-            "brave",
-            "duckduckgo",
-            "google",
-            "presearch",
-            "startpage",
-            "yahoo",
-        ]
-    )
+    engines: Annotated[
+        list[str],
+        PlainSerializer(lambda x: ",".join(x), return_type=str),
+    ] = [
+        "brave",
+        "duckduckgo",
+        "google",
+        "presearch",
+        "startpage",
+        "yahoo",
+    ]
 
 
 class ImageSearchRequest(SearchRequest):
-    engines: str = ",".join(
-        [
-            "bing images",
-            "duckduckgo images",
-            "google images",
-            "startpage images",
-        ]
-    )
+    engines: Annotated[
+        list[str],
+        PlainSerializer(lambda x: ",".join(x), return_type=str),
+    ] = [
+        "bing images",
+        "duckduckgo images",
+        "google images",
+        "startpage images",
+    ]
 
 
 class BaseSearchResult(BaseModel):
