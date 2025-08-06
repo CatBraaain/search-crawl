@@ -4,6 +4,39 @@ import httpx
 from pydantic import BaseModel, BeforeValidator
 
 
+class SearchRequest(BaseModel):
+    q: str
+    language: str = "en"
+    page: int = 1
+    time_range: Optional[Literal["day", "month", "year"]] = None
+    format: Literal["json", "csv", "rss"] = "json"
+
+
+class GeneralSearchRequest(SearchRequest):
+    # Use string instead of list because OpenAPI does not support default values for object types
+    engines: str = ",".join(
+        [
+            "brave",
+            "duckduckgo",
+            "google",
+            "presearch",
+            "startpage",
+            "yahoo",
+        ]
+    )
+
+
+class ImageSearchRequest(SearchRequest):
+    engines: str = ",".join(
+        [
+            "bing images",
+            "duckduckgo images",
+            "google images",
+            "startpage images",
+        ]
+    )
+
+
 class BaseSearchResult(BaseModel):
     url: str
     title: str
@@ -18,70 +51,20 @@ class ImageSearchResult(BaseSearchResult):
     img_src: str
 
 
-EngineType = Literal["general", "images"]
-
-engines_map: dict[EngineType, list[str]] = {
-    "general": [
-        "brave",
-        "duckduckgo",
-        "google",
-        "presearch",
-        "startpage",
-        "yahoo",
-    ],
-    "images": [
-        "bing images",
-        "duckduckgo images",
-        "google images",
-        "startpage images",
-    ],
-}
+@overload
+async def search(search_param: GeneralSearchRequest) -> list[GeneralSearchResult]: ...
 
 
 @overload
-async def search(
-    *,
-    q: str,
-    engine_type: Literal["general"],
-    language: Optional[str],
-    page: int,
-    time_range: Optional[Literal["day", "month", "year"]],
-    format: Optional[Literal["json", "csv", "rss"]],
-) -> list[GeneralSearchResult]: ...
-
-
-@overload
-async def search(
-    *,
-    q: str,
-    engine_type: Literal["images"],
-    language: Optional[str],
-    page: int,
-    time_range: Optional[Literal["day", "month", "year"]],
-    format: Optional[Literal["json", "csv", "rss"]],
-) -> list[ImageSearchResult]: ...
+async def search(search_param: ImageSearchRequest) -> list[ImageSearchResult]: ...
 
 
 async def search(
-    *,
-    q: str,
-    engine_type: EngineType,
-    language: Optional[str],
-    page: int,
-    time_range: Optional[Literal["day", "month", "year"]],
-    format: Optional[Literal["json", "csv", "rss"]],
+    search_param: GeneralSearchRequest | ImageSearchRequest,
 ) -> list[GeneralSearchResult] | list[ImageSearchResult]:
-    engines = engines_map[engine_type]
     async with httpx.AsyncClient() as client:
         response = await client.get(
             "http://searxng:8080/search",
-            params={
-                "q": q,
-                "engines": ",".join(engines),
-                "language": language,
-                "page": page,
-                "time_range": time_range,
-                "format": format,
-            },
+            params=search_param.model_dump(),
         )
         return response.json()["results"]

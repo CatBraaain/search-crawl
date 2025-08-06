@@ -1,43 +1,25 @@
-from typing import Literal, Optional
-
 from fastapi import APIRouter
 
-from .search import GeneralSearchResult, ImageSearchResult, search
+from .search import (
+    GeneralSearchRequest,
+    GeneralSearchResult,
+    ImageSearchRequest,
+    ImageSearchResult,
+    search,
+)
 
 router = APIRouter()
 
 
-@router.get("/search/general", response_model=list[GeneralSearchResult])
+@router.post("/search/general", response_model=list[GeneralSearchResult])
 async def search_general(
-    q: str,
-    language: Optional[str] = "en",
-    page: int = 1,
-    time_range: Optional[Literal["day", "month", "year"]] = None,
-    format: Optional[Literal["json", "csv", "rss"]] = "json",
+    search_request: GeneralSearchRequest,
 ) -> list[GeneralSearchResult]:
-    return await search(
-        q=q,
-        engine_type="general",
-        language=language,
-        page=page,
-        time_range=time_range,
-        format=format,
-    )
+    return await search(search_request)
 
 
-@router.get("/search/images", response_model=list[ImageSearchResult])
+@router.post("/search/images", response_model=list[ImageSearchResult])
 async def search_images(
-    q: str,
-    language: Optional[str] = "en",
-    page: int = 1,
-    time_range: Optional[Literal["day", "month", "year"]] = None,
-    format: Optional[Literal["json", "csv", "rss"]] = "json",
+    search_request: ImageSearchRequest,
 ) -> list[ImageSearchResult]:
-    return await search(
-        q=q,
-        engine_type="images",
-        language=language,
-        page=page,
-        time_range=time_range,
-        format=format,
-    )
+    return await search(search_request)
