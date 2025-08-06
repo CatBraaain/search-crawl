@@ -16,18 +16,27 @@ class Readable(Document):
         self.markitdown = MarkItDown()
 
     def content(self) -> str:
-        return cast(str, super().content())
+        try:
+            return cast(str, super().content())
+        except Exception:
+            return ""
 
     def summary_html(self) -> str:
-        return super().summary()
+        try:
+            return super().summary()
+        except Exception:
+            return ""
 
     def summary_md(self) -> str:
-        return str(
-            self.markitdown.convert_stream(
-                io.BytesIO(self.summary_html().encode("utf-8")),
-                stream_info=StreamInfo(mimetype="text/html", charset="utf-8"),
+        try:
+            return str(
+                self.markitdown.convert_stream(
+                    io.BytesIO(self.summary_html().encode("utf-8")),
+                    stream_info=StreamInfo(mimetype="text/html", charset="utf-8"),
+                )
             )
-        )
+        except Exception:
+            return ""
 
 
 class Navigation:
