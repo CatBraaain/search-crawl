@@ -851,7 +851,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/crawl/search/general',
+            resource_path='/search-crawl/general',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1124,7 +1124,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/crawl/search/image',
+            resource_path='/search-crawl/image',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

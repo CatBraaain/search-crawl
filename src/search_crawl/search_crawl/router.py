@@ -35,7 +35,7 @@ class ImageSearchCrawlResult(BaseModel):
     crawl: list[ScrapeResult]
 
 
-@router.post("/crawl/search/general", response_model=list[GeneralSearchCrawlResult])
+@router.post("/search-crawl/general", response_model=list[GeneralSearchCrawlResult])
 async def crawl_search_general(
     param: GeneralSearchCrawlRequest,
 ) -> list[GeneralSearchCrawlResult]:
@@ -52,7 +52,7 @@ async def crawl_search_general(
     ]
 
 
-@router.post("/crawl/search/image", response_model=list[ImageSearchCrawlResult])
+@router.post("/search-crawl/image", response_model=list[ImageSearchCrawlResult])
 async def crawl_search_image(
     param: ImageSearchCrawlRequest,
 ) -> list[ImageSearchCrawlResult]:
