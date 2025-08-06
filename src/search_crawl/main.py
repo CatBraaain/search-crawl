@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 
-from .crawl.routing import router as crawl_router
-from .healthz.healthz import router as healthz_router
-from .search.routing import router as search_router
-from .search_crawl.routing import router as search_crawl_router
+from .crawl.router import router as crawl_router
+from .healthz.router import router as healthz_router
+from .search.router import router as search_router
+from .search_crawl.router import router as search_crawl_router
 
 
 def main() -> FastAPI:

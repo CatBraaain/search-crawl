@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from ..crawl.routing import BaseCrawlRequest, CrawlManyRequest, ScrapeResult, crawl_many
+from ..crawl.router import BaseCrawlRequest, CrawlManyRequest, ScrapeResult, crawl_many
 from ..search.search import (
     GeneralSearchRequest,
     GeneralSearchResult,
