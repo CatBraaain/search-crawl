@@ -44,8 +44,7 @@ class Navigation:
     pagination_links: list[str]
 
     def __init__(self, html_str: str, url: URL) -> None:
-        tree = html.fromstring(html_str)
-        links = self.extract_links(tree, url)
+        links = self.extract_links(html.fromstring(html_str), url) if html_str else []
         self.links = links
         self.pagination_links = [
             link for link in links if URL(link).is_pagination_of(url)
