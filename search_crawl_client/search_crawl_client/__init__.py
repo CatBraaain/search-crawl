@@ -32,12 +32,16 @@ __all__ = [
     "CacheStrategy",
     "CrawlManyRequest",
     "CrawlRequest",
+    "GeneralSearchCrawlRequest",
+    "GeneralSearchCrawlResult",
+    "GeneralSearchRequest",
     "GeneralSearchResult",
     "HTTPValidationError",
+    "ImageSearchCrawlRequest",
+    "ImageSearchCrawlResult",
+    "ImageSearchRequest",
     "ImageSearchResult",
     "ScrapeResult",
-    "SearchCrawlRequest",
-    "SearchRequest",
     "Ttl",
     "ValidationError",
     "ValidationErrorLocInner",
@@ -62,12 +66,16 @@ from search_crawl_client.models.base_crawl_request import BaseCrawlRequest as Ba
 from search_crawl_client.models.cache_strategy import CacheStrategy as CacheStrategy
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
+from search_crawl_client.models.general_search_crawl_request import GeneralSearchCrawlRequest as GeneralSearchCrawlRequest
+from search_crawl_client.models.general_search_crawl_result import GeneralSearchCrawlResult as GeneralSearchCrawlResult
+from search_crawl_client.models.general_search_request import GeneralSearchRequest as GeneralSearchRequest
 from search_crawl_client.models.general_search_result import GeneralSearchResult as GeneralSearchResult
 from search_crawl_client.models.http_validation_error import HTTPValidationError as HTTPValidationError
+from search_crawl_client.models.image_search_crawl_request import ImageSearchCrawlRequest as ImageSearchCrawlRequest
+from search_crawl_client.models.image_search_crawl_result import ImageSearchCrawlResult as ImageSearchCrawlResult
+from search_crawl_client.models.image_search_request import ImageSearchRequest as ImageSearchRequest
 from search_crawl_client.models.image_search_result import ImageSearchResult as ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult as ScrapeResult
-from search_crawl_client.models.search_crawl_request import SearchCrawlRequest as SearchCrawlRequest
-from search_crawl_client.models.search_request import SearchRequest as SearchRequest
 from search_crawl_client.models.ttl import Ttl as Ttl
 from search_crawl_client.models.validation_error import ValidationError as ValidationError
 from search_crawl_client.models.validation_error_loc_inner import ValidationErrorLocInner as ValidationErrorLocInner

@@ -20,17 +20,17 @@ import json
 from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List, Optional
 from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
-from search_crawl_client.models.search import Search
+from search_crawl_client.models.general_search_request import GeneralSearchRequest
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SearchCrawlRequest(BaseModel):
+class GeneralSearchCrawlRequest(BaseModel):
     """
-    SearchCrawlRequest
+    GeneralSearchCrawlRequest
     """ # noqa: E501
-    search: Search
     crawl: Optional[BaseCrawlRequest] = None
-    __properties: ClassVar[List[str]] = ["search", "crawl"]
+    search: GeneralSearchRequest
+    __properties: ClassVar[List[str]] = ["crawl", "search"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +50,7 @@ class SearchCrawlRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a JSON string"""
+        """Create an instance of GeneralSearchCrawlRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +71,17 @@ class SearchCrawlRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of search
-        if self.search:
-            _dict['search'] = self.search.to_dict()
         # override the default output from pydantic by calling `to_dict()` of crawl
         if self.crawl:
             _dict['crawl'] = self.crawl.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of search
+        if self.search:
+            _dict['search'] = self.search.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a dict"""
+        """Create an instance of GeneralSearchCrawlRequest from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +89,8 @@ class SearchCrawlRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "search": Search.from_dict(obj["search"]) if obj.get("search") is not None else None,
-            "crawl": BaseCrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None
+            "crawl": BaseCrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None,
+            "search": GeneralSearchRequest.from_dict(obj["search"]) if obj.get("search") is not None else None
         })
         return _obj
 

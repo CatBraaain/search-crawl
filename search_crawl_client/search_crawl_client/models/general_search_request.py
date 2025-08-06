@@ -17,20 +17,42 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
-from search_crawl_client.models.search import Search
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SearchCrawlRequest(BaseModel):
+class GeneralSearchRequest(BaseModel):
     """
-    SearchCrawlRequest
+    GeneralSearchRequest
     """ # noqa: E501
-    search: Search
-    crawl: Optional[BaseCrawlRequest] = None
-    __properties: ClassVar[List[str]] = ["search", "crawl"]
+    q: StrictStr
+    language: Optional[StrictStr] = 'en'
+    page: Optional[StrictInt] = 1
+    time_range: Optional[StrictStr] = None
+    format: Optional[StrictStr] = 'json'
+    engines: Optional[StrictStr] = 'brave,duckduckgo,google,presearch,startpage,yahoo'
+    __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format", "engines"]
+
+    @field_validator('time_range')
+    def time_range_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['day', 'month', 'year']):
+            raise ValueError("must be one of enum values ('day', 'month', 'year')")
+        return value
+
+    @field_validator('format')
+    def format_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['json', 'csv', 'rss']):
+            raise ValueError("must be one of enum values ('json', 'csv', 'rss')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +72,7 @@ class SearchCrawlRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a JSON string"""
+        """Create an instance of GeneralSearchRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +93,16 @@ class SearchCrawlRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of search
-        if self.search:
-            _dict['search'] = self.search.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of crawl
-        if self.crawl:
-            _dict['crawl'] = self.crawl.to_dict()
+        # set to None if time_range (nullable) is None
+        # and model_fields_set contains the field
+        if self.time_range is None and "time_range" in self.model_fields_set:
+            _dict['time_range'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a dict"""
+        """Create an instance of GeneralSearchRequest from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +110,12 @@ class SearchCrawlRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "search": Search.from_dict(obj["search"]) if obj.get("search") is not None else None,
-            "crawl": BaseCrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None
+            "q": obj.get("q"),
+            "language": obj.get("language") if obj.get("language") is not None else 'en',
+            "page": obj.get("page") if obj.get("page") is not None else 1,
+            "time_range": obj.get("time_range"),
+            "format": obj.get("format") if obj.get("format") is not None else 'json',
+            "engines": obj.get("engines") if obj.get("engines") is not None else 'brave,duckduckgo,google,presearch,startpage,yahoo'
         })
         return _obj
 
