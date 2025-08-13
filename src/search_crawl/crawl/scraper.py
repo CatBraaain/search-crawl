@@ -3,7 +3,7 @@ from typing import TypedDict
 from patchright.async_api import Browser
 from patchright.async_api import Error as PlaywrightError
 
-from ..cache import CacheConfig, cache
+from ..cache_config import CacheConfig
 from .parser import URL, Navigation, Readable
 
 
@@ -53,14 +53,8 @@ class Scraper:
     async def scrape_raw_wrapper(
         self, requested_url: str, cache_config: CacheConfig
     ) -> tuple[str, str]:
-        cached = cache_config.readable and await cache.get(requested_url)
-        if cached:
-            return cached
-        else:
-            value = await self.scrape_raw(requested_url)
-            if cache_config.writable:
-                await cache.set(requested_url, value, expire=cache_config.ttl)
-            return value
+        scrape_with_cache = cache_config.wrap_with_cache(self.scrape_raw)
+        return await scrape_with_cache(requested_url)
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()

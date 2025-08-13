@@ -3,6 +3,8 @@ from typing import Annotated, Literal, Optional, overload
 import httpx
 from pydantic import BaseModel, BeforeValidator, PlainSerializer
 
+from ..cache_config import CacheConfig
+
 
 class SearchRequest(BaseModel):
     q: str
@@ -10,6 +12,7 @@ class SearchRequest(BaseModel):
     page: int = 1
     time_range: Optional[Literal["day", "month", "year"]] = None
     format: Literal["json", "csv", "rss"] = "json"
+    cache_config: CacheConfig = CacheConfig()
 
 
 class GeneralSearchRequest(SearchRequest):
@@ -53,26 +56,33 @@ class ImageSearchResult(BaseSearchResult):
 
 
 @overload
-async def search(search_param: GeneralSearchRequest) -> list[GeneralSearchResult]: ...
+async def search(search_request: GeneralSearchRequest) -> list[GeneralSearchResult]: ...
 
 
 @overload
-async def search(search_param: ImageSearchRequest) -> list[ImageSearchResult]: ...
+async def search(search_request: ImageSearchRequest) -> list[ImageSearchResult]: ...
 
 
 async def search(
-    search_param: GeneralSearchRequest | ImageSearchRequest,
+    search_request: GeneralSearchRequest | ImageSearchRequest,
+) -> list[GeneralSearchResult] | list[ImageSearchResult]:
+    search_with_cache = search_request.cache_config.wrap_with_cache(_search)
+    return await search_with_cache(search_request)
+
+
+async def _search(
+    search_request: SearchRequest,
 ) -> list[GeneralSearchResult] | list[ImageSearchResult]:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             "http://searxng:8080/search",
-            params=search_param.model_dump(),
+            params=search_request.model_dump(exclude={"cache_config"}),
         )
         results = response.json()["results"]
 
-    if isinstance(search_param, GeneralSearchRequest):
+    if isinstance(search_request, GeneralSearchRequest):
         return [GeneralSearchResult(**result) for result in results]
-    elif isinstance(search_param, ImageSearchRequest):
+    elif isinstance(search_request, ImageSearchRequest):
         return [ImageSearchResult(**result) for result in results]
     else:
         raise NotImplementedError

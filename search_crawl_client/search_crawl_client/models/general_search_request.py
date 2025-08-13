@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from search_crawl_client.models.cache_config import CacheConfig
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,8 +32,9 @@ class GeneralSearchRequest(BaseModel):
     page: Optional[StrictInt] = 1
     time_range: Optional[StrictStr] = None
     format: Optional[StrictStr] = 'json'
+    cache_config: Optional[CacheConfig] = None
     engines: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format", "engines"]
+    __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format", "cache_config", "engines"]
 
     @field_validator('time_range')
     def time_range_validate_enum(cls, value):
@@ -93,6 +95,9 @@ class GeneralSearchRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of cache_config
+        if self.cache_config:
+            _dict['cache_config'] = self.cache_config.to_dict()
         # set to None if time_range (nullable) is None
         # and model_fields_set contains the field
         if self.time_range is None and "time_range" in self.model_fields_set:
@@ -115,6 +120,7 @@ class GeneralSearchRequest(BaseModel):
             "page": obj.get("page") if obj.get("page") is not None else 1,
             "time_range": obj.get("time_range"),
             "format": obj.get("format") if obj.get("format") is not None else 'json',
+            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
             "engines": obj.get("engines")
         })
         return _obj
