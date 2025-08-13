@@ -8,7 +8,12 @@ from .search_crawl.router import router as search_crawl_router
 
 
 def main() -> FastAPI:
-    app = FastAPI()
+    app = FastAPI(
+        license_info={
+            "name": "WTFPL",
+            "identifier": "WTFPL",
+        },
+    )
     app.include_router(healthz_router)
     app.include_router(search_router)
     app.include_router(crawl_router)
