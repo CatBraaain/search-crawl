@@ -1,13 +1,44 @@
-from typing import Annotated, Literal, Optional, overload
+from typing import Annotated, Any, Literal, Optional, overload
 
 import httpx
 from pydantic import BaseModel, BeforeValidator, PlainSerializer
 
 from ..cache_config import CacheConfig
 
+GeneralEngineName = Literal[
+    "bing",
+    "brave",
+    "duckduckgo",
+    "google",
+    "mojeek",
+    "mullvadleta",
+    "mullvadleta brave",
+    "presearch",
+    "presearch videos",
+    "qwant",
+    "startpage",
+    "wiby",
+    "yahoo",
+    "seznam",
+    "goo",
+    "naver",
+]
+
+ImageEngineName = Literal[
+    "bing images",
+    "duckduckgo images",
+    "google images",
+    "startpage images",
+    "brave.images",
+    "mojeek images",
+    "presearch images",
+    "qwant images",
+]
+
 
 class SearchRequest(BaseModel):
     q: str
+    engines: Any
     language: str = "en"
     page: int = 1
     time_range: Optional[Literal["day", "month", "year"]] = None
@@ -21,7 +52,7 @@ class SearchRequest(BaseModel):
 
 class GeneralSearchRequest(SearchRequest):
     engines: Annotated[
-        list[str],
+        list[GeneralEngineName],
         PlainSerializer(lambda x: ",".join(x), return_type=str),
     ] = [
         "brave",
@@ -35,7 +66,7 @@ class GeneralSearchRequest(SearchRequest):
 
 class ImageSearchRequest(SearchRequest):
     engines: Annotated[
-        list[str],
+        list[ImageEngineName],
         PlainSerializer(lambda x: ",".join(x), return_type=str),
     ] = [
         "bing images",
