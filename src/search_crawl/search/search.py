@@ -14,6 +14,10 @@ class SearchRequest(BaseModel):
     format: Literal["json", "csv", "rss"] = "json"
     cache_config: CacheConfig = CacheConfig()
 
+    @property
+    def searxng_request(self):
+        return self.model_dump(exclude={"cache_config"})
+
 
 class GeneralSearchRequest(SearchRequest):
     engines: Annotated[
@@ -76,7 +80,7 @@ async def _search(
     async with httpx.AsyncClient() as client:
         response = await client.get(
             "http://searxng:8080/search",
-            params=search_request.model_dump(exclude={"cache_config"}),
+            params=search_request.searxng_request,
         )
         results = response.json()["results"]
 
