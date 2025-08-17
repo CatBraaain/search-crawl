@@ -28,13 +28,24 @@ class ImageSearchRequest(BaseModel):
     ImageSearchRequest
     """ # noqa: E501
     q: StrictStr
+    engines: Optional[List[StrictStr]] = None
     language: Optional[StrictStr] = 'en'
     page: Optional[StrictInt] = 1
     time_range: Optional[StrictStr] = None
     format: Optional[StrictStr] = 'json'
     cache_config: Optional[CacheConfig] = None
-    engines: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format", "cache_config", "engines"]
+    __properties: ClassVar[List[str]] = ["q", "engines", "language", "page", "time_range", "format", "cache_config"]
+
+    @field_validator('engines')
+    def engines_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        for i in value:
+            if i not in set(['bing images', 'duckduckgo images', 'google images', 'startpage images', 'brave.images', 'mojeek images', 'presearch images', 'qwant images']):
+                raise ValueError("each list item must be one of ('bing images', 'duckduckgo images', 'google images', 'startpage images', 'brave.images', 'mojeek images', 'presearch images', 'qwant images')")
+        return value
 
     @field_validator('time_range')
     def time_range_validate_enum(cls, value):
@@ -116,12 +127,12 @@ class ImageSearchRequest(BaseModel):
 
         _obj = cls.model_validate({
             "q": obj.get("q"),
+            "engines": obj.get("engines"),
             "language": obj.get("language") if obj.get("language") is not None else 'en',
             "page": obj.get("page") if obj.get("page") is not None else 1,
             "time_range": obj.get("time_range"),
             "format": obj.get("format") if obj.get("format") is not None else 'json',
-            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
-            "engines": obj.get("engines")
+            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None
         })
         return _obj
 

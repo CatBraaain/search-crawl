@@ -17,9 +17,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.ttl import Ttl
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,7 +28,7 @@ class CacheConfig(BaseModel):
     """ # noqa: E501
     readable: Optional[StrictBool] = True
     writable: Optional[StrictBool] = True
-    ttl: Optional[Ttl] = None
+    ttl: Optional[StrictInt] = None
     __properties: ClassVar[List[str]] = ["readable", "writable", "ttl"]
 
     model_config = ConfigDict(
@@ -71,9 +70,6 @@ class CacheConfig(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of ttl
-        if self.ttl:
-            _dict['ttl'] = self.ttl.to_dict()
         # set to None if ttl (nullable) is None
         # and model_fields_set contains the field
         if self.ttl is None and "ttl" in self.model_fields_set:
@@ -93,7 +89,7 @@ class CacheConfig(BaseModel):
         _obj = cls.model_validate({
             "readable": obj.get("readable") if obj.get("readable") is not None else True,
             "writable": obj.get("writable") if obj.get("writable") is not None else True,
-            "ttl": Ttl.from_dict(obj["ttl"]) if obj.get("ttl") is not None else None
+            "ttl": obj.get("ttl")
         })
         return _obj
 

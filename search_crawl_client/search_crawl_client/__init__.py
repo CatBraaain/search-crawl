@@ -42,7 +42,6 @@ __all__ = [
     "ImageSearchRequest",
     "ImageSearchResult",
     "ScrapeResult",
-    "Ttl",
     "ValidationError",
     "ValidationErrorLocInner",
 ]
@@ -76,6 +75,5 @@ from search_crawl_client.models.image_search_crawl_result import ImageSearchCraw
 from search_crawl_client.models.image_search_request import ImageSearchRequest as ImageSearchRequest
 from search_crawl_client.models.image_search_result import ImageSearchResult as ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult as ScrapeResult
-from search_crawl_client.models.ttl import Ttl as Ttl
 from search_crawl_client.models.validation_error import ValidationError as ValidationError
 from search_crawl_client.models.validation_error_loc_inner import ValidationErrorLocInner as ValidationErrorLocInner

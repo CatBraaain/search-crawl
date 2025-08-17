@@ -22,6 +22,15 @@
     networks:
       - searxng-net
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.cache:/data
+    networks:
+      - searxng-net
+
   search-crawl:
     build:
       context: .
@@ -45,8 +54,6 @@
       retries: 15
     networks:
       - searxng-net
-    volumes:
-      - ./.cache:/app/.cache
 
 networks:
   searxng-net:

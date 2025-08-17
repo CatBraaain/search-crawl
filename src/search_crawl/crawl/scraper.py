@@ -53,7 +53,10 @@ class Scraper:
     async def scrape_raw_wrapper(
         self, requested_url: str, cache_config: CacheConfig
     ) -> tuple[str, str]:
-        scrape_with_cache = cache_config.wrap_with_cache(self.scrape_raw)
+        scrape_with_cache = cache_config.wrap_with_cache(
+            cache_key=f"scrape:{requested_url}",
+            func=self.scrape_raw,
+        )
         return await scrape_with_cache(requested_url)
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:

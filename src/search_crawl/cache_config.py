@@ -1,37 +1,31 @@
 from functools import wraps
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
-from cashews import Command, cache
-from cashews.ttl import TTL
+import redis
 from pydantic import BaseModel
 
-cache.setup("disk://?directory=.cache&shards=0")
+r = redis.Redis.from_url("redis://@redis:6379", decode_responses=True)
 
 
 class CacheConfig(BaseModel):
     readable: bool = True
     writable: bool = True
-    ttl: TTL = "24h"
+    ttl: int | None = 60 * 60 * 24
 
-    @property
-    def disables(self) -> list[Command]:
-        return [
-            cmd
-            for cmd, enabled in [
-                (Command.GET, self.readable),
-                (Command.SET, self.writable),
-            ]
-            if not enabled
-        ]
-
-    def wrap_with_cache[R, **P](
-        self, func: Callable[P, Awaitable[R]]
+    def wrap_with_cache[R: Any, **P](
+        self, cache_key: str, func: Callable[P, Awaitable[R]]
     ) -> Callable[P, Awaitable[R]]:
-        cached_func = cache(ttl=self.ttl)(func)
-
         @wraps(func)
-        async def cached_func_with_disables(*args: P.args, **kwargs: P.kwargs) -> R:
-            with cache.disabling(*self.disables):
-                return await cached_func(*args, **kwargs)
+        async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            if self.readable and (cached_value := r.json().get(cache_key)):
+                return cached_value
+            else:
+                result = await func(*args, **kwargs)
+                if self.writable:
+                    r.json().set(cache_key, "$", result)
+                    if self.ttl:
+                        r.expire(cache_key, self.ttl)
 
-        return cached_func_with_disables
+                return result
+
+        return wrapper

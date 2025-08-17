@@ -1,3 +1,4 @@
+import json
 from typing import Annotated, Any, Literal, Optional, overload
 
 import httpx
@@ -48,6 +49,13 @@ class SearchRequest(BaseModel):
     @property
     def searxng_request(self):
         return self.model_dump(exclude={"cache_config"})
+
+    @property
+    def cache_key(self):
+        return json.dumps(
+            self.model_dump(exclude={"cache_config"}),
+            separators=(",", "="),
+        )
 
 
 class GeneralSearchRequest(SearchRequest):
@@ -101,19 +109,11 @@ async def search(search_request: ImageSearchRequest) -> list[ImageSearchResult]:
 async def search(
     search_request: GeneralSearchRequest | ImageSearchRequest,
 ) -> list[GeneralSearchResult] | list[ImageSearchResult]:
-    search_with_cache = search_request.cache_config.wrap_with_cache(_search)
-    return await search_with_cache(search_request)
-
-
-async def _search(
-    search_request: SearchRequest,
-) -> list[GeneralSearchResult] | list[ImageSearchResult]:
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "http://searxng:8080/search",
-            params=search_request.searxng_request,
-        )
-        results = response.json()["results"]
+    cached_search = search_request.cache_config.wrap_with_cache(
+        cache_key=f"search:{search_request.cache_key}",
+        func=_search,
+    )
+    results = await cached_search(search_request)
 
     if isinstance(search_request, GeneralSearchRequest):
         return [GeneralSearchResult(**result) for result in results]
@@ -121,3 +121,14 @@ async def _search(
         return [ImageSearchResult(**result) for result in results]
     else:
         raise NotImplementedError
+
+
+async def _search(
+    search_request: SearchRequest,
+) -> list[dict]:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "http://searxng:8080/search",
+            params=search_request.searxng_request,
+        )
+        return response.json()["results"]
