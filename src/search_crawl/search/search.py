@@ -61,7 +61,7 @@ class SearchRequest(BaseModel):
 class GeneralSearchRequest(SearchRequest):
     engines: Annotated[
         list[GeneralEngineName],
-        PlainSerializer(lambda x: ",".join(x), return_type=str),
+        PlainSerializer(lambda x: ",".join(sorted(x)), return_type=str),
     ] = [
         "brave",
         "duckduckgo",
@@ -75,7 +75,7 @@ class GeneralSearchRequest(SearchRequest):
 class ImageSearchRequest(SearchRequest):
     engines: Annotated[
         list[ImageEngineName],
-        PlainSerializer(lambda x: ",".join(x), return_type=str),
+        PlainSerializer(lambda x: ",".join(sorted(x)), return_type=str),
     ] = [
         "bing images",
         "duckduckgo images",
