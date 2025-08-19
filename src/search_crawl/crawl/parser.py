@@ -1,5 +1,4 @@
 import io
-import re
 from typing import cast
 from urllib.parse import urljoin
 
