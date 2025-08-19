@@ -20,7 +20,7 @@
       - ./searxng:/etc/searxng
     pull_policy: always
     networks:
-      - searxng-net
+      - search-crawl-net
 
   redis:
     image: redis
@@ -29,7 +29,7 @@
     volumes:
       - ./.cache:/data
     networks:
-      - searxng-net
+      - search-crawl-net
 
   search-crawl:
     build:
@@ -53,8 +53,8 @@
       timeout: 1s
       retries: 15
     networks:
-      - searxng-net
+      - search-crawl-net
 
 networks:
-  searxng-net:
+  search-crawl-net:
     driver: bridge
