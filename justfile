@@ -6,8 +6,7 @@ _:
   @just --list
 
 dev:
-  docker compose pull
-  docker compose up -d
+  docker compose up --build --wait
   uv run fastapi dev src/search_crawl/main.py
 
 run:
