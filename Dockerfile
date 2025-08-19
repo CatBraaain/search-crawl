@@ -12,4 +12,4 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --locked --no-editable
 
-CMD ["uv", "run", "fastapi", "run", "src/searxng_api/main.py", "--port", "80", "--host", "0.0.0.0"]
+CMD ["uv", "run", "fastapi", "run", "src/searxng_api/main.py", "--host", "0.0.0.0"]
