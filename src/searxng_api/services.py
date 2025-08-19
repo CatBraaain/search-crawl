@@ -5,8 +5,6 @@ import httpx
 
 from .schemas import GeneralSearchResult, ImageSearchResult
 
-SEARXNG_BASE_URL = os.environ.get("SEARXNG_BASE_URL", "http://localhost:8080")
-
 EngineType = Literal["general", "images"]
 
 engines_map: dict[EngineType, list[str]] = {
@@ -63,7 +61,7 @@ async def search(
     engines = engines_map[engine_type]
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            f"{SEARXNG_BASE_URL}/search",
+            "http://searxng:8080/search",
             params={
                 "q": q,
                 "engines": ",".join(engines),
