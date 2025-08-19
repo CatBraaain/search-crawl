@@ -3,9 +3,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
-from pydantic import BaseModel
 
-from .crawler import CacheConfig, Crawler, ScrapeResult
+from .crawler import Crawler, ScrapeResult
+from .schemas import (
+    BaseCrawlRequest,  # pyright: ignore[reportUnusedImport]
+    CrawlManyRequest,
+    CrawlRequest,
+)
 
 crawler: Crawler
 
@@ -20,19 +24,6 @@ async def lifespan(app: FastAPI):
 
 
 router = APIRouter(lifespan=lifespan)
-
-
-class BaseCrawlRequest(BaseModel):
-    cache_config: CacheConfig = CacheConfig()
-    concurrently: int = 2
-
-
-class CrawlRequest(BaseCrawlRequest):
-    url: str
-
-
-class CrawlManyRequest(BaseCrawlRequest):
-    urls: list[str]
 
 
 @router.post("/crawl", response_model=list[ScrapeResult])

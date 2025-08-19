@@ -1,7 +1,6 @@
 import json
-from typing import Annotated, Any, Literal, Optional, overload
+from typing import Annotated, Any, Literal, Optional
 
-import httpx
 from pydantic import BaseModel, BeforeValidator, PlainSerializer
 
 from ..cache_config import CacheConfig
@@ -96,39 +95,3 @@ class GeneralSearchResult(BaseSearchResult):
 
 class ImageSearchResult(BaseSearchResult):
     img_src: str
-
-
-@overload
-async def search(search_request: GeneralSearchRequest) -> list[GeneralSearchResult]: ...
-
-
-@overload
-async def search(search_request: ImageSearchRequest) -> list[ImageSearchResult]: ...
-
-
-async def search(
-    search_request: GeneralSearchRequest | ImageSearchRequest,
-) -> list[GeneralSearchResult] | list[ImageSearchResult]:
-    cached_search = search_request.cache_config.wrap_with_cache(
-        cache_key=f"search:{search_request.cache_key}",
-        func=_search,
-    )
-    results = await cached_search(search_request)
-
-    if isinstance(search_request, GeneralSearchRequest):
-        return [GeneralSearchResult(**result) for result in results]
-    elif isinstance(search_request, ImageSearchRequest):
-        return [ImageSearchResult(**result) for result in results]
-    else:
-        raise NotImplementedError
-
-
-async def _search(
-    search_request: SearchRequest,
-) -> list[dict]:
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "http://searxng:8080/search",
-            params=search_request.searxng_request,
-        )
-        return response.json()["results"]

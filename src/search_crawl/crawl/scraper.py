@@ -1,24 +1,9 @@
-from typing import TypedDict
-
 from patchright.async_api import Browser
 from patchright.async_api import Error as PlaywrightError
 
 from ..cache_config import CacheConfig
 from .parser import URL, Navigation, Readable
-
-
-class ScrapeResult(TypedDict):
-    requested_url: str
-    url: str
-    title: str
-    short_title: str
-    author: str
-    html: str
-    content: str
-    summary_html: str
-    summary_md: str
-    links: list[str]
-    pagination_links: list[str]
+from .schemas import ScrapeResult
 
 
 class Scraper:
