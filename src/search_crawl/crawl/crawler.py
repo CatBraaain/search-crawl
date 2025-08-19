@@ -35,7 +35,7 @@ class Crawler:
             await asyncio.gather(
                 *[
                     _crawl(pagination_link)
-                    for pagination_link in result["pagination_links"]
+                    for pagination_link in result.pagination_links
                 ]
             )
 

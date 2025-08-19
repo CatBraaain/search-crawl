@@ -1,5 +1,3 @@
-from typing import TypedDict
-
 from pydantic import BaseModel
 
 from ..cache_config import CacheConfig
@@ -18,7 +16,7 @@ class CrawlManyRequest(BaseCrawlRequest):
     urls: list[str]
 
 
-class ScrapeResult(TypedDict):
+class ScrapeResult(BaseModel):
     requested_url: str
     url: str
     title: str

@@ -21,19 +21,19 @@ class Scraper:
         readable = Readable(raw_html)
         navigation = Navigation(raw_html, url)
 
-        return {
-            "requested_url": requested_url,
-            "url": url.normalized,
-            "title": readable.title(),
-            "short_title": readable.short_title(),
-            "author": readable.author(),
-            "html": raw_html,
-            "content": readable.content(),
-            "summary_html": readable.summary_html(),
-            "summary_md": readable.summary_md(),
-            "links": navigation.links,
-            "pagination_links": navigation.pagination_links,
-        }
+        return ScrapeResult(
+            requested_url=requested_url,
+            url=url.normalized,
+            title=readable.title(),
+            short_title=readable.short_title(),
+            author=readable.author(),
+            html=raw_html,
+            content=readable.content(),
+            summary_html=readable.summary_html(),
+            summary_md=readable.summary_md(),
+            links=navigation.links,
+            pagination_links=navigation.pagination_links,
+        )
 
     async def scrape_raw_wrapper(
         self, requested_url: str, cache_config: CacheConfig
