@@ -15,7 +15,11 @@ class Scraper:
     async def scrape(
         self, requested_url: str, cache_config: CacheConfig
     ) -> ScrapeResult:
-        url_str, raw_html = await self.scrape_raw_wrapper(requested_url, cache_config)
+        scrape_with_cache = cache_config.wrap_with_cache(
+            cache_key=f"scrape:{requested_url}",
+            func=self.scrape_raw,
+        )
+        url_str, raw_html = await scrape_with_cache(requested_url)
         url = URL(url_str)
 
         readable = Readable(raw_html)
@@ -34,15 +38,6 @@ class Scraper:
             links=navigation.links,
             pagination_links=navigation.pagination_links,
         )
-
-    async def scrape_raw_wrapper(
-        self, requested_url: str, cache_config: CacheConfig
-    ) -> tuple[str, str]:
-        scrape_with_cache = cache_config.wrap_with_cache(
-            cache_key=f"scrape:{requested_url}",
-            func=self.scrape_raw,
-        )
-        return await scrape_with_cache(requested_url)
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()
