@@ -3,6 +3,7 @@ FROM ghcr.io/astral-sh/uv:python3.13-bookworm
 RUN --mount=type=cache,target=/root/.cache/uv \
   uvx patchright install chromium --with-deps
 
+
 WORKDIR /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -15,6 +16,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
   uv run patchright install chromium --with-deps
 
 COPY . /app
-
 RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --locked --no-install-project --no-dev
