@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Any, Awaitable, Callable
+from typing import Any, Awaitable, Callable, cast
 
 import redis
 from pydantic import BaseModel
@@ -18,7 +18,7 @@ class CacheConfig(BaseModel):
         @wraps(func)
         async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             if self.readable and (cached_value := r.json().get(cache_key)):
-                return cached_value
+                return cast(R, cached_value)
             else:
                 result = await func(*args, **kwargs)
                 if self.writable:
