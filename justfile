@@ -1,6 +1,3 @@
-export COMPOSE_EXPERIMENTAL_GIT_REMOTE := "true"
-
-
 _:
   @just --list --unsorted
 
