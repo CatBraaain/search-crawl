@@ -13,5 +13,8 @@ run:
   curl http://localhost:8000/search/general --json "{\"q\": \"ping\"}" -s -o nul  # warm-up request
 
 gen:
-  uv run openapi-generator-cli generate -i http://localhost:8000/openapi.json -g python -o ./search_crawl_client --package-name search_crawl_client
+  just _gen "http://localhost:8000/openapi.json" "search_crawl_client"
   uv sync
+
+_gen openapi_path package_name:
+  uv run openapi-generator-cli generate -i {{openapi_path}} -g python -o ./{{package_name}} --package-name {{package_name}}
