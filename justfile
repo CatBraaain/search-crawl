@@ -3,10 +3,6 @@ export JAVA_OPTS := "-Dlog.level=off"
 _:
   @just --list --unsorted
 
-dev:
-  docker compose up --build --wait
-  uv run fastapi dev src/search_crawl/main.py
-
 run:
   docker compose up --build --wait
   # curl http://localhost:8000/search/general --json '{"q":"hello world"}' -s -o /dev/null  # warm-up request
