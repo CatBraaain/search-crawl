@@ -12,12 +12,6 @@ dependencies = [
     "redis>=5.3.1",
 ]
 
-[tool.uv]
-package = true
-
-[tool.uv.sources]
-search-crawl-client = { path = "search_crawl_client" }
-
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
@@ -27,3 +21,9 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "types-lxml>=2025.3.30",
 ]
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+search-crawl-client = { path = "search_crawl_client" }
