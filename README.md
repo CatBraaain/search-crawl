@@ -1,4 +1,4 @@
-# search-crawl
+# SearchCrawl
 
 A FastAPI project providing a search and crawl API.
 Simply provide a search query, and it automatically searches and crawls results for you.
