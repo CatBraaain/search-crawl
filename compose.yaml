@@ -40,6 +40,9 @@
     depends_on:
       - search-crawl-searxng
       - search-crawl-redis
+    environment:
+      - REDIS_URL=redis://search-crawl-redis:6379
+      - SEARXNG_URL=http://search-crawl-searxng:8080
     healthcheck:
       test: [
           "CMD",

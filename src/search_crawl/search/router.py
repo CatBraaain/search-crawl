@@ -1,3 +1,5 @@
+import os
+
 import httpx
 from fastapi import APIRouter
 
@@ -41,7 +43,7 @@ async def search(
 ) -> list[dict]:
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            "http://search-crawl-searxng:8080/search",
+            os.environ["SEARXNG_URL"] + "/search",
             params=search_request.searxng_request,
         )
         return response.json()["results"]
