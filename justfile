@@ -1,3 +1,5 @@
+export JAVA_OPTS := "-Dlog.level=off"
+
 _:
   @just --list --unsorted
 
