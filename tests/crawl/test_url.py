@@ -1,5 +1,3 @@
-import pytest
-
 from search_crawl.crawl.scraper import URL
 
 
