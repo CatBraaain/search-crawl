@@ -27,3 +27,6 @@ package = true
 
 [tool.uv.sources]
 search-crawl-client = { path = "search_crawl_client" }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

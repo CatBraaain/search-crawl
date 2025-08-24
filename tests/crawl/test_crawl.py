@@ -1,12 +1,15 @@
+import pytest
+
 from search_crawl_client import (
     CacheConfig,
     CrawlManyRequest,
     CrawlRequest,
+    DefaultApi,
 )
 
 
-def test_crawl(api):
-    res = api.crawl(
+async def test_crawl(api: DefaultApi):
+    res = await api.crawl(
         CrawlRequest(
             url="https://example.com",
             cache_config=CacheConfig(readable=False, writable=False),
@@ -15,8 +18,8 @@ def test_crawl(api):
     assert res
 
 
-def test_crawl_many(api):
-    res = api.crawl_many(
+async def test_crawl_many(api: DefaultApi):
+    res = await api.crawl_many(
         CrawlManyRequest(
             urls=[
                 "https://example.com",

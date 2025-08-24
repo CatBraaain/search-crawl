@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import AsyncGenerator
 
 import pytest
 
@@ -6,7 +6,7 @@ from search_crawl_client import ApiClient, Configuration, DefaultApi
 
 
 @pytest.fixture
-def api() -> Generator[DefaultApi, None, None]:
+async def api() -> AsyncGenerator[DefaultApi]:
     config = Configuration(host="http://localhost:8000")
-    with ApiClient(config) as client:
+    async with ApiClient(config) as client:
         yield DefaultApi(client)

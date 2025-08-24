@@ -3,6 +3,7 @@ import pytest
 from search_crawl_client import (
     CacheConfig,
     CrawlRequest,
+    DefaultApi,
 )
 
 
@@ -15,8 +16,8 @@ from search_crawl_client import (
         ("https://quotes.toscrape.com/", 10),
     ],
 )
-def test_crawl_pagination(api, url, page_length):
-    res = api.crawl(
+async def test_crawl_pagination(api: DefaultApi, url, page_length):
+    res = await api.crawl(
         CrawlRequest(
             url=url,
             cache_config=CacheConfig(readable=True, writable=True),

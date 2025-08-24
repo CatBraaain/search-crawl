@@ -49,7 +49,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl(
+    async def crawl(
         self,
         crawl_request: CrawlRequest,
         _request_timeout: Union[
@@ -104,11 +104,11 @@ class DefaultApi:
             '200': "List[ScrapeResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -116,7 +116,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_with_http_info(
+    async def crawl_with_http_info(
         self,
         crawl_request: CrawlRequest,
         _request_timeout: Union[
@@ -171,11 +171,11 @@ class DefaultApi:
             '200': "List[ScrapeResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -183,7 +183,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_without_preload_content(
+    async def crawl_without_preload_content(
         self,
         crawl_request: CrawlRequest,
         _request_timeout: Union[
@@ -238,7 +238,7 @@ class DefaultApi:
             '200': "List[ScrapeResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -322,7 +322,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_many(
+    async def crawl_many(
         self,
         crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
@@ -377,11 +377,11 @@ class DefaultApi:
             '200': "List[List[ScrapeResult]]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -389,7 +389,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_many_with_http_info(
+    async def crawl_many_with_http_info(
         self,
         crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
@@ -444,11 +444,11 @@ class DefaultApi:
             '200': "List[List[ScrapeResult]]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -456,7 +456,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_many_without_preload_content(
+    async def crawl_many_without_preload_content(
         self,
         crawl_many_request: CrawlManyRequest,
         _request_timeout: Union[
@@ -511,7 +511,7 @@ class DefaultApi:
             '200': "List[List[ScrapeResult]]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -595,7 +595,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_general(
+    async def crawl_search_general(
         self,
         general_search_crawl_request: GeneralSearchCrawlRequest,
         _request_timeout: Union[
@@ -650,11 +650,11 @@ class DefaultApi:
             '200': "List[GeneralSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -662,7 +662,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_general_with_http_info(
+    async def crawl_search_general_with_http_info(
         self,
         general_search_crawl_request: GeneralSearchCrawlRequest,
         _request_timeout: Union[
@@ -717,11 +717,11 @@ class DefaultApi:
             '200': "List[GeneralSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -729,7 +729,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_general_without_preload_content(
+    async def crawl_search_general_without_preload_content(
         self,
         general_search_crawl_request: GeneralSearchCrawlRequest,
         _request_timeout: Union[
@@ -784,7 +784,7 @@ class DefaultApi:
             '200': "List[GeneralSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -868,7 +868,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_image(
+    async def crawl_search_image(
         self,
         image_search_crawl_request: ImageSearchCrawlRequest,
         _request_timeout: Union[
@@ -923,11 +923,11 @@ class DefaultApi:
             '200': "List[ImageSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -935,7 +935,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_image_with_http_info(
+    async def crawl_search_image_with_http_info(
         self,
         image_search_crawl_request: ImageSearchCrawlRequest,
         _request_timeout: Union[
@@ -990,11 +990,11 @@ class DefaultApi:
             '200': "List[ImageSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1002,7 +1002,7 @@ class DefaultApi:
 
 
     @validate_call
-    def crawl_search_image_without_preload_content(
+    async def crawl_search_image_without_preload_content(
         self,
         image_search_crawl_request: ImageSearchCrawlRequest,
         _request_timeout: Union[
@@ -1057,7 +1057,7 @@ class DefaultApi:
             '200': "List[ImageSearchCrawlResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1141,7 +1141,7 @@ class DefaultApi:
 
 
     @validate_call
-    def healthz(
+    async def healthz(
         self,
         _request_timeout: Union[
             None,
@@ -1191,11 +1191,11 @@ class DefaultApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "str",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1203,7 +1203,7 @@ class DefaultApi:
 
 
     @validate_call
-    def healthz_with_http_info(
+    async def healthz_with_http_info(
         self,
         _request_timeout: Union[
             None,
@@ -1253,11 +1253,11 @@ class DefaultApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "str",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1265,7 +1265,7 @@ class DefaultApi:
 
 
     @validate_call
-    def healthz_without_preload_content(
+    async def healthz_without_preload_content(
         self,
         _request_timeout: Union[
             None,
@@ -1315,7 +1315,7 @@ class DefaultApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "str",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1383,7 +1383,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_general(
+    async def search_general(
         self,
         general_search_request: GeneralSearchRequest,
         _request_timeout: Union[
@@ -1438,11 +1438,11 @@ class DefaultApi:
             '200': "List[GeneralSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1450,7 +1450,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_general_with_http_info(
+    async def search_general_with_http_info(
         self,
         general_search_request: GeneralSearchRequest,
         _request_timeout: Union[
@@ -1505,11 +1505,11 @@ class DefaultApi:
             '200': "List[GeneralSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1517,7 +1517,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_general_without_preload_content(
+    async def search_general_without_preload_content(
         self,
         general_search_request: GeneralSearchRequest,
         _request_timeout: Union[
@@ -1572,7 +1572,7 @@ class DefaultApi:
             '200': "List[GeneralSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1656,7 +1656,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_images(
+    async def search_images(
         self,
         image_search_request: ImageSearchRequest,
         _request_timeout: Union[
@@ -1711,11 +1711,11 @@ class DefaultApi:
             '200': "List[ImageSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1723,7 +1723,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_images_with_http_info(
+    async def search_images_with_http_info(
         self,
         image_search_request: ImageSearchRequest,
         _request_timeout: Union[
@@ -1778,11 +1778,11 @@ class DefaultApi:
             '200': "List[ImageSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1790,7 +1790,7 @@ class DefaultApi:
 
 
     @validate_call
-    def search_images_without_preload_content(
+    async def search_images_without_preload_content(
         self,
         image_search_request: ImageSearchRequest,
         _request_timeout: Union[
@@ -1845,7 +1845,7 @@ class DefaultApi:
             '200': "List[ImageSearchResult]",
             '422': "HTTPValidationError",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )

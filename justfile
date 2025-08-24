@@ -17,4 +17,4 @@ gen:
   uv sync
 
 _gen openapi_path package_name:
-  uv run openapi-generator-cli generate -i {{openapi_path}} -g python -o ./{{package_name}} --package-name {{package_name}}
+  uv run openapi-generator-cli generate -i {{openapi_path}} -g python --library asyncio -o ./{{package_name}} --package-name {{package_name}}

@@ -96,6 +96,8 @@ uv add git+https://github.com/CatBraaain/search-crawl.git#subdirectory=search_cr
 
 Use the API:
 ```python
+import asyncio
+
 from search_crawl_client import (
     ApiClient,
     BaseCrawlRequest,
@@ -105,20 +107,27 @@ from search_crawl_client import (
     GeneralSearchRequest,
 )
 
-config = Configuration(host="http://localhost:8000")
-with ApiClient(config) as client:
-    api = DefaultApi(client)
-    result = api.crawl_search_general(
-        GeneralSearchCrawlRequest(
-            search=GeneralSearchRequest(q="hello world"),
-            crawl=BaseCrawlRequest(concurrently=2),
-        )
-    )[0].crawl[0]
 
-    print("URL: " + result.url)
-    print("TITLE: " + result.title)
-    print("MARKDOWN: ")
-    print(result.summary_md[:200] + "...")
+async def main():
+    config = Configuration(host="http://localhost:8000")
+    async with ApiClient(config) as client:
+        api = DefaultApi(client)
+        result = (
+            await api.crawl_search_general(
+                GeneralSearchCrawlRequest(
+                    search=GeneralSearchRequest(q="hello world"),
+                    crawl=BaseCrawlRequest(concurrently=2),
+                )
+            )
+        )[0].crawl[0]
+
+        print("URL: " + result.url)
+        print("TITLE: " + result.title)
+        print("MARKDOWN: ")
+        print(result.summary_md[:200] + "...")
+
+
+asyncio.run(main())
 ```
 
 Output example:

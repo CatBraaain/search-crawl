@@ -1,6 +1,7 @@
 from search_crawl_client import (
     BaseCrawlRequest,
     CacheConfig,
+    DefaultApi,
     GeneralSearchCrawlRequest,
     GeneralSearchRequest,
     ImageSearchCrawlRequest,
@@ -8,8 +9,8 @@ from search_crawl_client import (
 )
 
 
-def test_crawl_search_general(api):
-    res = api.crawl_search_general(
+async def test_crawl_search_general(api: DefaultApi):
+    res = await api.crawl_search_general(
         GeneralSearchCrawlRequest(
             search=GeneralSearchRequest(q="scraping test site"),
             crawl=BaseCrawlRequest(
@@ -20,8 +21,8 @@ def test_crawl_search_general(api):
     assert isinstance(res, list) and len(res) > 0
 
 
-def test_crawl_search_image(api):
-    res = api.crawl_search_image(
+async def test_crawl_search_image(api: DefaultApi):
+    res = await api.crawl_search_image(
         ImageSearchCrawlRequest(
             search=ImageSearchRequest(q="scraping test site"),
             crawl=BaseCrawlRequest(
