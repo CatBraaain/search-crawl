@@ -41,7 +41,7 @@ async def search(
 ) -> list[dict]:
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            "http://searxng:8080/search",
+            "http://search-crawl-searxng:8080/search",
             params=search_request.searxng_request,
         )
         return response.json()["results"]

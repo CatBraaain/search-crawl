@@ -4,7 +4,7 @@ from typing import Any, Awaitable, Callable, cast
 import redis
 from pydantic import BaseModel
 
-r = redis.Redis.from_url("redis://@redis:6379", decode_responses=True)
+r = redis.Redis.from_url("redis://@search-crawl-redis:6379", decode_responses=True)
 
 
 class CacheConfig(BaseModel):

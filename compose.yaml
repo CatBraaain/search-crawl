@@ -1,5 +1,5 @@
 ﻿services:
-  searxng:
+  search-crawl-searxng:
     image: searxng/searxng
     healthcheck:
       test:
@@ -22,7 +22,7 @@
     networks:
       - search-crawl-net
 
-  redis:
+  search-crawl-redis:
     image: redis
     ports:
       - "6379:6379"
@@ -31,14 +31,15 @@
     networks:
       - search-crawl-net
 
-  search-crawl:
+  search-crawl-main:
     build:
       context: .
     command: uv run --no-sync fastapi run src/search_crawl/main.py --host 0.0.0.0
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:
-      - searxng
+      - search-crawl-searxng
+      - search-crawl-redis
     healthcheck:
       test: [
           "CMD",
