@@ -18,11 +18,7 @@ router = APIRouter()
 async def search_general(
     search_request: GeneralSearchRequest,
 ) -> list[GeneralSearchResult]:
-    cached_search = search_request.cache_config.wrap_with_cache(
-        cache_key=f"search:{search_request.cache_key}",
-        func=search,
-    )
-    results = await cached_search(search_request)
+    results = await get_search_results(search_request)
     return [GeneralSearchResult(**result) for result in results]
 
 
@@ -30,12 +26,19 @@ async def search_general(
 async def search_images(
     search_request: ImageSearchRequest,
 ) -> list[ImageSearchResult]:
+    results = await get_search_results(search_request)
+    return [ImageSearchResult(**result) for result in results]
+
+
+async def get_search_results(
+    search_request: SearchRequest,
+) -> list[dict]:
     cached_search = search_request.cache_config.wrap_with_cache(
         cache_key=f"search:{search_request.cache_key}",
         func=search,
     )
     results = await cached_search(search_request)
-    return [ImageSearchResult(**result) for result in results]
+    return results
 
 
 async def search(
