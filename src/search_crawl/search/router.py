@@ -38,7 +38,11 @@ async def get_search_results(
         func=search,
     )
     results = await cached_search(search_request)
-    return results
+
+    if search_request.max_results is not None:
+        return results[: search_request.max_results]
+    else:
+        return results
 
 
 async def search(

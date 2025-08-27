@@ -43,16 +43,17 @@ class SearchRequest(BaseModel):
     page: int = 1
     time_range: Optional[Literal["day", "month", "year"]] = None
     format: Literal["json", "csv", "rss"] = "json"
+    max_results: Optional[int] = None
     cache_config: CacheConfig = CacheConfig()
 
     @property
     def searxng_request(self):
-        return self.model_dump(exclude={"cache_config"})
+        return self.model_dump(exclude={"max_results", "cache_config"})
 
     @property
     def cache_key(self):
         return json.dumps(
-            self.model_dump(exclude={"cache_config"}),
+            self.model_dump(exclude={"max_results", "cache_config"}),
             separators=(",", "="),
         )
 

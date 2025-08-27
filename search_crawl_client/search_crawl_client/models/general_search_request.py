@@ -33,8 +33,9 @@ class GeneralSearchRequest(BaseModel):
     page: Optional[StrictInt] = 1
     time_range: Optional[StrictStr] = None
     format: Optional[StrictStr] = 'json'
+    max_results: Optional[StrictInt] = None
     cache_config: Optional[CacheConfig] = None
-    __properties: ClassVar[List[str]] = ["q", "engines", "language", "page", "time_range", "format", "cache_config"]
+    __properties: ClassVar[List[str]] = ["q", "engines", "language", "page", "time_range", "format", "max_results", "cache_config"]
 
     @field_validator('engines')
     def engines_validate_enum(cls, value):
@@ -114,6 +115,11 @@ class GeneralSearchRequest(BaseModel):
         if self.time_range is None and "time_range" in self.model_fields_set:
             _dict['time_range'] = None
 
+        # set to None if max_results (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_results is None and "max_results" in self.model_fields_set:
+            _dict['max_results'] = None
+
         return _dict
 
     @classmethod
@@ -132,6 +138,7 @@ class GeneralSearchRequest(BaseModel):
             "page": obj.get("page") if obj.get("page") is not None else 1,
             "time_range": obj.get("time_range"),
             "format": obj.get("format") if obj.get("format") is not None else 'json',
+            "max_results": obj.get("max_results"),
             "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None
         })
         return _obj

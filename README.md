@@ -115,7 +115,7 @@ async def main():
         result = (
             await api.crawl_search_general(
                 GeneralSearchCrawlRequest(
-                    search=GeneralSearchRequest(q="hello world"),
+                    search=GeneralSearchRequest(q="hello world", max_results=1),
                     crawl=BaseCrawlRequest(concurrently=2),
                 )
             )
@@ -128,6 +128,7 @@ async def main():
 
 
 asyncio.run(main())
+
 ```
 
 Output example:
