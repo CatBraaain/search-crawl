@@ -1,5 +1,6 @@
 ﻿services:
-  search-crawl-searxng:
+  searxng:
+    container_name: ${COMPOSE_PROJECT_NAME}-search-crawl-searxng
     image: searxng/searxng
     healthcheck:
       test:
@@ -20,7 +21,8 @@
       - ./searxng:/etc/searxng
     pull_policy: always
 
-  search-crawl-redka:
+  redka:
+    container_name: ${COMPOSE_PROJECT_NAME}-search-crawl-redka
     image: nalgeon/redka:latest
     ports:
       - "6379:6379"
@@ -28,18 +30,19 @@
       - ./.cache:/data
     command: /data/redka.db
 
-  search-crawl-main:
+  main:
+    container_name: ${COMPOSE_PROJECT_NAME}-search-crawl-main
     build:
       context: .
     command: uv run --no-sync fastapi run src/search_crawl/main.py --host 0.0.0.0
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:
-      - search-crawl-searxng
-      - search-crawl-redka
+      - searxng
+      - redka
     environment:
-      - REDIS_URL=redis://search-crawl-redka:6379
-      - SEARXNG_URL=http://search-crawl-searxng:8080
+      - REDIS_URL=redis://redka:6379
+      - SEARXNG_URL=http://searxng:8080
     healthcheck:
       test: [
           "CMD",
