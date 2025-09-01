@@ -1,4 +1,6 @@
-﻿services:
+﻿name: search-crawl
+
+services:
   searxng:
     container_name: ${COMPOSE_PROJECT_NAME}-search-crawl-searxng
     image: searxng/searxng
