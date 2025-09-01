@@ -19,8 +19,6 @@
     volumes:
       - ./searxng:/etc/searxng
     pull_policy: always
-    networks:
-      - search-crawl-net
 
   search-crawl-redka:
     image: nalgeon/redka:latest
@@ -29,8 +27,6 @@
     volumes:
       - ./.cache:/data
     command: /data/redka.db
-    networks:
-      - search-crawl-net
 
   search-crawl-main:
     build:
@@ -57,9 +53,3 @@
       interval: 1s
       timeout: 1s
       retries: 15
-    networks:
-      - search-crawl-net
-
-networks:
-  search-crawl-net:
-    driver: bridge
