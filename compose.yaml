@@ -22,12 +22,13 @@
     networks:
       - search-crawl-net
 
-  search-crawl-redis:
-    image: redis
+  search-crawl-redka:
+    image: nalgeon/redka:latest
     ports:
       - "6379:6379"
     volumes:
       - ./.cache:/data
+    command: /data/redka.db
     networks:
       - search-crawl-net
 
@@ -39,9 +40,9 @@
       - "${API_PORT:-8000}:8000"
     depends_on:
       - search-crawl-searxng
-      - search-crawl-redis
+      - search-crawl-redka
     environment:
-      - REDIS_URL=redis://search-crawl-redis:6379
+      - REDIS_URL=redis://search-crawl-redka:6379
       - SEARXNG_URL=http://search-crawl-searxng:8080
     healthcheck:
       test: [

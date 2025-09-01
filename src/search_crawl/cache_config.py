@@ -1,3 +1,4 @@
+import json
 import os
 from functools import wraps
 from typing import Any, Awaitable, Callable, cast
@@ -26,14 +27,12 @@ class CacheConfig(BaseModel):
         @wraps(func)
         async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             r = get_redis()
-            if self.readable and (cached_value := r.json().get(cache_key)):
-                return cast(R, cached_value)
+            if self.readable and (cached_value := r.get(cache_key)):
+                return cast(R, json.loads(cast(str, cached_value)))
             else:
                 result = await func(*args, **kwargs)
                 if self.writable:
-                    r.json().set(cache_key, "$", result)
-                    if self.ttl:
-                        r.expire(cache_key, self.ttl)
+                    r.set(cache_key, json.dumps(result), self.ttl)
 
                 return result
 
