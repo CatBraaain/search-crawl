@@ -24,8 +24,6 @@
   redka:
     container_name: ${COMPOSE_PROJECT_NAME}-search-crawl-redka
     image: nalgeon/redka:latest
-    ports:
-      - "6379:6379"
     volumes:
       - ./.cache:/data
     command: /data/redka.db
