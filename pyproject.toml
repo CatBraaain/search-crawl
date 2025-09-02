@@ -30,3 +30,51 @@ search-crawl-client = { path = "search_crawl_client" }
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+
+[tool.ruff]
+include = [ "pyproject.toml", "src/**/*.py", "tests/**/*.py" ]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "FAST",     # fastapi
+    "ANN",      # flake8-annotations
+    "F",        # Pyflakes
+    "UP",       # pyupgrade
+    "ASYNC105", # flake8-async[trio-sync-call]
+    "B",        # flake8-bugbear
+    "C4",       # flake8-comprehensions
+    "ISC",      # flake8-implicit-str-concat
+    "PIE",      # flake8-pie
+    "PT",       # flake8-pytest-style
+    "SIM",      # flake8-simplify
+    "TID",      # flake8-tidy-imports
+    "TC",       # flake8-type-checking
+    "PTH",      # flake8-use-pathlib
+    "I",        # isort
+    "NPY",      # numpy
+    "PD",       # pandas-vet
+    "N",        # pep8-naming
+    "PERF",     # perflint
+    "E4",       # pycodestyle[import]
+    "E7",       # pycodestyle[colon]
+    "E9",       # pycodestyle[io-error]
+    "F",        # pyflakes
+    "PGH",      # pygrep-hooks
+    "PL",       # pylint
+    "RUF1",     # ruff[noqa]
+    "RUF2",     # ruff[project.toml]
+    "FURB",     # refurb
+]
+ignore = [
+    "ANN401", # any-type
+    "TC006",  # runtime-cast-value
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**.py" = [ "ANN201", "PLR2004" ]
