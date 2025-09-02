@@ -14,7 +14,7 @@ from .schemas import (
 router = APIRouter()
 
 
-@router.post("/search/general", response_model=list[GeneralSearchResult])
+@router.post("/search/general")
 async def search_general(
     search_request: GeneralSearchRequest,
 ) -> list[GeneralSearchResult]:
@@ -22,7 +22,7 @@ async def search_general(
     return [GeneralSearchResult(**result) for result in results]
 
 
-@router.post("/search/images", response_model=list[ImageSearchResult])
+@router.post("/search/images")
 async def search_images(
     search_request: ImageSearchRequest,
 ) -> list[ImageSearchResult]:

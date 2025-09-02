@@ -8,7 +8,7 @@ from search_crawl_client import (
 
 
 @pytest.mark.parametrize(
-    "url, page_length",
+    ("url", "page_length"),
     [
         ("https://example.com", 1),
         ("https://web-scraping.dev/products", 5),
@@ -16,7 +16,7 @@ from search_crawl_client import (
         ("https://quotes.toscrape.com/", 10),
     ],
 )
-async def test_crawl_pagination(api: DefaultApi, url, page_length):
+async def test_crawl_pagination(api: DefaultApi, url: str, page_length: int):
     res = await api.crawl(
         CrawlRequest(
             url=url,

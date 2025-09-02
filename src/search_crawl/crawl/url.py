@@ -53,7 +53,7 @@ class URL:
         return normalized_query
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, URL) or isinstance(other, str):
+        if isinstance(other, URL | str):
             other_url = other if isinstance(other, URL) else URL(other)
             if (
                 self.page == 1
@@ -69,6 +69,9 @@ class URL:
                 return self.normalized == other_url.normalized
 
         return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash(self.normalized)
 
     def is_pagination_of(self, other: Self) -> bool:
         return (

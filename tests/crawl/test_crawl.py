@@ -1,5 +1,3 @@
-import pytest
-
 from search_crawl_client import (
     CacheConfig,
     CrawlManyRequest,

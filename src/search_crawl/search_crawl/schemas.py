@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from ..crawl.router import BaseCrawlRequest, ScrapeResult
-from ..search.router import (
+from search_crawl.crawl.router import BaseCrawlRequest, ScrapeResult
+from search_crawl.search.router import (
     GeneralSearchRequest,
     GeneralSearchResult,
     ImageSearchRequest,

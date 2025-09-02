@@ -1,7 +1,8 @@
 import json
 import os
+from collections.abc import Awaitable, Callable
 from functools import wraps
-from typing import Any, Awaitable, Callable, cast
+from typing import Any, cast
 
 import redis
 from pydantic import BaseModel
@@ -10,7 +11,7 @@ r: redis.Redis | None = None
 
 
 def get_redis() -> redis.Redis:
-    global r
+    global r  # noqa: PLW0603
     if r is None:
         r = redis.Redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
     return r

@@ -1,7 +1,7 @@
-from patchright.async_api import Browser
-from patchright.async_api import Error as PlaywrightError
+from patchright.async_api import Browser, Error as PlaywrightError
 
-from ..cache_config import CacheConfig
+from search_crawl.cache_config import CacheConfig
+
 from .parser import URL, Navigation, Readable
 from .schemas import ScrapeResult
 
@@ -41,7 +41,7 @@ class Scraper:
 
     async def scrape_raw(self, requested_url: str) -> tuple[str, str]:
         page = await self.browser.new_page()
-        try:
+        try:  # noqa: SIM105
             await page.goto(requested_url, timeout=5000, wait_until="networkidle")
         except PlaywrightError:
             pass

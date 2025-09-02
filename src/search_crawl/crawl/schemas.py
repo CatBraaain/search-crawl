@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from ..cache_config import CacheConfig
+from search_crawl.cache_config import CacheConfig
 
 
 class BaseCrawlRequest(BaseModel):

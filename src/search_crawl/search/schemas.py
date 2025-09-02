@@ -1,9 +1,9 @@
 import json
-from typing import Annotated, Any, Literal, Optional
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, BeforeValidator, PlainSerializer
 
-from ..cache_config import CacheConfig
+from search_crawl.cache_config import CacheConfig
 
 GeneralEngineName = Literal[
     "bing",
@@ -41,17 +41,17 @@ class SearchRequest(BaseModel):
     engines: Any
     language: str = "en"
     page: int = 1
-    time_range: Optional[Literal["day", "month", "year"]] = None
+    time_range: Literal["day", "month", "year"] | None = None
     format: Literal["json", "csv", "rss"] = "json"
-    max_results: Optional[int] = None
+    max_results: int | None = None
     cache_config: CacheConfig = CacheConfig()
 
     @property
-    def searxng_request(self):
+    def searxng_request(self) -> dict[str, Any]:
         return self.model_dump(exclude={"max_results", "cache_config"})
 
     @property
-    def cache_key(self):
+    def cache_key(self) -> str:
         return json.dumps(
             self.model_dump(exclude={"max_results", "cache_config"}),
             separators=(",", "="),
@@ -91,7 +91,7 @@ class BaseSearchResult(BaseModel):
 
 
 class GeneralSearchResult(BaseSearchResult):
-    thumbnail: Optional[str]
+    thumbnail: str | None
 
 
 class ImageSearchResult(BaseSearchResult):

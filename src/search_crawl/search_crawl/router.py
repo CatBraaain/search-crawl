@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 
-from ..crawl.router import CrawlManyRequest, crawl_many
-from ..search.router import (
+from search_crawl.crawl.router import CrawlManyRequest, crawl_many
+from search_crawl.search.router import (
     search_general,
     search_images,
 )
+
 from .schemas import (
     GeneralSearchCrawlRequest,
     GeneralSearchCrawlResult,
@@ -15,7 +16,7 @@ from .schemas import (
 router = APIRouter()
 
 
-@router.post("/search-crawl/general", response_model=list[GeneralSearchCrawlResult])
+@router.post("/search-crawl/general")
 async def crawl_search_general(
     param: GeneralSearchCrawlRequest,
 ) -> list[GeneralSearchCrawlResult]:
@@ -28,11 +29,13 @@ async def crawl_search_general(
     )
     return [
         GeneralSearchCrawlResult(search=search_result, crawl=crawl_result)
-        for search_result, crawl_result in zip(search_results, crawl_results)
+        for search_result, crawl_result in zip(
+            search_results, crawl_results, strict=True
+        )
     ]
 
 
-@router.post("/search-crawl/image", response_model=list[ImageSearchCrawlResult])
+@router.post("/search-crawl/image")
 async def crawl_search_image(
     param: ImageSearchCrawlRequest,
 ) -> list[ImageSearchCrawlResult]:
@@ -45,5 +48,7 @@ async def crawl_search_image(
     )
     return [
         ImageSearchCrawlResult(search=search_result, crawl=crawl_result)
-        for search_result, crawl_result in zip(search_results, crawl_results)
+        for search_result, crawl_result in zip(
+            search_results, crawl_results, strict=True
+        )
     ]

@@ -57,12 +57,10 @@ class Navigation:
             for a in tree.cssselect("a[href]")
         ]
         inner_links = sorted(
-            list(
-                {
-                    link
-                    for link in all_links
-                    if URL(link).with_domain == current_url.with_domain
-                }
-            )
+            {
+                link
+                for link in all_links
+                if URL(link).with_domain == current_url.with_domain
+            }
         )
         return inner_links
