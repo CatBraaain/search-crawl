@@ -7,13 +7,17 @@ from search_crawl_client import (
 )
 
 
+def pagination_param(url: str, page: int):
+    return pytest.param(url, page, id=f"crawl {url} for {page} pages")
+
+
 @pytest.mark.parametrize(
     ("url", "page_length"),
     [
-        ("https://example.com", 1),
-        ("https://web-scraping.dev/products", 5),
-        ("https://www.scrapethissite.com/pages/forms/?per_page=100", 6),
-        ("https://quotes.toscrape.com/", 10),
+        pagination_param("https://example.com", 1),
+        pagination_param("https://web-scraping.dev/products", 5),
+        pagination_param("https://www.scrapethissite.com/pages/forms/?per_page=100", 6),
+        pagination_param("https://quotes.toscrape.com/", 10),
     ],
 )
 async def test_crawl_pagination(api: DefaultApi, url: str, page_length: int):
