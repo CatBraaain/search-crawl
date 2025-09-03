@@ -36,7 +36,9 @@ async def crawl(
 
 
 @router.post("/crawl-many")
-async def crawl_many(crawl_many_request: CrawlManyRequest) -> list[list[ScrapeResult]]:
+async def crawl_many(
+    crawl_many_request: CrawlManyRequest,
+) -> list[list[ScrapeResult]]:
     sem = asyncio.Semaphore(crawl_many_request.concurrently)
     return await asyncio.gather(
         *(
