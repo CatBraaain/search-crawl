@@ -103,19 +103,19 @@ from search_crawl_client import (
     BaseCrawlRequest,
     Configuration,
     DefaultApi,
-    GeneralSearchCrawlRequest,
-    GeneralSearchRequest,
+    SearchCrawlRequest,
+    SearchRequest,
 )
 
 
-async def main():
+async def main() -> None:
     config = Configuration(host="http://localhost:8000")
     async with ApiClient(config) as client:
         api = DefaultApi(client)
         result = (
-            await api.crawl_search_general(
-                GeneralSearchCrawlRequest(
-                    search=GeneralSearchRequest(q="hello world", max_results=1),
+            await api.crawl_search(
+                SearchCrawlRequest(
+                    search=SearchRequest(q="hello world", max_results=1),
                     crawl=BaseCrawlRequest(concurrently=2),
                 )
             )
