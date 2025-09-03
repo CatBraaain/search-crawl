@@ -1035,6 +1035,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
+    { name = "httpx" },
     { name = "lxml", extra = ["cssselect"] },
     { name = "markitdown" },
     { name = "patchright" },
@@ -1044,7 +1045,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "openapi-generator-cli", extra = ["jdk4py"] },
     { name = "pytest" },
     { name = "pytest-asyncio" },
@@ -1055,6 +1055,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.14" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "lxml", extras = ["cssselect"], specifier = ">=5.4.0" },
     { name = "markitdown", specifier = ">=0.1.2" },
     { name = "patchright", specifier = ">=1.52.5" },
@@ -1064,7 +1065,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "openapi-generator-cli", extras = ["jdk4py"], specifier = ">=7.14.0" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-asyncio", specifier = ">=1.0.0" },
