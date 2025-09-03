@@ -8,7 +8,7 @@ from search_crawl_client import (
 
 
 @pytest.fixture(params=[None, 1, 3], ids=lambda x: f"max_search_results={x}")
-def max_results(request: pytest.FixtureRequest):
+def max_results(request: pytest.FixtureRequest) -> int | None:
     return request.param
 
 
