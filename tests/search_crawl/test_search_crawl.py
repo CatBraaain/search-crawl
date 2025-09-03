@@ -9,12 +9,16 @@ from search_crawl_client import (
 )
 
 
-@pytest.fixture(params=[1, 3], ids=lambda x: f"max_search_results={x}")
+@pytest.fixture(params=[1, 3], ids=lambda x: f"[max search results={x}]")
 def max_results(request: pytest.FixtureRequest):
     return request.param
 
 
-async def test_crawl_search(api: DefaultApi, max_results: int | None):
+async def test_crawl_search(
+    api: DefaultApi,
+    max_results: int | None,
+    cache_config: CacheConfig,
+):
     res = await api.crawl_search(
         SearchCrawlRequest(
             search=SearchRequest(
@@ -22,7 +26,7 @@ async def test_crawl_search(api: DefaultApi, max_results: int | None):
                 max_results=max_results,
             ),
             crawl=BaseCrawlRequest(
-                cache_config=CacheConfig(readable=True, writable=True),
+                cache_config=cache_config,
             ),
         )
     )

@@ -8,7 +8,7 @@ from search_crawl_client import (
 
 
 def pagination_param(url: str, page: int):
-    return pytest.param(url, page, id=f"crawl {url} for {page} pages")
+    return pytest.param(url, page, id=f"[crawl {page} paginations]")
 
 
 @pytest.mark.parametrize(
@@ -20,11 +20,16 @@ def pagination_param(url: str, page: int):
         pagination_param("https://quotes.toscrape.com/", 10),
     ],
 )
-async def test_crawl_pagination(api: DefaultApi, url: str, page_length: int):
+async def test_crawl_pagination(
+    api: DefaultApi,
+    url: str,
+    page_length: int,
+    cache_config: CacheConfig,
+):
     res = await api.crawl(
         CrawlRequest(
             url=url,
-            cache_config=CacheConfig(readable=True, writable=True),
+            cache_config=cache_config,
         )
     )
     assert len(res) == page_length

@@ -7,17 +7,21 @@ from search_crawl_client import (
 )
 
 
-@pytest.fixture(params=[None, 1, 3], ids=lambda x: f"max_search_results={x}")
+@pytest.fixture(params=[None, 1, 3], ids=lambda x: f"[max search results={x}]")
 def max_results(request: pytest.FixtureRequest) -> int | None:
     return request.param
 
 
-async def test_search(api: DefaultApi, max_results: int | None):
+async def test_search(
+    api: DefaultApi,
+    max_results: int | None,
+    cache_config: CacheConfig,
+):
     res = await api.search(
         SearchRequest(
             q="ping",
             max_results=max_results,
-            cache_config=CacheConfig(readable=False, writable=False),
+            cache_config=cache_config,
         )
     )
     assert isinstance(res, list)
