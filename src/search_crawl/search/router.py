@@ -4,38 +4,27 @@ import httpx
 from fastapi import APIRouter
 
 from .schemas import (
-    GeneralSearchRequest,
-    GeneralSearchResult,
-    ImageSearchRequest,
-    ImageSearchResult,
     SearchRequest,
+    SearchResult,
 )
 
 router = APIRouter()
 
 
-@router.post("/search/general")
-async def search_general(
-    search_request: GeneralSearchRequest,
-) -> list[GeneralSearchResult]:
-    results = await get_search_results(search_request)
-    return [GeneralSearchResult(**result) for result in results]
+@router.post("/search")
+async def search(
+    search_request: SearchRequest,
+) -> list[SearchResult]:
+    results = await search_with_cache(search_request)
+    return [SearchResult(**result) for result in results]
 
 
-@router.post("/search/images")
-async def search_images(
-    search_request: ImageSearchRequest,
-) -> list[ImageSearchResult]:
-    results = await get_search_results(search_request)
-    return [ImageSearchResult(**result) for result in results]
-
-
-async def get_search_results(
+async def search_with_cache(
     search_request: SearchRequest,
 ) -> list[dict]:
     cached_search = search_request.cache_config.wrap_with_cache(
         cache_key=f"search:{search_request.cache_key}",
-        func=search,
+        func=searxng,
     )
     results = await cached_search(search_request)
 
@@ -45,7 +34,7 @@ async def get_search_results(
         return results
 
 
-async def search(
+async def searxng(
     search_request: SearchRequest,
 ) -> list[dict]:
     async with httpx.AsyncClient() as client:

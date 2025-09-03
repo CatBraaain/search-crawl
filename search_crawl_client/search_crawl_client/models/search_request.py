@@ -19,6 +19,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from search_crawl_client.models.cache_config import CacheConfig
+from search_crawl_client.models.engines import Engines
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,11 +29,14 @@ class SearchRequest(BaseModel):
     SearchRequest
     """ # noqa: E501
     q: StrictStr
-    language: Optional[StrictStr] = None
+    engines: Optional[Engines] = None
+    language: Optional[StrictStr] = 'en'
     page: Optional[StrictInt] = 1
     time_range: Optional[StrictStr] = None
-    format: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["q", "language", "page", "time_range", "format"]
+    format: Optional[StrictStr] = 'json'
+    max_results: Optional[StrictInt] = None
+    cache_config: Optional[CacheConfig] = None
+    __properties: ClassVar[List[str]] = ["q", "engines", "language", "page", "time_range", "format", "max_results", "cache_config"]
 
     @field_validator('time_range')
     def time_range_validate_enum(cls, value):
@@ -92,20 +97,21 @@ class SearchRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if language (nullable) is None
-        # and model_fields_set contains the field
-        if self.language is None and "language" in self.model_fields_set:
-            _dict['language'] = None
-
+        # override the default output from pydantic by calling `to_dict()` of engines
+        if self.engines:
+            _dict['engines'] = self.engines.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of cache_config
+        if self.cache_config:
+            _dict['cache_config'] = self.cache_config.to_dict()
         # set to None if time_range (nullable) is None
         # and model_fields_set contains the field
         if self.time_range is None and "time_range" in self.model_fields_set:
             _dict['time_range'] = None
 
-        # set to None if format (nullable) is None
+        # set to None if max_results (nullable) is None
         # and model_fields_set contains the field
-        if self.format is None and "format" in self.model_fields_set:
-            _dict['format'] = None
+        if self.max_results is None and "max_results" in self.model_fields_set:
+            _dict['max_results'] = None
 
         return _dict
 
@@ -120,10 +126,13 @@ class SearchRequest(BaseModel):
 
         _obj = cls.model_validate({
             "q": obj.get("q"),
-            "language": obj.get("language"),
+            "engines": Engines.from_dict(obj["engines"]) if obj.get("engines") is not None else None,
+            "language": obj.get("language") if obj.get("language") is not None else 'en',
             "page": obj.get("page") if obj.get("page") is not None else 1,
             "time_range": obj.get("time_range"),
-            "format": obj.get("format")
+            "format": obj.get("format") if obj.get("format") is not None else 'json',
+            "max_results": obj.get("max_results"),
+            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None
         })
         return _obj
 

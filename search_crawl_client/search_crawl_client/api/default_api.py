@@ -20,15 +20,11 @@ from pydantic import StrictStr
 from typing import List
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest
-from search_crawl_client.models.general_search_crawl_request import GeneralSearchCrawlRequest
-from search_crawl_client.models.general_search_crawl_result import GeneralSearchCrawlResult
-from search_crawl_client.models.general_search_request import GeneralSearchRequest
-from search_crawl_client.models.general_search_result import GeneralSearchResult
-from search_crawl_client.models.image_search_crawl_request import ImageSearchCrawlRequest
-from search_crawl_client.models.image_search_crawl_result import ImageSearchCrawlResult
-from search_crawl_client.models.image_search_request import ImageSearchRequest
-from search_crawl_client.models.image_search_result import ImageSearchResult
 from search_crawl_client.models.scrape_result import ScrapeResult
+from search_crawl_client.models.search_crawl_request import SearchCrawlRequest
+from search_crawl_client.models.search_crawl_result import SearchCrawlResult
+from search_crawl_client.models.search_request import SearchRequest
+from search_crawl_client.models.search_result import SearchResult
 
 from search_crawl_client.api_client import ApiClient, RequestSerialized
 from search_crawl_client.api_response import ApiResponse
@@ -595,9 +591,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def crawl_search_general(
+    async def crawl_search(
         self,
-        general_search_crawl_request: GeneralSearchCrawlRequest,
+        search_crawl_request: SearchCrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -610,12 +606,12 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[GeneralSearchCrawlResult]:
-        """Crawl Search General
+    ) -> List[SearchCrawlResult]:
+        """Crawl Search
 
 
-        :param general_search_crawl_request: (required)
-        :type general_search_crawl_request: GeneralSearchCrawlRequest
+        :param search_crawl_request: (required)
+        :type search_crawl_request: SearchCrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -638,8 +634,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._crawl_search_general_serialize(
-            general_search_crawl_request=general_search_crawl_request,
+        _param = self._crawl_search_serialize(
+            search_crawl_request=search_crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -647,7 +643,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchCrawlResult]",
+            '200': "List[SearchCrawlResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -662,9 +658,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def crawl_search_general_with_http_info(
+    async def crawl_search_with_http_info(
         self,
-        general_search_crawl_request: GeneralSearchCrawlRequest,
+        search_crawl_request: SearchCrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -677,12 +673,12 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[GeneralSearchCrawlResult]]:
-        """Crawl Search General
+    ) -> ApiResponse[List[SearchCrawlResult]]:
+        """Crawl Search
 
 
-        :param general_search_crawl_request: (required)
-        :type general_search_crawl_request: GeneralSearchCrawlRequest
+        :param search_crawl_request: (required)
+        :type search_crawl_request: SearchCrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -705,8 +701,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._crawl_search_general_serialize(
-            general_search_crawl_request=general_search_crawl_request,
+        _param = self._crawl_search_serialize(
+            search_crawl_request=search_crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -714,7 +710,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchCrawlResult]",
+            '200': "List[SearchCrawlResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -729,9 +725,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def crawl_search_general_without_preload_content(
+    async def crawl_search_without_preload_content(
         self,
-        general_search_crawl_request: GeneralSearchCrawlRequest,
+        search_crawl_request: SearchCrawlRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -745,11 +741,11 @@ class DefaultApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Crawl Search General
+        """Crawl Search
 
 
-        :param general_search_crawl_request: (required)
-        :type general_search_crawl_request: GeneralSearchCrawlRequest
+        :param search_crawl_request: (required)
+        :type search_crawl_request: SearchCrawlRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -772,8 +768,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._crawl_search_general_serialize(
-            general_search_crawl_request=general_search_crawl_request,
+        _param = self._crawl_search_serialize(
+            search_crawl_request=search_crawl_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -781,7 +777,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchCrawlResult]",
+            '200': "List[SearchCrawlResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -791,9 +787,9 @@ class DefaultApi:
         return response_data.response
 
 
-    def _crawl_search_general_serialize(
+    def _crawl_search_serialize(
         self,
-        general_search_crawl_request,
+        search_crawl_request,
         _request_auth,
         _content_type,
         _headers,
@@ -819,8 +815,8 @@ class DefaultApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if general_search_crawl_request is not None:
-            _body_params = general_search_crawl_request
+        if search_crawl_request is not None:
+            _body_params = search_crawl_request
 
 
         # set the HTTP header `Accept`
@@ -851,280 +847,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/search-crawl/general',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def crawl_search_image(
-        self,
-        image_search_crawl_request: ImageSearchCrawlRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[ImageSearchCrawlResult]:
-        """Crawl Search Image
-
-
-        :param image_search_crawl_request: (required)
-        :type image_search_crawl_request: ImageSearchCrawlRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._crawl_search_image_serialize(
-            image_search_crawl_request=image_search_crawl_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchCrawlResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def crawl_search_image_with_http_info(
-        self,
-        image_search_crawl_request: ImageSearchCrawlRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[ImageSearchCrawlResult]]:
-        """Crawl Search Image
-
-
-        :param image_search_crawl_request: (required)
-        :type image_search_crawl_request: ImageSearchCrawlRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._crawl_search_image_serialize(
-            image_search_crawl_request=image_search_crawl_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchCrawlResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def crawl_search_image_without_preload_content(
-        self,
-        image_search_crawl_request: ImageSearchCrawlRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Crawl Search Image
-
-
-        :param image_search_crawl_request: (required)
-        :type image_search_crawl_request: ImageSearchCrawlRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._crawl_search_image_serialize(
-            image_search_crawl_request=image_search_crawl_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchCrawlResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _crawl_search_image_serialize(
-        self,
-        image_search_crawl_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if image_search_crawl_request is not None:
-            _body_params = image_search_crawl_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/search-crawl/image',
+            resource_path='/search-crawl',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1383,9 +1106,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def search_general(
+    async def search(
         self,
-        general_search_request: GeneralSearchRequest,
+        search_request: SearchRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1398,12 +1121,12 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[GeneralSearchResult]:
-        """Search General
+    ) -> List[SearchResult]:
+        """Search
 
 
-        :param general_search_request: (required)
-        :type general_search_request: GeneralSearchRequest
+        :param search_request: (required)
+        :type search_request: SearchRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1426,8 +1149,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_general_serialize(
-            general_search_request=general_search_request,
+        _param = self._search_serialize(
+            search_request=search_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1435,7 +1158,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchResult]",
+            '200': "List[SearchResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1450,9 +1173,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def search_general_with_http_info(
+    async def search_with_http_info(
         self,
-        general_search_request: GeneralSearchRequest,
+        search_request: SearchRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1465,12 +1188,12 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[GeneralSearchResult]]:
-        """Search General
+    ) -> ApiResponse[List[SearchResult]]:
+        """Search
 
 
-        :param general_search_request: (required)
-        :type general_search_request: GeneralSearchRequest
+        :param search_request: (required)
+        :type search_request: SearchRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1493,8 +1216,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_general_serialize(
-            general_search_request=general_search_request,
+        _param = self._search_serialize(
+            search_request=search_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1502,7 +1225,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchResult]",
+            '200': "List[SearchResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1517,9 +1240,9 @@ class DefaultApi:
 
 
     @validate_call
-    async def search_general_without_preload_content(
+    async def search_without_preload_content(
         self,
-        general_search_request: GeneralSearchRequest,
+        search_request: SearchRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1533,11 +1256,11 @@ class DefaultApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Search General
+        """Search
 
 
-        :param general_search_request: (required)
-        :type general_search_request: GeneralSearchRequest
+        :param search_request: (required)
+        :type search_request: SearchRequest
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1560,8 +1283,8 @@ class DefaultApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._search_general_serialize(
-            general_search_request=general_search_request,
+        _param = self._search_serialize(
+            search_request=search_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1569,7 +1292,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[GeneralSearchResult]",
+            '200': "List[SearchResult]",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1579,9 +1302,9 @@ class DefaultApi:
         return response_data.response
 
 
-    def _search_general_serialize(
+    def _search_serialize(
         self,
-        general_search_request,
+        search_request,
         _request_auth,
         _content_type,
         _headers,
@@ -1607,8 +1330,8 @@ class DefaultApi:
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if general_search_request is not None:
-            _body_params = general_search_request
+        if search_request is not None:
+            _body_params = search_request
 
 
         # set the HTTP header `Accept`
@@ -1639,280 +1362,7 @@ class DefaultApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/search/general',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-
-    @validate_call
-    async def search_images(
-        self,
-        image_search_request: ImageSearchRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[ImageSearchResult]:
-        """Search Images
-
-
-        :param image_search_request: (required)
-        :type image_search_request: ImageSearchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._search_images_serialize(
-            image_search_request=image_search_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    @validate_call
-    async def search_images_with_http_info(
-        self,
-        image_search_request: ImageSearchRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[ImageSearchResult]]:
-        """Search Images
-
-
-        :param image_search_request: (required)
-        :type image_search_request: ImageSearchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._search_images_serialize(
-            image_search_request=image_search_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        await response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        )
-
-
-    @validate_call
-    async def search_images_without_preload_content(
-        self,
-        image_search_request: ImageSearchRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> RESTResponseType:
-        """Search Images
-
-
-        :param image_search_request: (required)
-        :type image_search_request: ImageSearchRequest
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._search_images_serialize(
-            image_search_request=image_search_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[ImageSearchResult]",
-            '422': "HTTPValidationError",
-        }
-        response_data = await self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        return response_data.response
-
-
-    def _search_images_serialize(
-        self,
-        image_search_request,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if image_search_request is not None:
-            _body_params = image_search_request
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/search/images',
+            resource_path='/search',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
