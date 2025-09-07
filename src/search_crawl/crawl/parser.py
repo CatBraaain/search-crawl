@@ -1,5 +1,4 @@
 import io
-from typing import cast
 from urllib.parse import urljoin
 
 from lxml import html
@@ -10,15 +9,22 @@ from .url import URL
 
 
 class Readable(Document):
+    raw_html: str
     markitdown: MarkItDown
 
     def __init__(self, raw_html: str) -> None:
         super().__init__(raw_html)
+        self.raw_html = raw_html
         self.markitdown = MarkItDown()
 
-    def content(self) -> str:
+    def md(self) -> str:
         try:
-            return cast(str, super().content())
+            return str(
+                self.markitdown.convert_stream(
+                    io.BytesIO(self.raw_html.encode("utf-8")),
+                    stream_info=StreamInfo(mimetype="text/html", charset="utf-8"),
+                )
+            )
         except Exception:
             return ""
 

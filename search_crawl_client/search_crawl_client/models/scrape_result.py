@@ -32,12 +32,12 @@ class ScrapeResult(BaseModel):
     short_title: StrictStr
     author: StrictStr
     html: StrictStr
-    content: StrictStr
+    markdown: StrictStr
     summary_html: StrictStr
     summary_md: StrictStr
     links: List[StrictStr]
     pagination_links: List[StrictStr]
-    __properties: ClassVar[List[str]] = ["requested_url", "url", "title", "short_title", "author", "html", "content", "summary_html", "summary_md", "links", "pagination_links"]
+    __properties: ClassVar[List[str]] = ["requested_url", "url", "title", "short_title", "author", "html", "markdown", "summary_html", "summary_md", "links", "pagination_links"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -96,7 +96,7 @@ class ScrapeResult(BaseModel):
             "short_title": obj.get("short_title"),
             "author": obj.get("author"),
             "html": obj.get("html"),
-            "content": obj.get("content"),
+            "markdown": obj.get("markdown"),
             "summary_html": obj.get("summary_html"),
             "summary_md": obj.get("summary_md"),
             "links": obj.get("links"),

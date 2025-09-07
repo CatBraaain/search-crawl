@@ -23,7 +23,7 @@ class ScrapeResult(BaseModel):
     short_title: str
     author: str
     html: str
-    content: str
+    markdown: str
     summary_html: str
     summary_md: str
     links: list[str]
