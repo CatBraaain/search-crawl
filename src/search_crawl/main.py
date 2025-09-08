@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.routing import APIRoute
 
 from .crawl.router import router as crawl_router
+from .extract.router import router as extract_router
 from .healthz.router import router as healthz_router
 from .search.router import router as search_router
 from .search_crawl.router import router as search_crawl_router
@@ -17,6 +18,7 @@ def main() -> FastAPI:
     app.include_router(healthz_router)
     app.include_router(search_router)
     app.include_router(crawl_router)
+    app.include_router(extract_router)
     app.include_router(search_crawl_router)
     simplify_client_method_names(app)
     return app

@@ -5,6 +5,7 @@ searxng/*
 !searxng/settings.yml
 
 .cache
+.env
 .pytest_cache
 .venv
 __pycache__

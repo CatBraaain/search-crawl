@@ -30,12 +30,15 @@ __all__ = [
     "ApiException",
     "BaseCrawlRequest",
     "CacheConfig",
+    "CrawlExtractRequest",
     "CrawlManyRequest",
     "CrawlRequest",
     "EnginePresetKey",
     "Engines",
+    "ExtractRequest",
     "HTTPValidationError",
     "ScrapeResult",
+    "SearchCrawlExtractRequest",
     "SearchCrawlRequest",
     "SearchCrawlResult",
     "SearchRequest",
@@ -61,12 +64,15 @@ from search_crawl_client.exceptions import ApiException as ApiException
 # import models into sdk package
 from search_crawl_client.models.base_crawl_request import BaseCrawlRequest as BaseCrawlRequest
 from search_crawl_client.models.cache_config import CacheConfig as CacheConfig
+from search_crawl_client.models.crawl_extract_request import CrawlExtractRequest as CrawlExtractRequest
 from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
 from search_crawl_client.models.engine_preset_key import EnginePresetKey as EnginePresetKey
 from search_crawl_client.models.engines import Engines as Engines
+from search_crawl_client.models.extract_request import ExtractRequest as ExtractRequest
 from search_crawl_client.models.http_validation_error import HTTPValidationError as HTTPValidationError
 from search_crawl_client.models.scrape_result import ScrapeResult as ScrapeResult
+from search_crawl_client.models.search_crawl_extract_request import SearchCrawlExtractRequest as SearchCrawlExtractRequest
 from search_crawl_client.models.search_crawl_request import SearchCrawlRequest as SearchCrawlRequest
 from search_crawl_client.models.search_crawl_result import SearchCrawlResult as SearchCrawlResult
 from search_crawl_client.models.search_request import SearchRequest as SearchRequest

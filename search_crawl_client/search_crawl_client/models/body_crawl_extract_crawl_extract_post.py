@@ -18,19 +18,19 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
-from search_crawl_client.models.search_request import SearchRequest
+from typing import Any, ClassVar, Dict, List
+from search_crawl_client.models.crawl_request import CrawlRequest
+from search_crawl_client.models.extract_request import ExtractRequest
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SearchCrawlRequest(BaseModel):
+class BodyCrawlExtractCrawlExtractPost(BaseModel):
     """
-    SearchCrawlRequest
+    BodyCrawlExtractCrawlExtractPost
     """ # noqa: E501
-    search: SearchRequest
-    crawl: Optional[BaseCrawlRequest] = None
-    __properties: ClassVar[List[str]] = ["search", "crawl"]
+    crawl_request: CrawlRequest
+    extract_request: ExtractRequest
+    __properties: ClassVar[List[str]] = ["crawl_request", "extract_request"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +50,7 @@ class SearchCrawlRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a JSON string"""
+        """Create an instance of BodyCrawlExtractCrawlExtractPost from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +71,17 @@ class SearchCrawlRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of search
-        if self.search:
-            _dict['search'] = self.search.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of crawl
-        if self.crawl:
-            _dict['crawl'] = self.crawl.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of crawl_request
+        if self.crawl_request:
+            _dict['crawl_request'] = self.crawl_request.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of extract_request
+        if self.extract_request:
+            _dict['extract_request'] = self.extract_request.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SearchCrawlRequest from a dict"""
+        """Create an instance of BodyCrawlExtractCrawlExtractPost from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +89,8 @@ class SearchCrawlRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "search": SearchRequest.from_dict(obj["search"]) if obj.get("search") is not None else None,
-            "crawl": BaseCrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None
+            "crawl_request": CrawlRequest.from_dict(obj["crawl_request"]) if obj.get("crawl_request") is not None else None,
+            "extract_request": ExtractRequest.from_dict(obj["extract_request"]) if obj.get("extract_request") is not None else None
         })
         return _obj
 
