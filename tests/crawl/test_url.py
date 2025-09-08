@@ -80,10 +80,25 @@ def test_pagination() -> None:
     assert URL(f"{example_path}/a/b/p/2").page == 2
 
 
-def test_equality() -> None:
+def test_page1_equals_toppage() -> None:
     assert URL("https://example.com/a?page=1") == URL("https://example.com/a")
     assert URL("https://example.com/a?page=1") == "https://example.com/a"
-    assert URL("https://example.com/a?a=1&b=1") == "https://example.com/a?b=1&a=1"
+    assert URL("https://example.com/a?p=1") == URL("https://example.com/a")
     assert URL("https://example.com/a?p=1") == "https://example.com/a"
+
+
+def test_page2_not_equals_toppage() -> None:
+    assert URL("https://example.com/a?page=2") != URL("https://example.com/a")
+    assert URL("https://example.com/a?page=2") != "https://example.com/a"
+    assert URL("https://example.com/a?p=2") != URL("https://example.com/a")
     assert URL("https://example.com/a?p=2") != "https://example.com/a"
+
+
+def test_sorted_params_equals_unsorted_params() -> None:
+    assert URL("https://example.com/a?a=1&b=1") == URL("https://example.com/a?b=1&a=1")
+    assert URL("https://example.com/a?a=1&b=1") == "https://example.com/a?b=1&a=1"
+
+
+def test_with_slash_equals_without_slash() -> None:
+    assert URL("https://example.com/a?page=1") == "https://example.com/a/?page=1"
     assert URL("https://example.com/a?page=1") == URL("https://example.com/a/?page=1")
