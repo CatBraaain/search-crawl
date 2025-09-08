@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 
 from search_crawl_client import (
-    BaseCrawlRequest,
     CacheConfig,
     CrawlExtractRequest,
     CrawlRequest,
+    CrawlRequestWithUrl,
     DefaultApi,
     ExtractRequest,
     SearchCrawlExtractRequest,
@@ -30,7 +30,7 @@ class Country(BaseModel):
 async def test_crawl_extract(api: DefaultApi):
     res = await api.crawl_extract(
         CrawlExtractRequest(
-            crawl=CrawlRequest(
+            crawl=CrawlRequestWithUrl(
                 url="https://www.scrapethissite.com/pages/simple/",
                 cache_config=CacheConfig(readable=False, writable=True),
             ),
@@ -59,7 +59,7 @@ async def test_search_crawl_extract(api: DefaultApi):
                 max_results=1,
                 cache_config=CacheConfig(readable=False, writable=True),
             ),
-            crawl=BaseCrawlRequest(),
+            crawl=CrawlRequest(),
             extract=ExtractRequest(
                 model="gemini/gemini-2.0-flash-lite",
                 instruction=("How many populations are there in China?"),

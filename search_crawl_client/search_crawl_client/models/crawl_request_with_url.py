@@ -17,22 +17,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
-from search_crawl_client.models.crawl_request import CrawlRequest
-from search_crawl_client.models.extract_request import ExtractRequest
-from search_crawl_client.models.search_request import SearchRequest
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
+from search_crawl_client.models.cache_config import CacheConfig
 from typing import Optional, Set
 from typing_extensions import Self
 
-class SearchCrawlExtractRequest(BaseModel):
+class CrawlRequestWithUrl(BaseModel):
     """
-    SearchCrawlExtractRequest
+    CrawlRequestWithUrl
     """ # noqa: E501
-    search: SearchRequest
-    crawl: CrawlRequest
-    extract: ExtractRequest
-    __properties: ClassVar[List[str]] = ["search", "crawl", "extract"]
+    cache_config: Optional[CacheConfig] = None
+    concurrently: Optional[StrictInt] = 2
+    url: StrictStr
+    __properties: ClassVar[List[str]] = ["cache_config", "concurrently", "url"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -52,7 +50,7 @@ class SearchCrawlExtractRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SearchCrawlExtractRequest from a JSON string"""
+        """Create an instance of CrawlRequestWithUrl from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,20 +71,14 @@ class SearchCrawlExtractRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of search
-        if self.search:
-            _dict['search'] = self.search.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of crawl
-        if self.crawl:
-            _dict['crawl'] = self.crawl.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of extract
-        if self.extract:
-            _dict['extract'] = self.extract.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of cache_config
+        if self.cache_config:
+            _dict['cache_config'] = self.cache_config.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SearchCrawlExtractRequest from a dict"""
+        """Create an instance of CrawlRequestWithUrl from a dict"""
         if obj is None:
             return None
 
@@ -94,9 +86,9 @@ class SearchCrawlExtractRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "search": SearchRequest.from_dict(obj["search"]) if obj.get("search") is not None else None,
-            "crawl": CrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None,
-            "extract": ExtractRequest.from_dict(obj["extract"]) if obj.get("extract") is not None else None
+            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
+            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2,
+            "url": obj.get("url")
         })
         return _obj
 

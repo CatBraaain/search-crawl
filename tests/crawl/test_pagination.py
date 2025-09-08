@@ -2,7 +2,7 @@ import pytest
 
 from search_crawl_client import (
     CacheConfig,
-    CrawlRequest,
+    CrawlRequestWithUrl,
     DefaultApi,
 )
 
@@ -27,7 +27,7 @@ async def test_crawl_pagination(
     cache_config: CacheConfig,
 ):
     res = await api.crawl(
-        CrawlRequest(
+        CrawlRequestWithUrl(
             url=url,
             cache_config=cache_config,
         )

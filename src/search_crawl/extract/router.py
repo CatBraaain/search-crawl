@@ -6,7 +6,7 @@ from fastapi import APIRouter
 from litellm import ModelResponse, acompletion
 
 from search_crawl.crawl.router import (
-    CrawlManyRequest,
+    CrawlRequestWithUrls,
     crawl,
     crawl_many,
 )
@@ -31,7 +31,7 @@ async def search_crawl_extract(
 ) -> dict[str, Any]:
     search_results = await search(req.search)
     crawl_results = await crawl_many(
-        CrawlManyRequest(
+        CrawlRequestWithUrls(
             **req.crawl.model_dump(),
             urls=[search_result.url for search_result in search_results],
         )

@@ -28,11 +28,11 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
-    "BaseCrawlRequest",
     "CacheConfig",
     "CrawlExtractRequest",
-    "CrawlManyRequest",
     "CrawlRequest",
+    "CrawlRequestWithUrl",
+    "CrawlRequestWithUrls",
     "EnginePresetKey",
     "Engines",
     "ExtractRequest",
@@ -62,11 +62,11 @@ from search_crawl_client.exceptions import ApiAttributeError as ApiAttributeErro
 from search_crawl_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
-from search_crawl_client.models.base_crawl_request import BaseCrawlRequest as BaseCrawlRequest
 from search_crawl_client.models.cache_config import CacheConfig as CacheConfig
 from search_crawl_client.models.crawl_extract_request import CrawlExtractRequest as CrawlExtractRequest
-from search_crawl_client.models.crawl_many_request import CrawlManyRequest as CrawlManyRequest
 from search_crawl_client.models.crawl_request import CrawlRequest as CrawlRequest
+from search_crawl_client.models.crawl_request_with_url import CrawlRequestWithUrl as CrawlRequestWithUrl
+from search_crawl_client.models.crawl_request_with_urls import CrawlRequestWithUrls as CrawlRequestWithUrls
 from search_crawl_client.models.engine_preset_key import EnginePresetKey as EnginePresetKey
 from search_crawl_client.models.engines import Engines as Engines
 from search_crawl_client.models.extract_request import ExtractRequest as ExtractRequest

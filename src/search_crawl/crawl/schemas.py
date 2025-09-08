@@ -7,16 +7,16 @@ from search_crawl.search.router import (
 )
 
 
-class BaseCrawlRequest(BaseModel):
+class CrawlRequest(BaseModel):
     cache_config: CacheConfig = CacheConfig()
     concurrently: int = 2
 
 
-class CrawlRequest(BaseCrawlRequest):
+class CrawlRequestWithUrl(CrawlRequest):
     url: str
 
 
-class CrawlManyRequest(BaseCrawlRequest):
+class CrawlRequestWithUrls(CrawlRequest):
     urls: list[str]
 
 
@@ -36,7 +36,7 @@ class ScrapeResult(BaseModel):
 
 class SearchCrawlRequest(BaseModel):
     search: SearchRequest
-    crawl: BaseCrawlRequest = BaseCrawlRequest()
+    crawl: CrawlRequest = CrawlRequest()
 
 
 class SearchCrawlResult(BaseModel):

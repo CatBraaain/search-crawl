@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from search_crawl_client.models.cache_config import CacheConfig
 from typing import Optional, Set
@@ -29,8 +29,7 @@ class CrawlRequest(BaseModel):
     """ # noqa: E501
     cache_config: Optional[CacheConfig] = None
     concurrently: Optional[StrictInt] = 2
-    url: StrictStr
-    __properties: ClassVar[List[str]] = ["cache_config", "concurrently", "url"]
+    __properties: ClassVar[List[str]] = ["cache_config", "concurrently"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -87,8 +86,7 @@ class CrawlRequest(BaseModel):
 
         _obj = cls.model_validate({
             "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
-            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2,
-            "url": obj.get("url")
+            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2
         })
         return _obj
 

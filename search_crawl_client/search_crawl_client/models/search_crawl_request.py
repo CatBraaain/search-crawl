@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.base_crawl_request import BaseCrawlRequest
+from search_crawl_client.models.crawl_request import CrawlRequest
 from search_crawl_client.models.search_request import SearchRequest
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,7 +29,7 @@ class SearchCrawlRequest(BaseModel):
     SearchCrawlRequest
     """ # noqa: E501
     search: SearchRequest
-    crawl: Optional[BaseCrawlRequest] = None
+    crawl: Optional[CrawlRequest] = None
     __properties: ClassVar[List[str]] = ["search", "crawl"]
 
     model_config = ConfigDict(
@@ -90,7 +90,7 @@ class SearchCrawlRequest(BaseModel):
 
         _obj = cls.model_validate({
             "search": SearchRequest.from_dict(obj["search"]) if obj.get("search") is not None else None,
-            "crawl": BaseCrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None
+            "crawl": CrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None
         })
         return _obj
 

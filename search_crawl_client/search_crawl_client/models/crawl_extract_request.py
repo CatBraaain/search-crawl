@@ -19,7 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List
-from search_crawl_client.models.crawl_request import CrawlRequest
+from search_crawl_client.models.crawl_request_with_url import CrawlRequestWithUrl
 from search_crawl_client.models.extract_request import ExtractRequest
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,7 +28,7 @@ class CrawlExtractRequest(BaseModel):
     """
     CrawlExtractRequest
     """ # noqa: E501
-    crawl: CrawlRequest
+    crawl: CrawlRequestWithUrl
     extract: ExtractRequest
     __properties: ClassVar[List[str]] = ["crawl", "extract"]
 
@@ -89,7 +89,7 @@ class CrawlExtractRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "crawl": CrawlRequest.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None,
+            "crawl": CrawlRequestWithUrl.from_dict(obj["crawl"]) if obj.get("crawl") is not None else None,
             "extract": ExtractRequest.from_dict(obj["extract"]) if obj.get("extract") is not None else None
         })
         return _obj

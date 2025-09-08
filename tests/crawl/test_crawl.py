@@ -1,10 +1,10 @@
 import pytest
 
 from search_crawl_client import (
-    BaseCrawlRequest,
     CacheConfig,
-    CrawlManyRequest,
     CrawlRequest,
+    CrawlRequestWithUrl,
+    CrawlRequestWithUrls,
     DefaultApi,
     SearchCrawlRequest,
     SearchRequest,
@@ -13,7 +13,7 @@ from search_crawl_client import (
 
 async def test_crawl(api: DefaultApi, cache_config: CacheConfig):
     res = await api.crawl(
-        CrawlRequest(
+        CrawlRequestWithUrl(
             url="https://example.com",
             cache_config=cache_config,
         )
@@ -23,7 +23,7 @@ async def test_crawl(api: DefaultApi, cache_config: CacheConfig):
 
 async def test_crawl_many(api: DefaultApi, cache_config: CacheConfig):
     res = await api.crawl_many(
-        CrawlManyRequest(
+        CrawlRequestWithUrls(
             urls=[
                 "https://example.com",
                 "https://web-scraping.dev/products",
@@ -52,7 +52,7 @@ async def test_search_crawl(
                 q="scraping test site",
                 max_results=max_results,
             ),
-            crawl=BaseCrawlRequest(
+            crawl=CrawlRequest(
                 cache_config=cache_config,
             ),
         )

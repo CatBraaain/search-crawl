@@ -3,7 +3,11 @@ from typing import Any, Literal
 
 from pydantic import BaseModel
 
-from search_crawl.crawl.router import BaseCrawlRequest, CrawlRequest, ScrapeResult
+from search_crawl.crawl.router import (
+    CrawlRequest,
+    CrawlRequestWithUrl,
+    ScrapeResult,
+)
 from search_crawl.search.router import SearchRequest
 
 InputFormat = Literal["content_markdown", "full_markdown", "content_html", "full_html"]
@@ -78,11 +82,11 @@ class ExtractRequest(BaseModel):
 
 
 class CrawlExtractRequest(BaseModel):
-    crawl: CrawlRequest
+    crawl: CrawlRequestWithUrl
     extract: ExtractRequest
 
 
 class SearchCrawlExtractRequest(BaseModel):
     search: SearchRequest
-    crawl: BaseCrawlRequest
+    crawl: CrawlRequest
     extract: ExtractRequest
