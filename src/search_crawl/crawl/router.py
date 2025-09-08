@@ -56,7 +56,7 @@ async def crawl_many(
 
 
 @router.post("/search-crawl")
-async def crawl_search(
+async def search_crawl(
     param: SearchCrawlRequest,
 ) -> list[SearchCrawlResult]:
     search_results = await search(param.search)

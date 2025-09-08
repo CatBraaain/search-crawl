@@ -41,12 +41,12 @@ def max_results(request: pytest.FixtureRequest):
     return request.param
 
 
-async def test_crawl_search(
+async def test_search_crawl(
     api: DefaultApi,
     max_results: int | None,
     cache_config: CacheConfig,
 ):
-    res = await api.crawl_search(
+    res = await api.search_crawl(
         SearchCrawlRequest(
             search=SearchRequest(
                 q="scraping test site",
