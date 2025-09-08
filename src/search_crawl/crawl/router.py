@@ -36,33 +36,30 @@ router = APIRouter(lifespan=lifespan)
 
 @router.post("/crawl")
 async def crawl(
-    crawl_request: CrawlRequest,
+    req: CrawlRequest,
 ) -> list[ScrapeResult]:
-    sem = asyncio.Semaphore(crawl_request.concurrently)
-    return await crawler.crawl(crawl_request.url, sem, crawl_request.cache_config)
+    sem = asyncio.Semaphore(req.concurrently)
+    return await crawler.crawl(req.url, sem, req.cache_config)
 
 
 @router.post("/crawl-many")
 async def crawl_many(
-    crawl_many_request: CrawlManyRequest,
+    req: CrawlManyRequest,
 ) -> list[list[ScrapeResult]]:
-    sem = asyncio.Semaphore(crawl_many_request.concurrently)
+    sem = asyncio.Semaphore(req.concurrently)
     return await asyncio.gather(
-        *(
-            crawler.crawl(url, sem, crawl_many_request.cache_config)
-            for url in crawl_many_request.urls
-        )
+        *(crawler.crawl(url, sem, req.cache_config) for url in req.urls)
     )
 
 
 @router.post("/search-crawl")
 async def search_crawl(
-    param: SearchCrawlRequest,
+    req: SearchCrawlRequest,
 ) -> list[SearchCrawlResult]:
-    search_results = await search(param.search)
+    search_results = await search(req.search)
     crawl_results = await crawl_many(
         CrawlManyRequest(
-            **param.crawl.model_dump(),
+            **req.crawl.model_dump(),
             urls=[search_result.url for search_result in search_results],
         )
     )

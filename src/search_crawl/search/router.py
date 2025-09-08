@@ -13,33 +13,33 @@ router = APIRouter()
 
 @router.post("/search")
 async def search(
-    search_request: SearchRequest,
+    req: SearchRequest,
 ) -> list[SearchResult]:
-    results = await search_with_cache(search_request)
+    results = await search_with_cache(req)
     return [SearchResult(**result) for result in results]
 
 
 async def search_with_cache(
-    search_request: SearchRequest,
+    req: SearchRequest,
 ) -> list[dict]:
-    cached_search = search_request.cache_config.wrap_with_cache(
-        cache_key=f"search:{search_request.cache_key}",
+    cached_search = req.cache_config.wrap_with_cache(
+        cache_key=f"search:{req.cache_key}",
         func=searxng,
     )
-    results = await cached_search(search_request)
+    results = await cached_search(req)
 
-    if search_request.max_results is not None:
-        return results[: search_request.max_results]
+    if req.max_results is not None:
+        return results[: req.max_results]
     else:
         return results
 
 
 async def searxng(
-    search_request: SearchRequest,
+    req: SearchRequest,
 ) -> list[dict]:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             os.environ["SEARXNG_URL"] + "/search",
-            params=search_request.searxng_request,
+            params=req.searxng_request,
         )
         return response.json()["results"]
