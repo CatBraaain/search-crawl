@@ -1,4 +1,4 @@
-from search_crawl.crawl.scraper import URL
+from search_crawl.crawl.utils import URL
 
 
 def test_with_domain() -> None:
