@@ -16,34 +16,40 @@ class ExtractRequest(BaseModel):
     json_schema: dict[str, Any]
     input_format: InputFormat = "content_markdown"
 
-    def make_prompt(self, input: CrawledContent) -> list[dict[str, str]]:
+    def make_prompt(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
         return [
             {
                 "role": "system",
-                "content": "You are an AI assistant that reads information from web pages and performs tasks based on user instructions.",
+                "content": (
+                    "You are an AI assistant that reads information from"
+                    " web pages and performs tasks based on user instructions."
+                ),
             },
             {
                 "role": "user",
                 "content": "\n".join(
                     [
-                        "Read the website contents provided in the `Content:` section and answer the user instructions accurately.",
+                        (
+                            "Read the website contents provided in the `Content:`"
+                            " section and answer the user instructions accurately."
+                        ),
                         "",
                         "Instruction:",
                         self.instruction,
                         "",
                         "Contents:",
                         "```json",
-                        json.dumps(self._make_content(input)),
+                        json.dumps(self._make_content(crawled_content)),
                         "```",
                     ]
                 ),
             },
         ]
 
-    def _make_content(self, input: CrawledContent) -> list[dict[str, str]]:
+    def _make_content(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
         scrape_results: list[ScrapeResult] = [
             scrape_result
-            for e in input
+            for e in crawled_content
             for scrape_result in (e if isinstance(e, list) else [e])
         ]
         return [self._format_scrape_result(sr) for sr in scrape_results]

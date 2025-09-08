@@ -23,7 +23,7 @@ crawler: Crawler
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:  # noqa: ARG001
     global crawler  # noqa: PLW0603
     async with async_playwright() as p:
         browser = await p.chromium.launch()
