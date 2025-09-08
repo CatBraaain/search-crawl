@@ -5,12 +5,19 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from patchright.async_api import async_playwright
 
+from search_crawl.search.router import search
+
 from .crawler import Crawler, ScrapeResult
 from .schemas import (
     BaseCrawlRequest,  # noqa: F401
     CrawlManyRequest,
     CrawlRequest,
+    SearchCrawlRequest,
+    SearchCrawlResult,
 )
+
+router = APIRouter()
+
 
 crawler: Crawler
 
@@ -46,3 +53,22 @@ async def crawl_many(
             for url in crawl_many_request.urls
         )
     )
+
+
+@router.post("/search-crawl")
+async def crawl_search(
+    param: SearchCrawlRequest,
+) -> list[SearchCrawlResult]:
+    search_results = await search(param.search)
+    crawl_results = await crawl_many(
+        CrawlManyRequest(
+            **param.crawl.model_dump(),
+            urls=[search_result.url for search_result in search_results],
+        )
+    )
+    return [
+        SearchCrawlResult(search=search_result, crawl=crawl_result)
+        for search_result, crawl_result in zip(
+            search_results, crawl_results, strict=True
+        )
+    ]

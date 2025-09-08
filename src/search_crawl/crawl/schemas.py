@@ -1,6 +1,10 @@
 from pydantic import BaseModel
 
 from search_crawl.cache_config import CacheConfig
+from search_crawl.search.router import (
+    SearchRequest,
+    SearchResult,
+)
 
 
 class BaseCrawlRequest(BaseModel):
@@ -28,3 +32,13 @@ class ScrapeResult(BaseModel):
     summary_md: str
     links: list[str]
     pagination_links: list[str]
+
+
+class SearchCrawlRequest(BaseModel):
+    search: SearchRequest
+    crawl: BaseCrawlRequest = BaseCrawlRequest()
+
+
+class SearchCrawlResult(BaseModel):
+    search: SearchResult
+    crawl: list[ScrapeResult]
