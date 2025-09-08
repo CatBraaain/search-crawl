@@ -8,8 +8,8 @@ from search_crawl.search.router import (
 
 
 class SearchCrawlRequest(BaseModel):
-    crawl: BaseCrawlRequest = BaseCrawlRequest()
     search: SearchRequest
+    crawl: BaseCrawlRequest = BaseCrawlRequest()
 
 
 class SearchCrawlResult(BaseModel):
