@@ -4,7 +4,7 @@ from patchright.async_api import Browser, Error as PlaywrightError
 
 from search_crawl.cache_config import CacheConfig
 
-from .schemas import ScrapeResult
+from .schemas import CrawlConfig, CrawlScope, ScrapeResult
 from .utils import URL, Navigation, Readable
 
 
@@ -18,13 +18,17 @@ class Crawler:
         self,
         requested_url: str,
         sem: asyncio.Semaphore,
+        crawl_config: CrawlConfig,
         cache_config: CacheConfig,
     ) -> list[ScrapeResult]:
         visited: list[URL] = []
         results: list[ScrapeResult] = []
 
-        async def _crawl(_url: str) -> None:
-            if _url in visited:
+        async def _crawl(_url: str, current_depth: int = 0) -> None:
+            should_scrape_this = _url not in visited and (
+                crawl_config.max_pages is None or len(visited) < crawl_config.max_pages
+            )
+            if not should_scrape_this:
                 return
             visited.append(URL(_url))
 
@@ -32,10 +36,25 @@ class Crawler:
                 result = await self.scrape(_url, cache_config)
                 results.append(result)
 
+            should_scrape_more = (
+                crawl_config.max_depth is None or current_depth < crawl_config.max_depth
+            )
+            if not should_scrape_more:
+                return
+
+            match crawl_config.crawl_scope:
+                case CrawlScope.PAGINATION:
+                    target_links = result.pagination_links
+                case CrawlScope.INTERNAL:
+                    target_links = result.internal_links
+                case CrawlScope.ALL:
+                    target_links = result.links
+                case _:
+                    raise ValueError(f"Invalid CrawlScope: {crawl_config.crawl_scope}")
             await asyncio.gather(
                 *[
-                    _crawl(pagination_link)
-                    for pagination_link in result.pagination_links
+                    _crawl(pagination_link, current_depth + 1)
+                    for pagination_link in target_links
                 ]
             )
 
@@ -66,6 +85,7 @@ class Crawler:
             summary_html=readable.summary_html(),
             summary_md=readable.summary_md(),
             links=navigation.links,
+            internal_links=navigation.internal_links,
             pagination_links=navigation.pagination_links,
         )
 

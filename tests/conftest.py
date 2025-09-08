@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from enum import StrEnum
 
 import pytest
 
@@ -26,3 +27,11 @@ async def api() -> AsyncGenerator[DefaultApi]:
 )
 def cache_config(request: pytest.FixtureRequest):
     return request.param
+
+
+class TestSite(StrEnum):
+    EXAMPLE = "https://example.com/"
+    QUOTES = "https://quotes.toscrape.com/"
+    COUNTRY = "https://www.scrapethissite.com/pages/simple/"
+    PRODUCTS = "https://web-scraping.dev/products"
+    HOCKEY = "https://www.scrapethissite.com/pages/forms/?per_page=100"

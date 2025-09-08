@@ -126,25 +126,23 @@ class Readable(Document):
 
 class Navigation:
     links: list[str]
+    internal_links: list[str]
     pagination_links: list[str]
 
     def __init__(self, html_str: str, url: URL) -> None:
-        links = self.extract_links(html.fromstring(html_str), url) if html_str else []
-        self.links = links
-        self.pagination_links = [
-            link for link in links if URL(link).is_pagination_of(url)
-        ]
-
-    def extract_links(self, tree: html.HtmlElement, current_url: URL) -> list[str]:
-        all_links = [
-            urljoin(current_url.normalized, a.get("href"))
-            for a in tree.cssselect("a[href]")
-        ]
-        inner_links = sorted(
-            {
-                link
-                for link in all_links
-                if URL(link).with_domain == current_url.with_domain
-            }
+        self.links = (
+            sorted(
+                [
+                    urljoin(url.normalized, a.get("href"))
+                    for a in html.fromstring(html_str).cssselect("a[href]")
+                ]
+            )
+            if html_str
+            else []
         )
-        return inner_links
+        self.internal_links = [
+            link for link in self.links if URL(link).with_domain == url.with_domain
+        ]
+        self.pagination_links = [
+            link for link in self.internal_links if URL(link).is_pagination_of(url)
+        ]

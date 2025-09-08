@@ -15,10 +15,12 @@
 
 # import models into model package
 from search_crawl_client.models.cache_config import CacheConfig
+from search_crawl_client.models.crawl_config import CrawlConfig
 from search_crawl_client.models.crawl_extract_request import CrawlExtractRequest
 from search_crawl_client.models.crawl_request import CrawlRequest
 from search_crawl_client.models.crawl_request_with_url import CrawlRequestWithUrl
 from search_crawl_client.models.crawl_request_with_urls import CrawlRequestWithUrls
+from search_crawl_client.models.crawl_scope import CrawlScope
 from search_crawl_client.models.engine_preset_key import EnginePresetKey
 from search_crawl_client.models.engines import Engines
 from search_crawl_client.models.extract_request import ExtractRequest

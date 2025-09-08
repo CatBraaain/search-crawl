@@ -17,20 +17,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
-from search_crawl_client.models.cache_config import CacheConfig
-from search_crawl_client.models.crawl_config import CrawlConfig
+from search_crawl_client.models.crawl_scope import CrawlScope
 from typing import Optional, Set
 from typing_extensions import Self
 
-class CrawlRequest(BaseModel):
+class CrawlConfig(BaseModel):
     """
-    CrawlRequest
+    CrawlConfig
     """ # noqa: E501
-    crawl_config: Optional[CrawlConfig] = None
-    cache_config: Optional[CacheConfig] = None
-    __properties: ClassVar[List[str]] = ["crawl_config", "cache_config"]
+    crawl_scope: Optional[CrawlScope] = None
+    max_depth: Optional[StrictInt] = None
+    max_pages: Optional[StrictInt] = None
+    concurrently: Optional[StrictInt] = 2
+    __properties: ClassVar[List[str]] = ["crawl_scope", "max_depth", "max_pages", "concurrently"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +51,7 @@ class CrawlRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CrawlRequest from a JSON string"""
+        """Create an instance of CrawlConfig from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +72,21 @@ class CrawlRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of crawl_config
-        if self.crawl_config:
-            _dict['crawl_config'] = self.crawl_config.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of cache_config
-        if self.cache_config:
-            _dict['cache_config'] = self.cache_config.to_dict()
+        # set to None if max_depth (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_depth is None and "max_depth" in self.model_fields_set:
+            _dict['max_depth'] = None
+
+        # set to None if max_pages (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_pages is None and "max_pages" in self.model_fields_set:
+            _dict['max_pages'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CrawlRequest from a dict"""
+        """Create an instance of CrawlConfig from a dict"""
         if obj is None:
             return None
 
@@ -89,8 +94,10 @@ class CrawlRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "crawl_config": CrawlConfig.from_dict(obj["crawl_config"]) if obj.get("crawl_config") is not None else None,
-            "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None
+            "crawl_scope": obj.get("crawl_scope"),
+            "max_depth": obj.get("max_depth"),
+            "max_pages": obj.get("max_pages"),
+            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2
         })
         return _obj
 

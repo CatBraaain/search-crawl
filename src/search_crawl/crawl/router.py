@@ -9,6 +9,7 @@ from search_crawl.search.router import search
 
 from .crawler import Crawler, ScrapeResult
 from .schemas import (
+    CrawlConfig,  # noqa: F401
     CrawlRequest,  # noqa: F401
     CrawlRequestWithUrl,
     CrawlRequestWithUrls,
@@ -38,17 +39,20 @@ router = APIRouter(lifespan=lifespan)
 async def crawl(
     req: CrawlRequestWithUrl,
 ) -> list[ScrapeResult]:
-    sem = asyncio.Semaphore(req.concurrently)
-    return await crawler.crawl(req.url, sem, req.cache_config)
+    sem = asyncio.Semaphore(req.crawl_config.concurrently)
+    return await crawler.crawl(req.url, sem, req.crawl_config, req.cache_config)
 
 
 @router.post("/crawl-many")
 async def crawl_many(
     req: CrawlRequestWithUrls,
 ) -> list[list[ScrapeResult]]:
-    sem = asyncio.Semaphore(req.concurrently)
+    sem = asyncio.Semaphore(req.crawl_config.concurrently)
     return await asyncio.gather(
-        *(crawler.crawl(url, sem, req.cache_config) for url in req.urls)
+        *(
+            crawler.crawl(url, sem, req.crawl_config, req.cache_config)
+            for url in req.urls
+        )
     )
 
 

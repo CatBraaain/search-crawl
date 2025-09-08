@@ -1,3 +1,5 @@
+from enum import StrEnum, auto
+
 from pydantic import BaseModel
 
 from search_crawl.cache_config import CacheConfig
@@ -7,9 +9,22 @@ from search_crawl.search.router import (
 )
 
 
-class CrawlRequest(BaseModel):
-    cache_config: CacheConfig = CacheConfig()
+class CrawlScope(StrEnum):
+    PAGINATION = auto()
+    INTERNAL = auto()
+    ALL = auto()
+
+
+class CrawlConfig(BaseModel):
+    crawl_scope: CrawlScope = CrawlScope.PAGINATION
+    max_depth: int | None = 1
+    max_pages: int | None = None
     concurrently: int = 2
+
+
+class CrawlRequest(BaseModel):
+    crawl_config: CrawlConfig = CrawlConfig()
+    cache_config: CacheConfig = CacheConfig()
 
 
 class CrawlRequestWithUrl(CrawlRequest):
@@ -31,6 +46,7 @@ class ScrapeResult(BaseModel):
     summary_html: str
     summary_md: str
     links: list[str]
+    internal_links: list[str]
     pagination_links: list[str]
 
 

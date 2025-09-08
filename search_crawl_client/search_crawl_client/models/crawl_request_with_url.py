@@ -17,9 +17,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from search_crawl_client.models.cache_config import CacheConfig
+from search_crawl_client.models.crawl_config import CrawlConfig
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,10 +28,10 @@ class CrawlRequestWithUrl(BaseModel):
     """
     CrawlRequestWithUrl
     """ # noqa: E501
+    crawl_config: Optional[CrawlConfig] = None
     cache_config: Optional[CacheConfig] = None
-    concurrently: Optional[StrictInt] = 2
     url: StrictStr
-    __properties: ClassVar[List[str]] = ["cache_config", "concurrently", "url"]
+    __properties: ClassVar[List[str]] = ["crawl_config", "cache_config", "url"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -71,6 +72,9 @@ class CrawlRequestWithUrl(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of crawl_config
+        if self.crawl_config:
+            _dict['crawl_config'] = self.crawl_config.to_dict()
         # override the default output from pydantic by calling `to_dict()` of cache_config
         if self.cache_config:
             _dict['cache_config'] = self.cache_config.to_dict()
@@ -86,8 +90,8 @@ class CrawlRequestWithUrl(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "crawl_config": CrawlConfig.from_dict(obj["crawl_config"]) if obj.get("crawl_config") is not None else None,
             "cache_config": CacheConfig.from_dict(obj["cache_config"]) if obj.get("cache_config") is not None else None,
-            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2,
             "url": obj.get("url")
         })
         return _obj
