@@ -32,17 +32,16 @@ Simply provide a search query, and it automatically searches and crawls results 
 ## API Endpoints
 
 ### Search API
-- `/search/general`: Search for websites by query.
-- `/search/images`: Search for images by query.
+- `/search`: Search for websites by query.
 
 ### Crawl API
 - `/crawl`: Crawl a website using a crawl request.
 - `/crawl-many`: Crawl multiple websites concurrently using a crawl many request.
+- `/search-crawl`: Combine search and crawl functionality.
 
-### Search Crawl API
-- `/search-crawl/general`: Combine search and crawl functionality for general searches.
-- `/search-crawl/image`: Combine search and crawl functionality for image searches.
-
+### Extract API
+- `/crawl-extract` – Crawl and immediately extract structured data.
+- `/search-crawl-extract` – Search, crawl, and extract structured data in one step.
 
 ## Getting Started
 
@@ -82,9 +81,9 @@ docker compose up -d
 ## Quick Example
 ```bash
 # Linux / macOS
-curl http://localhost:8000/search/general --json '{"q":"hello world"}'
+curl http://localhost:8000/search --json '{"q":"hello world"}'
 # Windows (PowerShell)
-curl http://localhost:8000/search/general --json "{\"q\":\"hello world\"}"
+curl http://localhost:8000/search --json "{\"q\":\"hello world\"}"
 ```
 
 ## Full Example
@@ -100,8 +99,9 @@ import asyncio
 
 from search_crawl_client import (
     ApiClient,
-    BaseCrawlRequest,
     Configuration,
+    CrawlConfig,
+    CrawlRequest,
     DefaultApi,
     SearchCrawlRequest,
     SearchRequest,
@@ -113,10 +113,14 @@ async def main() -> None:
     async with ApiClient(config) as client:
         api = DefaultApi(client)
         result = (
-            await api.crawl_search(
+            await api.search_crawl(
                 SearchCrawlRequest(
                     search=SearchRequest(q="hello world", max_results=1),
-                    crawl=BaseCrawlRequest(concurrently=2),
+                    crawl=CrawlRequest(
+                        crawl_config=CrawlConfig(
+                            concurrently=2,
+                        )
+                    ),
                 )
             )
         )[0].crawl[0]
