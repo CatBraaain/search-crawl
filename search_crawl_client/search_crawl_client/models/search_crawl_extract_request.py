@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from search_crawl_client.models.crawl_request import CrawlRequest
 from search_crawl_client.models.extract_request import ExtractRequest
 from search_crawl_client.models.search_request import SearchRequest
@@ -30,7 +30,7 @@ class SearchCrawlExtractRequest(BaseModel):
     SearchCrawlExtractRequest
     """ # noqa: E501
     search: SearchRequest
-    crawl: CrawlRequest
+    crawl: Optional[CrawlRequest] = None
     extract: ExtractRequest
     __properties: ClassVar[List[str]] = ["search", "crawl", "extract"]
 

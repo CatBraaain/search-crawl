@@ -88,5 +88,5 @@ class CrawlExtractRequest(BaseModel):
 
 class SearchCrawlExtractRequest(BaseModel):
     search: SearchRequest
-    crawl: CrawlRequest
+    crawl: CrawlRequest = CrawlRequest()
     extract: ExtractRequest
