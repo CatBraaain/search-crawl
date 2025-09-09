@@ -2,8 +2,9 @@ import json
 from typing import Any, cast
 
 import litellm
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from litellm import ModelResponse, acompletion
+from litellm.exceptions import APIError
 
 from search_crawl.crawl.router import (
     CrawlRequestWithUrls,
@@ -51,12 +52,18 @@ async def extract_from_crawled_content(
     extract_request: ExtractRequest,
     crawled_content: CrawledContent,
 ) -> Any:  # noqa: ANN401
-    response = cast(
-        ModelResponse,
-        await acompletion(
-            model=extract_request.model,
-            messages=extract_request.make_prompt(crawled_content),
-            response_format=extract_request.make_response_format(),
-        ),
-    )
-    return json.loads(response["choices"][0]["message"].content)
+    try:
+        response = cast(
+            ModelResponse,
+            await acompletion(
+                model=extract_request.model,
+                messages=extract_request.make_prompt(crawled_content),
+                response_format=extract_request.make_response_format(),
+            ),
+        )
+        return json.loads(response["choices"][0]["message"].content)
+    except Exception as e:
+        if isinstance(e, APIError):
+            code = getattr(e, "status_code", 500)
+            raise HTTPException(status_code=code, detail=str(e)) from e
+        raise HTTPException(status_code=500, detail=str(e)) from e
