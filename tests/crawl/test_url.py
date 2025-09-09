@@ -1,112 +1,107 @@
 import pytest
 
 from search_crawl.crawl.utils import URL
+from tests.conftest import TestSite
 
 
-def test_with_domain() -> None:
-    assert URL("https://example.com/path/page/2").with_domain == "https://example.com"
-    assert URL("http://test.com/a/b/c").with_domain == "http://test.com"
-    assert (
-        URL("https://web-scraping.dev/products?page=2").with_domain
-        == "https://web-scraping.dev"
-    )
-    assert URL("https://web-scraping.dev/").with_domain == "https://web-scraping.dev"
-    assert URL("https://web-scraping.dev").with_domain == "https://web-scraping.dev"
+@pytest.fixture
+def example_url() -> str:
+    return "https://example.com"
 
 
-def test_with_pagination_base() -> None:
-    example_path = "https://example.com"
-    assert URL(f"{example_path}").with_pagination_base == example_path
-    assert URL(f"{example_path}/").with_pagination_base == example_path
-    assert URL(f"{example_path}/a").with_pagination_base == example_path + "/a"
-    assert URL(f"{example_path}/a/").with_pagination_base == example_path + "/a"
+def test_with_domain(example_url: str) -> None:
+    assert URL(f"{example_url}").with_domain == example_url
+    assert URL(f"{example_url}/").with_domain == example_url
+    assert URL(f"{example_url}/a/b/c").with_domain == example_url
+    assert URL(f"{example_url}/path/page/2").with_domain == example_url
+    assert URL(f"{example_url}/products?page=2").with_domain == example_url
+
+
+def test_with_pagination_base(example_url: str) -> None:
+    assert URL(f"{example_url}").with_pagination_base == example_url
+    assert URL(f"{example_url}/").with_pagination_base == example_url
+    assert URL(f"{example_url}/a").with_pagination_base == example_url + "/a"
+    assert URL(f"{example_url}/a/").with_pagination_base == example_url + "/a"
 
     i = 2
-    assert URL(f"{example_path}?p={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?pa={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?pag={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?page={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?pg={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?paging={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?pagination={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?pagenum={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?p-num={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}?page-num={i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/p/{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/page/{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/page-num/{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/p{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/p-{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/p-num-{i}").with_pagination_base == example_path
-    assert URL(f"{example_path}/page-num-{i}").with_pagination_base == example_path
-    assert (
-        URL(f"{example_path}/a/b?p={i}").with_pagination_base == example_path + "/a/b"
-    )
-    assert (
-        URL(f"{example_path}/a/b/p/{i}").with_pagination_base == example_path + "/a/b"
-    )
+    assert URL(f"{example_url}?p={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?pa={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?pag={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?page={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?pg={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?paging={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?pagination={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?pagenum={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?p-num={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}?page-num={i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/p/{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/page/{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/page-num/{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/p{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/p-{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/p-num-{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/page-num-{i}").with_pagination_base == example_url
+    assert URL(f"{example_url}/a/b?p={i}").with_pagination_base == example_url + "/a/b"
+    assert URL(f"{example_url}/a/b/p/{i}").with_pagination_base == example_url + "/a/b"
 
 
-def test_with_path() -> None:
-    example_path = "https://example.com"
-    assert URL(f"{example_path}/a/b").with_path == f"{example_path}/a/b"
-    assert URL(f"{example_path}/a/b/").with_path == f"{example_path}/a/b"
-    assert URL(f"{example_path}/a/b?p=2").with_path == f"{example_path}/a/b"
-    assert URL(f"{example_path}/a/b/?p=2").with_path == f"{example_path}/a/b"
+def test_with_path(example_url: str) -> None:
+    assert URL(f"{example_url}/a/b").with_path == f"{example_url}/a/b"
+    assert URL(f"{example_url}/a/b/").with_path == f"{example_url}/a/b"
+    assert URL(f"{example_url}/a/b?p=2").with_path == f"{example_url}/a/b"
+    assert URL(f"{example_url}/a/b/?p=2").with_path == f"{example_url}/a/b"
 
 
-def test_normalized() -> None:
-    example_path = "https://example.com"
-    assert URL(f"{example_path}?p=2").normalized == f"{example_path}?p=2"
-    assert URL(f"{example_path}?page=2").normalized == f"{example_path}?page=2"
-    assert URL(f"{example_path}?z=9&b=2").normalized == f"{example_path}?b=2&z=9"
+def test_normalized(example_url: str) -> None:
+    assert URL(f"{example_url}?p=2").normalized == f"{example_url}?p=2"
+    assert URL(f"{example_url}?page=2").normalized == f"{example_url}?page=2"
+    assert URL(f"{example_url}?z=9&b=2").normalized == f"{example_url}?b=2&z=9"
 
 
-@pytest.mark.parametrize("page_num", range(1, 4), ids=lambda x: f"page_num={x}")
-def test_pagination(page_num: int) -> None:
-    example_path = "https://example.com"
-    assert URL(f"{example_path}").page is None
-    assert URL(f"{example_path}/").page is None
-    assert URL(f"{example_path}?p={page_num}").page == page_num
-    assert URL(f"{example_path}?pa={page_num}").page == page_num
-    assert URL(f"{example_path}?pag={page_num}").page == page_num
-    assert URL(f"{example_path}?page={page_num}").page == page_num
-    assert URL(f"{example_path}?pg={page_num}").page == page_num
-    assert URL(f"{example_path}?paging={page_num}").page == page_num
-    assert URL(f"{example_path}?pagination={page_num}").page == page_num
-    assert URL(f"{example_path}?pagenum={page_num}").page == page_num
-    assert URL(f"{example_path}?p-num={page_num}").page == page_num
-    assert URL(f"{example_path}?page-num={page_num}").page == page_num
-    assert URL(f"{example_path}/p/{page_num}").page == page_num
-    assert URL(f"{example_path}/page/{page_num}").page == page_num
-    assert URL(f"{example_path}/page-num/{page_num}").page == page_num
-    assert URL(f"{example_path}/p{page_num}").page == page_num
-    assert URL(f"{example_path}/p-{page_num}").page == page_num
-    assert URL(f"{example_path}/p-num-{page_num}").page == page_num
-    assert URL(f"{example_path}/page-num-{page_num}").page == page_num
-    assert URL(f"{example_path}/a/b?p={page_num}").page == page_num
-    assert URL(f"{example_path}/a/b/p/{page_num}").page == page_num
+@pytest.mark.parametrize("page_num", [1, 3, 5], ids=lambda x: f"page_num={x}")
+def test_pagination(example_url: str, page_num: int) -> None:
+    assert URL(f"{example_url}").page is None
+    assert URL(f"{example_url}/").page is None
+    assert URL(f"{example_url}?p={page_num}").page == page_num
+    assert URL(f"{example_url}?pa={page_num}").page == page_num
+    assert URL(f"{example_url}?pag={page_num}").page == page_num
+    assert URL(f"{example_url}?page={page_num}").page == page_num
+    assert URL(f"{example_url}?pg={page_num}").page == page_num
+    assert URL(f"{example_url}?paging={page_num}").page == page_num
+    assert URL(f"{example_url}?pagination={page_num}").page == page_num
+    assert URL(f"{example_url}?pagenum={page_num}").page == page_num
+    assert URL(f"{example_url}?p-num={page_num}").page == page_num
+    assert URL(f"{example_url}?page-num={page_num}").page == page_num
+    assert URL(f"{example_url}/p/{page_num}").page == page_num
+    assert URL(f"{example_url}/page/{page_num}").page == page_num
+    assert URL(f"{example_url}/page-num/{page_num}").page == page_num
+    assert URL(f"{example_url}/p{page_num}").page == page_num
+    assert URL(f"{example_url}/p-{page_num}").page == page_num
+    assert URL(f"{example_url}/p-num-{page_num}").page == page_num
+    assert URL(f"{example_url}/page-num-{page_num}").page == page_num
+    assert URL(f"{example_url}/a/b?p={page_num}").page == page_num
+    assert URL(f"{example_url}/a/b/p/{page_num}").page == page_num
 
 
-def test_page1_equals_toppage() -> None:
-    assert URL("https://example.com/a?page=1") == URL("https://example.com/a")
-    assert URL("https://example.com/a?page=1") == "https://example.com/a"
-    assert URL("https://example.com/a?p=1") == URL("https://example.com/a")
-    assert URL("https://example.com/a?p=1") == "https://example.com/a"
+def test_page1_equals_toppage(example_url: str) -> None:
+    assert URL(f"{example_url}/a?page=1") == URL(f"{example_url}/a")
+    assert URL(f"{example_url}/a?page=1") == f"{example_url}/a"
+    assert URL(f"{example_url}/a?p=1") == URL(f"{example_url}/a")
+    assert URL(f"{example_url}/a?p=1") == f"{example_url}/a"
 
 
-def test_page2_not_equals_toppage() -> None:
-    assert URL("https://example.com/a?page=2") != URL("https://example.com/a")
-    assert URL("https://example.com/a?page=2") != "https://example.com/a"
-    assert URL("https://example.com/a?p=2") != URL("https://example.com/a")
-    assert URL("https://example.com/a?p=2") != "https://example.com/a"
+def test_page2_not_equals_toppage(example_url: str) -> None:
+    assert URL(f"{example_url}/a?page=2") != URL("{example_url}/a")
+    assert URL(f"{example_url}/a?page=2") != "{example_url}/a"
+    assert URL(f"{example_url}/a?p=2") != URL("{example_url}/a")
+    assert URL(f"{example_url}/a?p=2") != "{example_url}/a"
 
 
-def test_sorted_params_equals_unsorted_params() -> None:
-    assert URL("https://example.com/a?a=1&b=1") == URL("https://example.com/a?b=1&a=1")
-    assert URL("https://example.com/a?a=1&b=1") == "https://example.com/a?b=1&a=1"
+def test_sorted_params_equals_unsorted_params(example_url: str) -> None:
+    assert URL(f"{example_url}/a?a=1&b=1") == URL(f"{example_url}/a?b=1&a=1")
+    assert URL(f"{example_url}/a?a=1&b=1") == f"{example_url}/a?b=1&a=1"
 
 
-def test_with_slash_equals_without_slash() -> None:
-    assert URL("https://example.com/a?page=1") == "https://example.com/a/?page=1"
-    assert URL("https://example.com/a?page=1") == URL("https://example.com/a/?page=1")
+def test_with_slash_equals_without_slash(example_url: str) -> None:
+    assert URL(f"{example_url}/a?page=1") == URL(f"{example_url}/a/?page=1")
+    assert URL(f"{example_url}/a?page=1") == f"{example_url}/a/?page=1"

@@ -7,11 +7,11 @@ from search_crawl_client import (
 )
 
 
-@pytest.fixture(params=[None, 1, 3], ids=lambda x: f"[max search results={x}]")
-def max_results(request: pytest.FixtureRequest) -> int | None:
-    return request.param
-
-
+@pytest.mark.parametrize(
+    "max_results",
+    [None, 1, 3],
+    ids=lambda x: f"[max_results={x}]",
+)
 async def test_search(
     api: DefaultApi,
     max_results: int | None,
