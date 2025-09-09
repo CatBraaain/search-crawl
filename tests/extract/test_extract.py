@@ -1,3 +1,5 @@
+from datetime import UTC, datetime
+
 from pydantic import BaseModel
 
 from search_crawl_client import (
@@ -51,21 +53,49 @@ async def test_crawl_extract(api: DefaultApi):
     }
 
 
+class DatetimeModel(BaseModel):
+    """
+    Datetime information model
+    """
+
+    year: int
+    month: int
+    day: int
+    hour: int = 0
+    minute: int = 0
+    second: int = 0
+
+    class Config:
+        title = "utc datetime"
+
+    @property
+    def datetime(self):
+        return datetime(
+            year=self.year,
+            month=self.month,
+            day=self.day,
+            hour=self.hour,
+            minute=self.minute,
+            second=self.second,
+            tzinfo=UTC,
+        )
+
+
 async def test_search_crawl_extract(api: DefaultApi):
     res = await api.search_crawl_extract(
         SearchCrawlExtractRequest(
             search=SearchRequest(
-                q="China wikipedia",
-                max_results=1,
-                cache_config=CacheConfig(readable=False, writable=True),
+                q="What time is it now?",
+                max_results=5,
             ),
-            crawl=CrawlRequest(),
+            crawl=CrawlRequest(cache_config=CacheConfig(readable=False, writable=True)),
             extract=ExtractRequest(
                 model="gemini/gemini-2.0-flash-lite",
-                instruction=("How many populations are there in China?"),
-                json_schema=Country.model_json_schema(),
+                instruction=("What time is it now?"),
+                json_schema=DatetimeModel.model_json_schema(),
+                input_format="full_markdown",
             ),
         )
     )
-    country = Country.model_validate(res)
-    assert country.population > 1330044000
+    extracted_datetime = DatetimeModel.model_validate(res)
+    assert extracted_datetime.datetime > datetime(2025, 9, 1, tzinfo=UTC)
