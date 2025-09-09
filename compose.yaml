@@ -43,8 +43,6 @@ services:
     environment:
       - REDIS_URL=redis://redka:6379
       - SEARXNG_URL=http://searxng:8080
-    env_file:
-      - .env
     healthcheck:
       test: [
           "CMD",
