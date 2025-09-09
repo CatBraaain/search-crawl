@@ -28,7 +28,7 @@ router = APIRouter()
 @router.post("/search-crawl-extract")
 async def search_crawl_extract(
     req: SearchCrawlExtractRequest,
-) -> dict[str, Any]:
+) -> Any:  # noqa: ANN401
     search_results = await search(req.search)
     crawl_results = await crawl_many(
         CrawlRequestWithUrls(
@@ -42,7 +42,7 @@ async def search_crawl_extract(
 @router.post("/crawl-extract")
 async def crawl_extract(
     req: CrawlExtractRequest,
-) -> dict[str, Any]:
+) -> Any:  # noqa: ANN401
     crawl_result = await crawl(req.crawl)
     return await extract_from_crawled_content(req.extract, crawl_result)
 
@@ -50,7 +50,7 @@ async def crawl_extract(
 async def extract_from_crawled_content(
     extract_request: ExtractRequest,
     crawled_content: CrawledContent,
-) -> dict[str, Any]:
+) -> Any:  # noqa: ANN401
     response = cast(
         ModelResponse,
         await acompletion(

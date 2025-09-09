@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import StrictStr
-from typing import Any, Dict, List
+from typing import Any, List
 from search_crawl_client.models.crawl_extract_request import CrawlExtractRequest
 from search_crawl_client.models.crawl_request_with_url import CrawlRequestWithUrl
 from search_crawl_client.models.crawl_request_with_urls import CrawlRequestWithUrls
@@ -335,7 +335,7 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Dict[str, object]:
+    ) -> object:
         """Crawl Extract
 
 
@@ -372,7 +372,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -402,7 +402,7 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Dict[str, object]]:
+    ) -> ApiResponse[object]:
         """Crawl Extract
 
 
@@ -439,7 +439,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -506,7 +506,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1669,7 +1669,7 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Dict[str, object]:
+    ) -> object:
         """Search Crawl Extract
 
 
@@ -1706,7 +1706,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1736,7 +1736,7 @@ class DefaultApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Dict[str, object]]:
+    ) -> ApiResponse[object]:
         """Search Crawl Extract
 
 
@@ -1773,7 +1773,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
@@ -1840,7 +1840,7 @@ class DefaultApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, object]",
+            '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = await self.api_client.call_api(
