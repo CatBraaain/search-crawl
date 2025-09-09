@@ -16,6 +16,8 @@ CrawledContent = list[list[ScrapeResult]] | list[ScrapeResult]
 
 class ExtractRequest(BaseModel):
     model: str
+    api_key: str
+    base_url: str | None = None
     instruction: str
     json_schema: dict[str, Any]
     input_format: InputFormat = "content_markdown"

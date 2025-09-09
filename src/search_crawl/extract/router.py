@@ -57,6 +57,8 @@ async def extract_from_crawled_content(
             ModelResponse,
             await acompletion(
                 model=extract_request.model,
+                api_key=extract_request.api_key,
+                base_url=extract_request.base_url,
                 messages=extract_request.make_prompt(crawled_content),
                 response_format=extract_request.make_response_format(),
             ),

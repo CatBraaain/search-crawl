@@ -81,14 +81,6 @@ cd search-crawl
 docker compose up -d
 ```
 
-## Requirements for Extract API
-
-To use the **Extract API** (`/crawl-extract` and `/search-crawl-extract`), you need to provide API keys for the LLM models.
-
-1. Create a `.env` file in the project root.
-2. Define your API key(s) following [litellm’s provider documentation](https://docs.litellm.ai/docs/providers).
-   The variable names and model names must be exactly the same as described there.
-
 ## Quick Example
 ```bash
 # Linux / macOS
@@ -159,7 +151,9 @@ A **"Hello, World!" program** is usually a simple [computer program](/wiki/Compu
 ### search_crawl_extract:
 ```python
 import asyncio
+import os
 
+import dotenv
 from pydantic import BaseModel, Field
 
 from search_crawl_client import (
@@ -172,6 +166,8 @@ from search_crawl_client import (
     SearchCrawlExtractRequest,
     SearchRequest,
 )
+
+dotenv.load_dotenv()
 
 
 class Population(BaseModel):
@@ -193,6 +189,7 @@ async def main() -> None:
                 crawl=CrawlRequest(crawl_config=CrawlConfig(max_pages=1)),
                 extract=ExtractRequest(
                     model="gemini/gemini-2.0-flash-lite",
+                    api_key=os.environ["GEMINI_API_KEY"],
                     instruction="how many people live in the world",
                     json_schema=Population.model_json_schema(),
                     input_format="full_markdown",

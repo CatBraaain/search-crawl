@@ -29,7 +29,7 @@ class Country(BaseModel):
         title = "Country"
 
 
-async def test_crawl_extract(api: DefaultApi):
+async def test_crawl_extract(api: DefaultApi, api_key: str):
     res = await api.crawl_extract(
         CrawlExtractRequest(
             crawl=CrawlRequestWithUrl(
@@ -38,6 +38,7 @@ async def test_crawl_extract(api: DefaultApi):
             ),
             extract=ExtractRequest(
                 model="gemini/gemini-2.0-flash-lite",
+                api_key=api_key,
                 instruction="which one has the biggest population",
                 json_schema=Country.model_json_schema(),
                 input_format="full_markdown",
@@ -81,7 +82,7 @@ class DatetimeModel(BaseModel):
         )
 
 
-async def test_search_crawl_extract(api: DefaultApi):
+async def test_search_crawl_extract(api: DefaultApi, api_key: str):
     res = await api.search_crawl_extract(
         SearchCrawlExtractRequest(
             search=SearchRequest(
@@ -91,6 +92,7 @@ async def test_search_crawl_extract(api: DefaultApi):
             crawl=CrawlRequest(cache_config=CacheConfig(readable=False, writable=True)),
             extract=ExtractRequest(
                 model="gemini/gemini-2.0-flash-lite",
+                api_key=api_key,
                 instruction="What time is it now?",
                 json_schema=DatetimeModel.model_json_schema(),
                 input_format="full_markdown",

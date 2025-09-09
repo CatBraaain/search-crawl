@@ -27,10 +27,12 @@ class ExtractRequest(BaseModel):
     ExtractRequest
     """ # noqa: E501
     model: StrictStr
+    api_key: StrictStr
+    base_url: Optional[StrictStr] = None
     instruction: StrictStr
     json_schema: Dict[str, Any]
     input_format: Optional[StrictStr] = 'content_markdown'
-    __properties: ClassVar[List[str]] = ["model", "instruction", "json_schema", "input_format"]
+    __properties: ClassVar[List[str]] = ["model", "api_key", "base_url", "instruction", "json_schema", "input_format"]
 
     @field_validator('input_format')
     def input_format_validate_enum(cls, value):
@@ -81,6 +83,11 @@ class ExtractRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if base_url (nullable) is None
+        # and model_fields_set contains the field
+        if self.base_url is None and "base_url" in self.model_fields_set:
+            _dict['base_url'] = None
+
         return _dict
 
     @classmethod
@@ -94,6 +101,8 @@ class ExtractRequest(BaseModel):
 
         _obj = cls.model_validate({
             "model": obj.get("model"),
+            "api_key": obj.get("api_key"),
+            "base_url": obj.get("base_url"),
             "instruction": obj.get("instruction"),
             "json_schema": obj.get("json_schema"),
             "input_format": obj.get("input_format") if obj.get("input_format") is not None else 'content_markdown'

@@ -20,6 +20,7 @@ dev = [
     "pytest>=8.4.1",
     "pytest-asyncio>=1.0.0",
     "types-lxml>=2025.3.30",
+    "dotenv>=0.9.9",
 ]
 
 [tool.uv]
