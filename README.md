@@ -1,24 +1,28 @@
 # SearchCrawl
 
-A FastAPI project providing a search and crawl API.
-Simply provide a search query, and it automatically searches and crawls results for you.
+A FastAPI project providing a search and crawl API, with optional content extraction using LLMs.
+Simply provide a search query, and it automatically searches and crawls websites.
+If desired, you can also extract structured content from the crawled pages using your custom instructions with LLMs.
 
 
 ## Features
 
+- **Search, Crawl, and Extract in a Single Step**
+  Perform search queries, crawl resulting websites, and extract content using custom instructions with LLMs—all in one request.
+  You can specify the format for passing crawled results to the LLM.
+  By default, only the main content is extracted in Markdown, significantly reducing token usage.
+
 - **Undetected search**
-  Powered by [SearxNG](https://github.com/searxng/searxng) for stealthy, meta search.
+  Powered by [SearXNG](https://github.com/searxng/searxng) for stealthy, meta search.
 
 - **Undetected crawl**
-  Powered by [Patchright](https://github.com/CatBraaain/patchright) for stealthy web crawling.
+  Powered by [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) for stealthy web crawling, with support for JavaScript-rendered content.
 
-- **Pagination support**
-  Automatically follows pagination links and extracts multi-page content.
+- **Flexible crawl scope**
+  Follow pagination links, internal links, or all links based on configuration.
+  Supports multi-page crawling with configurable depth, page limits, and concurrency.
 
-- **Markdown-formatted summaries**
-  Extract main body text from HTML using [readability-python](https://github.com/buriy/python-readability) in Markdown format for LLM inputs.
-
-- **Built-in cache system**
+- **Cache system**
   Stores search and crawl results persistently with a 24-hour default TTL, preventing frequent requests from triggering IP bans. Cache settings are configurable.
 
 - **OpenAPI support**
@@ -77,6 +81,13 @@ cd search-crawl
 docker compose up -d
 ```
 
+## Requirements for Extract API
+
+To use the **Extract API** (`/crawl-extract` and `/search-crawl-extract`), you need to provide API keys for the LLM models.
+
+1. Create a `.env` file in the project root.
+2. Define your API key(s) following [litellm’s provider documentation](https://docs.litellm.ai/docs/providers).
+   The variable names and model names must be exactly the same as described there.
 
 ## Quick Example
 ```bash
@@ -93,7 +104,7 @@ uv init
 uv add git+https://github.com/CatBraaain/search-crawl.git#subdirectory=search_crawl_client
 ```
 
-Use the API:
+### search_crawl:
 ```python
 import asyncio
 
@@ -112,7 +123,7 @@ async def main() -> None:
     config = Configuration(host="http://localhost:8000")
     async with ApiClient(config) as client:
         api = DefaultApi(client)
-        result = (
+        res = (
             await api.search_crawl(
                 SearchCrawlRequest(
                     search=SearchRequest(q="hello world", max_results=1),
@@ -125,10 +136,10 @@ async def main() -> None:
             )
         )[0].crawl[0]
 
-        print("URL: " + result.url)
-        print("TITLE: " + result.title)
+        print("URL: " + res.url)
+        print("TITLE: " + res.title)
         print("MARKDOWN: ")
-        print(result.summary_md[:200] + "...")
+        print(res.summary_md[:200] + "...")
 
 
 asyncio.run(main())
@@ -144,6 +155,63 @@ Traditional first example of a computer programming language
 
 A **"Hello, World!" program** is usually a simple [computer program](/wiki/Computer_program "Computer program") that emits (or displays) t...
 ```
+
+### search_crawl_extract:
+```python
+import asyncio
+
+from pydantic import BaseModel, Field
+
+from search_crawl_client import (
+    ApiClient,
+    Configuration,
+    CrawlConfig,
+    CrawlRequest,
+    DefaultApi,
+    ExtractRequest,
+    SearchCrawlExtractRequest,
+    SearchRequest,
+)
+
+
+class Population(BaseModel):
+    population: int = Field(
+        description="The total number of people that live in the world"
+    )
+    source_url: str = Field(
+        description="The URL of the source where the population data is obtained"
+    )
+
+
+async def main() -> None:
+    config = Configuration(host="http://localhost:8000")
+    async with ApiClient(config) as client:
+        api = DefaultApi(client)
+        res = await api.search_crawl_extract(
+            SearchCrawlExtractRequest(
+                search=SearchRequest(q="world population", max_results=1),
+                crawl=CrawlRequest(crawl_config=CrawlConfig(max_pages=1)),
+                extract=ExtractRequest(
+                    model="gemini/gemini-2.0-flash-lite",
+                    instruction="how many people live in the world",
+                    json_schema=Population.model_json_schema(),
+                    input_format="full_markdown",
+                ),
+            )
+        )
+        population = Population.model_validate(res)
+        print(population)
+
+
+asyncio.run(main())
+
+```
+
+Output example:
+```
+population=8005176000 source_url='https://worldpopulationreview.com'
+```
+
 
 ## OpenAPI Document
 After starting the service, visit:
