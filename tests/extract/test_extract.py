@@ -91,7 +91,7 @@ async def test_search_crawl_extract(api: DefaultApi):
             crawl=CrawlRequest(cache_config=CacheConfig(readable=False, writable=True)),
             extract=ExtractRequest(
                 model="gemini/gemini-2.0-flash-lite",
-                instruction=("What time is it now?"),
+                instruction="What time is it now?",
                 json_schema=DatetimeModel.model_json_schema(),
                 input_format="full_markdown",
             ),
