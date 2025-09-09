@@ -58,7 +58,6 @@ class SearchRequest(BaseModel):
     def cache_key(self) -> str:
         return json.dumps(
             self.model_dump(exclude={"max_results", "cache_config"}),
-            separators=(",", "="),
             ensure_ascii=False,
         )
 
