@@ -43,7 +43,9 @@ class ExtractRequest(BaseModel):
                         "",
                         "Contents:",
                         "```json",
-                        json.dumps(self._make_content(crawled_content)),
+                        json.dumps(
+                            self._make_content(crawled_content), ensure_ascii=False
+                        ),
                         "```",
                     ]
                 ),

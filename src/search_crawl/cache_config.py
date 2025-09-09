@@ -33,7 +33,7 @@ class CacheConfig(BaseModel):
             else:
                 result = await func(*args, **kwargs)
                 if self.writable:
-                    r.set(cache_key, json.dumps(result), self.ttl)
+                    r.set(cache_key, json.dumps(result, ensure_ascii=False), self.ttl)
 
                 return result
 
