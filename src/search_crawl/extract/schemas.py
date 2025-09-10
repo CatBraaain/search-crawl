@@ -1,7 +1,7 @@
 import json
 from typing import Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from search_crawl.crawl.router import (
     CrawlRequest,
@@ -17,10 +17,11 @@ CrawledContent = list[list[ScrapeResult]] | list[ScrapeResult]
 class ExtractRequest(BaseModel):
     model: str
     api_key: str
-    base_url: str | None = None
     instruction: str
     json_schema: dict[str, Any]
     input_format: InputFormat = "content_markdown"
+
+    model_config = ConfigDict(extra="allow")
 
     def make_prompt(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
         return [

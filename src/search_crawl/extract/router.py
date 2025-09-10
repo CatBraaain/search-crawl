@@ -58,9 +58,9 @@ async def extract(
             await acompletion(
                 model=extract_request.model,
                 api_key=extract_request.api_key,
-                base_url=extract_request.base_url,
                 messages=extract_request.make_prompt(crawled_content),
                 response_format=extract_request.make_response_format(),
+                **(extract_request.model_extra or {}),
             ),
         )
         return json.loads(response["choices"][0]["message"].content)
