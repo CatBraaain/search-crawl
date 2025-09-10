@@ -37,7 +37,7 @@ async def search_crawl_extract(
             urls=[search_result.url for search_result in search_results],
         )
     )
-    return await extract_from_crawled_content(req.extract, crawl_results)
+    return await extract(req.extract, crawl_results)
 
 
 @router.post("/crawl-extract")
@@ -45,10 +45,10 @@ async def crawl_extract(
     req: CrawlExtractRequest,
 ) -> Any:  # noqa: ANN401
     crawl_result = await crawl(req.crawl)
-    return await extract_from_crawled_content(req.extract, crawl_result)
+    return await extract(req.extract, crawl_result)
 
 
-async def extract_from_crawled_content(
+async def extract(
     extract_request: ExtractRequest,
     crawled_content: CrawledContent,
 ) -> Any:  # noqa: ANN401
