@@ -1,7 +1,6 @@
 import pytest
 
 from search_crawl.crawl.utils import URL
-from tests.conftest import TestSite
 
 
 @pytest.fixture
