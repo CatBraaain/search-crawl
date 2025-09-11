@@ -95,6 +95,7 @@ class Readable(Document):
         self.raw_html = raw_html
         self.markitdown = MarkItDown()
 
+    @property
     def md(self) -> str:
         try:
             return str(
@@ -106,17 +107,19 @@ class Readable(Document):
         except Exception:
             return ""
 
+    @property
     def summary_html(self) -> str:
         try:
             return super().summary()
         except Exception:
             return ""
 
+    @property
     def summary_md(self) -> str:
         try:
             return str(
                 self.markitdown.convert_stream(
-                    io.BytesIO(self.summary_html().encode("utf-8")),
+                    io.BytesIO(self.summary_html.encode("utf-8")),
                     stream_info=StreamInfo(mimetype="text/html", charset="utf-8"),
                 )
             )

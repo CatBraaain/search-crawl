@@ -66,7 +66,6 @@ async def extract(
         )
         return json.loads(response["choices"][0]["message"].content)
     except Exception as e:
-        if isinstance(e, APIError):
-            code = getattr(e, "status_code", 500)
-            raise HTTPException(status_code=code, detail=str(e)) from e
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        code = getattr(e, "status_code", None) or 500
+        detail = repr(e)
+        raise HTTPException(status_code=code, detail=detail) from e

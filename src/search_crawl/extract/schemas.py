@@ -49,7 +49,7 @@ class ExtractRequest(BaseModel):
                         "Contents:",
                         "```json",
                         json.dumps(
-                            self._make_content(crawled_content), ensure_ascii=False
+                            self._make_contents(crawled_content), ensure_ascii=False
                         ),
                         "```",
                     ]
@@ -57,7 +57,7 @@ class ExtractRequest(BaseModel):
             },
         ]
 
-    def _make_content(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
+    def _make_contents(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
         scrape_results: list[ScrapeResult] = [
             scrape_result
             for e in crawled_content
