@@ -88,125 +88,34 @@ curl http://localhost:8000/search --json "{\"q\":\"hello world\"}"
 ```
 
 ## Full Example
-Install the client:
+
+### 1. Install the client
+First, install the Python client:
 ```bash
 uv init
 uv add git+https://github.com/CatBraaain/search-crawl.git#subdirectory=search_crawl_client
 ```
 
-### search_crawl:
-```python
-import asyncio
+### 2. Explore the examples
+After installing the client, you can check out the [examples](examples) directory for ready-to-run sample scripts:
 
-from search_crawl_client import (
-    ApiClient,
-    Configuration,
-    CrawlConfig,
-    CrawlRequest,
-    DefaultApi,
-    SearchCrawlRequest,
-    SearchRequest,
-)
+examples/search_crawl.py - Search + Crawl example
+examples/search_crawl_extract.py - Search + Crawl + LLM Extract example
 
-
-async def main() -> None:
-    config = Configuration(host="http://localhost:8000")
-    async with ApiClient(config) as client:
-        api = DefaultApi(client)
-        res = (
-            await api.search_crawl(
-                SearchCrawlRequest(
-                    search=SearchRequest(q="hello world", max_results=1),
-                    crawl=CrawlRequest(
-                        crawl_config=CrawlConfig(
-                            concurrently=2,
-                        )
-                    ),
-                )
-            )
-        )[0].crawl[0]
-
-        print("URL: " + res.url)
-        print("TITLE: " + res.title)
-        print("MARKDOWN: ")
-        print(res.summary_md[:200] + "...")
-
-
-asyncio.run(main())
-
+### 3. Run a sample
+For instance, to run the basic search and crawl example:
+```bash
+uv run examples/search_crawl.py
 ```
 
-Output example:
-```text
+Expected output:
+```bash
 URL: https://en.wikipedia.org/wiki/%22Hello,_World!%22_program
 TITLE: "Hello, World!" program - Wikipedia
 MARKDOWN:
 Traditional first example of a computer programming language
-
 A **"Hello, World!" program** is usually a simple [computer program](/wiki/Computer_program "Computer program") that emits (or displays) t...
 ```
-
-### search_crawl_extract:
-```python
-import asyncio
-import os
-
-import dotenv
-from pydantic import BaseModel, Field
-
-from search_crawl_client import (
-    ApiClient,
-    Configuration,
-    CrawlConfig,
-    CrawlRequest,
-    DefaultApi,
-    ExtractRequest,
-    SearchCrawlExtractRequest,
-    SearchRequest,
-)
-
-dotenv.load_dotenv()
-
-
-class Population(BaseModel):
-    population: int = Field(
-        description="The total number of people that live in the world"
-    )
-    source_url: str = Field(
-        description="The URL of the source where the population data is obtained"
-    )
-
-
-async def main() -> None:
-    config = Configuration(host="http://localhost:8000")
-    async with ApiClient(config) as client:
-        api = DefaultApi(client)
-        res = await api.search_crawl_extract(
-            SearchCrawlExtractRequest(
-                search=SearchRequest(q="world population", max_results=1),
-                crawl=CrawlRequest(crawl_config=CrawlConfig(max_pages=1)),
-                extract=ExtractRequest(
-                    model="gemini/gemini-2.0-flash-lite",
-                    api_key=os.environ["GEMINI_API_KEY"],
-                    instruction="how many people live in the world",
-                    json_schema=Population.model_json_schema(),
-                    input_format="full_markdown",
-                ),
-            )
-        )
-        population = Population.model_validate(res)
-        print(population)
-
-
-asyncio.run(main())
-
-```
-
-Output example:
-```
-population=8005176000 source_url='https://worldpopulationreview.com'
-```
-
 
 ## OpenAPI Document
 After starting the service, visit:
