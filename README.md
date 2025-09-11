@@ -37,15 +37,13 @@ If desired, you can also extract structured content from the crawled pages using
 
 ### Search API
 - `/search`: Search for websites by query.
+- `/search-crawl`: Combine search and crawl functionality.
+- `/search-crawl-extract`: Search, crawl, and extract structured data in one step.
 
 ### Crawl API
 - `/crawl`: Crawl a website using a crawl request.
 - `/crawl-many`: Crawl multiple websites concurrently using a crawl many request.
-- `/search-crawl`: Combine search and crawl functionality.
-
-### Extract API
-- `/crawl-extract` – Crawl and immediately extract structured data.
-- `/search-crawl-extract` – Search, crawl, and extract structured data in one step.
+- `/crawl-extract`: Crawl and immediately extract structured data.
 
 ## Getting Started
 
