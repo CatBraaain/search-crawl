@@ -1,7 +1,5 @@
 import asyncio
-import os
 
-import dotenv
 from pydantic import BaseModel, Field
 
 from search_crawl_client import (
@@ -14,8 +12,6 @@ from search_crawl_client import (
     SearchCrawlExtractRequest,
     SearchRequest,
 )
-
-dotenv.load_dotenv()
 
 
 class Population(BaseModel):
@@ -36,8 +32,6 @@ async def main() -> None:
                 search=SearchRequest(q="world population", max_results=1),
                 crawl=CrawlRequest(crawl_config=CrawlConfig(max_pages=1)),
                 extract=ExtractRequest(
-                    model="gemini/gemini-2.0-flash-lite",
-                    api_key=os.environ["GEMINI_API_KEY"],
                     instruction="how many people live in the world",
                     json_schema=Population.model_json_schema(),
                     input_format="full_markdown",

@@ -1,7 +1,6 @@
 from collections.abc import AsyncGenerator
 from enum import StrEnum
 
-import dotenv
 import pytest
 
 from search_crawl_client import (
@@ -17,15 +16,6 @@ async def api() -> AsyncGenerator[DefaultApi]:
     config = Configuration(host="http://localhost:8000")
     async with ApiClient(config) as client:
         yield DefaultApi(client)
-
-
-@pytest.fixture
-async def api_key() -> str:
-    api_key = dotenv.get_key(".env", "GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY is not set")
-
-    return api_key
 
 
 @pytest.fixture(

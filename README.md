@@ -47,63 +47,67 @@ If desired, you can also extract structured content from the crawled pages using
 
 ## Getting Started
 
-You can start the service in two ways:
-using **Docker Compose Remote Include** (recommended for quick setup),
-or the **traditional clone method**.
-
-### Option 1: Remote Include (Recommended)
-
-Create a `compose.yaml` in your project:
+### 1: Prepare compose.yaml
+Create a `compose.yaml` in your project. Remote include requires Docker Compose >= v2.21.0:
 ```yaml
 # compose.yaml
 include:
   - https://github.com/CatBraaain/search-crawl.git
 ```
 
+<details><summary>Alternative: Traditional way or older Docker Compose</summary>
+
+```bash
+git clone https://github.com/CatBraaain/search-crawl
+cd search-crawl
+```
+</details>
+
+### 2: Prepare .env
+Set environment variables for extract function:
+```dotenv
+# .env
+LLM_MODEL="xxxxxxxxxx"
+LLM_API_KEY="xxxxxxxxxx"
+```
+The model name should follow the [LiteLLM documentation](https://docs.litellm.ai/docs/providers)
+Examples: "openai/gpt-5", "gemini/gemini-2.5-pro", "anthropic/claude-4", "deepseek/deepseek-chat"
+
+### 3: Run Server
 Run the service:
 ```bash
 docker compose up --wait
 ```
 
-If your Docker Compose version is older than v2.34.0, enable experimental mode:
+<details><summary>If Docker Compose version < v2.34.0</summary>
+
 ```bash
 SET COMPOSE_EXPERIMENTAL_GIT_REMOTE=True
 docker compose up --wait
 ```
+</details>
 
-### Option 2: Traditional Way
-Clone the repository and run it manually:
-```bash
-git clone https://github.com/CatBraaain/search-crawl
-cd search-crawl
-docker compose up -d
-```
+## Test the API
 
-## Quick Example
+### Request via curl
 ```bash
+docker compose up --wait
 # Linux / macOS
 curl http://localhost:8000/search --json '{"q":"hello world"}'
 # Windows (PowerShell)
 curl http://localhost:8000/search --json "{\"q\":\"hello world\"}"
 ```
 
-## Full Example
-
-### 1. Install the client
-First, install the Python client:
+### Request via Python SDK
+Install the Python client:
 ```bash
 uv init
 uv add git+https://github.com/CatBraaain/search-crawl.git#subdirectory=search_crawl_client
 ```
 
-### 2. Explore the examples
-After installing the client, you can check out the [examples](examples) directory for ready-to-run sample scripts:
+Run examples from the [examples](examples) directory
 
-examples/search_crawl.py - Search + Crawl example
-examples/search_crawl_extract.py - Search + Crawl + LLM Extract example
-
-### 3. Run a sample
-For instance, to run the basic search and crawl example:
+#### Search + Crawl:
 ```bash
 uv run examples/search_crawl.py
 ```
@@ -115,6 +119,16 @@ TITLE: "Hello, World!" program - Wikipedia
 MARKDOWN:
 Traditional first example of a computer programming language
 A **"Hello, World!" program** is usually a simple [computer program](/wiki/Computer_program "Computer program") that emits (or displays) t...
+```
+
+#### Search + Crawl + Extract:
+```bash
+uv run examples/search_crawl_extract.py
+```
+
+Expected output:
+```bash
+population=8005176000 source_url='https://worldpopulationreview.com'
 ```
 
 ## OpenAPI Document

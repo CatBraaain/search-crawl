@@ -26,13 +26,13 @@ class ExtractRequest(BaseModel):
     """
     ExtractRequest
     """ # noqa: E501
-    model: StrictStr
-    api_key: StrictStr
+    model: Optional[StrictStr] = None
+    api_key: Optional[StrictStr] = None
+    base_url: Optional[StrictStr] = None
     instruction: StrictStr
     json_schema: Dict[str, Any]
     input_format: Optional[StrictStr] = 'content_markdown'
-    additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["model", "api_key", "instruction", "json_schema", "input_format"]
+    __properties: ClassVar[List[str]] = ["model", "api_key", "base_url", "instruction", "json_schema", "input_format"]
 
     @field_validator('input_format')
     def input_format_validate_enum(cls, value):
@@ -74,10 +74,8 @@ class ExtractRequest(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
-        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
-            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -85,10 +83,20 @@ class ExtractRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
+        # set to None if model (nullable) is None
+        # and model_fields_set contains the field
+        if self.model is None and "model" in self.model_fields_set:
+            _dict['model'] = None
+
+        # set to None if api_key (nullable) is None
+        # and model_fields_set contains the field
+        if self.api_key is None and "api_key" in self.model_fields_set:
+            _dict['api_key'] = None
+
+        # set to None if base_url (nullable) is None
+        # and model_fields_set contains the field
+        if self.base_url is None and "base_url" in self.model_fields_set:
+            _dict['base_url'] = None
 
         return _dict
 
@@ -104,15 +112,11 @@ class ExtractRequest(BaseModel):
         _obj = cls.model_validate({
             "model": obj.get("model"),
             "api_key": obj.get("api_key"),
+            "base_url": obj.get("base_url"),
             "instruction": obj.get("instruction"),
             "json_schema": obj.get("json_schema"),
             "input_format": obj.get("input_format") if obj.get("input_format") is not None else 'content_markdown'
         })
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
-
         return _obj
 
 

@@ -1,10 +1,10 @@
 import json
+import os
 from typing import Any, cast
 
 import litellm
 from fastapi import APIRouter, HTTPException
 from litellm import ModelResponse, acompletion
-from litellm.exceptions import APIError
 
 from search_crawl.crawl.router import (
     CrawlRequestWithUrls,
@@ -56,8 +56,9 @@ async def extract(
         response = cast(
             ModelResponse,
             await acompletion(
-                model=extract_request.model,
-                api_key=extract_request.api_key,
+                model=extract_request.model or os.environ.get("LLM_MODEL") or "",
+                api_key=extract_request.api_key or os.environ.get("LLM_API_KEY"),
+                base_url=extract_request.base_url or os.environ.get("LLM_BASE_URL"),
                 messages=extract_request.make_prompt(crawled_content),
                 response_format=extract_request.make_response_format(),
                 **(extract_request.model_extra or {}),

@@ -43,6 +43,9 @@ services:
     environment:
       - REDIS_URL=redis://redka:6379
       - SEARXNG_URL=http://searxng:8080
+      - LLM_MODEL
+      - LLM_API_KEY
+      - LLM_BASE_URL
     healthcheck:
       test: [
           "CMD",

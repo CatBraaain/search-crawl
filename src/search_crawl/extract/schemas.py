@@ -1,7 +1,7 @@
 import json
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
 from search_crawl.crawl.router import (
     CrawlRequest,
@@ -15,13 +15,15 @@ CrawledContent = list[list[ScrapeResult]] | list[ScrapeResult]
 
 
 class ExtractRequest(BaseModel):
-    model: str
-    api_key: str
+    model: str | None = None
+    api_key: str | None = None
+    base_url: str | None = None
     instruction: str
     json_schema: dict[str, Any]
     input_format: InputFormat = "content_markdown"
 
-    model_config = ConfigDict(extra="allow")
+    # openapi-generator not supporting this option with optional fields
+    # model_config = ConfigDict(extra="allow")
 
     def make_prompt(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
         return [
