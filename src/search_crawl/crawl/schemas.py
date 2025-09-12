@@ -15,11 +15,19 @@ class CrawlScope(StrEnum):
     ALL = auto()
 
 
+class OutputFormat(StrEnum):
+    FULL_MARKDOWN = auto()
+    MAIN_MARKDOWN = auto()
+    FULL_HTML = auto()
+    MAIN_HTML = auto()
+
+
 class CrawlConfig(BaseModel):
     crawl_scope: CrawlScope = CrawlScope.PAGINATION
     max_depth: int | None = 1
     max_pages: int | None = None
     concurrently: int = 2
+    output_format: OutputFormat = OutputFormat.MAIN_MARKDOWN
 
 
 class CrawlRequest(BaseModel):
@@ -41,10 +49,7 @@ class ScrapeResult(BaseModel):
     title: str
     short_title: str
     author: str
-    html: str
-    markdown: str
-    summary_html: str
-    summary_md: str
+    content: str
     links: list[str]
     internal_links: list[str]
     pagination_links: list[str]

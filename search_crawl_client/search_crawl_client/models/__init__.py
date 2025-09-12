@@ -25,6 +25,7 @@ from search_crawl_client.models.engine_preset_key import EnginePresetKey
 from search_crawl_client.models.engines import Engines
 from search_crawl_client.models.extract_request import ExtractRequest
 from search_crawl_client.models.http_validation_error import HTTPValidationError
+from search_crawl_client.models.output_format import OutputFormat
 from search_crawl_client.models.scrape_result import ScrapeResult
 from search_crawl_client.models.search_crawl_extract_request import SearchCrawlExtractRequest
 from search_crawl_client.models.search_crawl_request import SearchCrawlRequest

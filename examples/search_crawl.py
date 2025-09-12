@@ -31,7 +31,7 @@ async def main() -> None:
         print("URL: " + res.url)
         print("TITLE: " + res.title)
         print("MARKDOWN: ")
-        print(res.summary_md[:200] + "...")
+        print(res.content[:200] + "...")
 
 
 asyncio.run(main())

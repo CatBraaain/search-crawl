@@ -9,6 +9,7 @@ from search_crawl_client import (
     CrawlRequest,
     DefaultApi,
     ExtractRequest,
+    OutputFormat,
     SearchCrawlExtractRequest,
     SearchRequest,
 )
@@ -30,11 +31,15 @@ async def main() -> None:
         res = await api.search_crawl_extract(
             SearchCrawlExtractRequest(
                 search=SearchRequest(q="world population", max_results=1),
-                crawl=CrawlRequest(crawl_config=CrawlConfig(max_pages=1)),
+                crawl=CrawlRequest(
+                    crawl_config=CrawlConfig(
+                        max_pages=1,
+                        output_format=OutputFormat.FULL_MARKDOWN,
+                    )
+                ),
                 extract=ExtractRequest(
                     instruction="how many people live in the world",
                     json_schema=Population.model_json_schema(),
-                    input_format="full_markdown",
                 ),
             )
         )

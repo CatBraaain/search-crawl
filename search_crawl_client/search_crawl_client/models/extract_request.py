@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -31,18 +31,7 @@ class ExtractRequest(BaseModel):
     base_url: Optional[StrictStr] = None
     instruction: StrictStr
     json_schema: Dict[str, Any]
-    input_format: Optional[StrictStr] = 'content_markdown'
-    __properties: ClassVar[List[str]] = ["model", "api_key", "base_url", "instruction", "json_schema", "input_format"]
-
-    @field_validator('input_format')
-    def input_format_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(['content_markdown', 'full_markdown', 'content_html', 'full_html']):
-            raise ValueError("must be one of enum values ('content_markdown', 'full_markdown', 'content_html', 'full_html')")
-        return value
+    __properties: ClassVar[List[str]] = ["model", "api_key", "base_url", "instruction", "json_schema"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -114,8 +103,7 @@ class ExtractRequest(BaseModel):
             "api_key": obj.get("api_key"),
             "base_url": obj.get("base_url"),
             "instruction": obj.get("instruction"),
-            "json_schema": obj.get("json_schema"),
-            "input_format": obj.get("input_format") if obj.get("input_format") is not None else 'content_markdown'
+            "json_schema": obj.get("json_schema")
         })
         return _obj
 

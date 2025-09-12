@@ -4,7 +4,7 @@ from patchright.async_api import Browser, Error as PlaywrightError
 
 from search_crawl.cache_config import CacheConfig
 
-from .schemas import CrawlConfig, CrawlScope, ScrapeResult
+from .schemas import CrawlConfig, CrawlScope, OutputFormat, ScrapeResult
 from .utils import URL, Navigation, Readable
 
 
@@ -33,7 +33,9 @@ class Crawler:
             visited.append(URL(_url))
 
             async with sem:
-                result = await self.scrape(_url, cache_config)
+                result = await self.scrape(
+                    _url, crawl_config.output_format, cache_config
+                )
                 results.append(result)
 
             should_scrape_more = (
@@ -62,7 +64,10 @@ class Crawler:
         return results
 
     async def scrape(
-        self, requested_url: str, cache_config: CacheConfig
+        self,
+        requested_url: str,
+        output_format: OutputFormat,
+        cache_config: CacheConfig,
     ) -> ScrapeResult:
         scrape_with_cache = cache_config.wrap_with_cache(
             cache_key=f"scrape:{requested_url}",
@@ -74,16 +79,25 @@ class Crawler:
         readable = Readable(raw_html)
         navigation = Navigation(raw_html, url)
 
+        match output_format:
+            case OutputFormat.FULL_HTML:
+                content = readable.raw_html
+            case OutputFormat.FULL_MARKDOWN:
+                content = readable.md
+            case OutputFormat.MAIN_HTML:
+                content = readable.summary_html
+            case OutputFormat.MAIN_MARKDOWN:
+                content = readable.summary_md
+            case _:
+                raise ValueError(f"Invalid output format: {output_format}")
+
         return ScrapeResult(
             requested_url=requested_url,
             url=url.normalized,
             title=readable.title(),
             short_title=readable.short_title(),
             author=readable.author(),
-            html=readable.raw_html,
-            markdown=readable.md,
-            summary_html=readable.summary_html,
-            summary_md=readable.summary_md,
+            content=content,
             links=navigation.links,
             internal_links=navigation.internal_links,
             pagination_links=navigation.pagination_links,

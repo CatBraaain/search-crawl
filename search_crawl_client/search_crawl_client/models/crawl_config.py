@@ -20,6 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List, Optional
 from search_crawl_client.models.crawl_scope import CrawlScope
+from search_crawl_client.models.output_format import OutputFormat
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -31,7 +32,8 @@ class CrawlConfig(BaseModel):
     max_depth: Optional[StrictInt] = None
     max_pages: Optional[StrictInt] = None
     concurrently: Optional[StrictInt] = 2
-    __properties: ClassVar[List[str]] = ["crawl_scope", "max_depth", "max_pages", "concurrently"]
+    output_format: Optional[OutputFormat] = None
+    __properties: ClassVar[List[str]] = ["crawl_scope", "max_depth", "max_pages", "concurrently", "output_format"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -97,7 +99,8 @@ class CrawlConfig(BaseModel):
             "crawl_scope": obj.get("crawl_scope"),
             "max_depth": obj.get("max_depth"),
             "max_pages": obj.get("max_pages"),
-            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2
+            "concurrently": obj.get("concurrently") if obj.get("concurrently") is not None else 2,
+            "output_format": obj.get("output_format")
         })
         return _obj
 

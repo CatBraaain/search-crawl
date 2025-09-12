@@ -4,11 +4,13 @@ from pydantic import BaseModel
 
 from search_crawl_client import (
     CacheConfig,
+    CrawlConfig,
     CrawlExtractRequest,
     CrawlRequest,
     CrawlRequestWithUrl,
     DefaultApi,
     ExtractRequest,
+    OutputFormat,
     SearchCrawlExtractRequest,
     SearchRequest,
 )
@@ -34,12 +36,12 @@ async def test_crawl_extract(api: DefaultApi):
         CrawlExtractRequest(
             crawl=CrawlRequestWithUrl(
                 url="https://www.scrapethissite.com/pages/simple/",
+                crawl_config=CrawlConfig(output_format=OutputFormat.FULL_MARKDOWN),
                 cache_config=CacheConfig(readable=False, writable=True),
             ),
             extract=ExtractRequest(
                 instruction="which one has the biggest population",
                 json_schema=Country.model_json_schema(),
-                input_format="full_markdown",
             ),
         )
     )
@@ -87,11 +89,13 @@ async def test_search_crawl_extract(api: DefaultApi):
                 q="What time is it now?",
                 max_results=5,
             ),
-            crawl=CrawlRequest(cache_config=CacheConfig(readable=False, writable=True)),
+            crawl=CrawlRequest(
+                crawl_config=CrawlConfig(output_format=OutputFormat.FULL_MARKDOWN),
+                cache_config=CacheConfig(readable=False, writable=True),
+            ),
             extract=ExtractRequest(
                 instruction="What time is it now?",
                 json_schema=DatetimeModel.model_json_schema(),
-                input_format="full_markdown",
             ),
         )
     )

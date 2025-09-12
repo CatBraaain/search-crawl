@@ -1,5 +1,5 @@
 import json
-from typing import Any, Literal
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -10,7 +10,6 @@ from search_crawl.crawl.router import (
 )
 from search_crawl.search.router import SearchRequest
 
-InputFormat = Literal["content_markdown", "full_markdown", "content_html", "full_html"]
 CrawledContent = list[list[ScrapeResult]] | list[ScrapeResult]
 
 
@@ -20,7 +19,6 @@ class ExtractRequest(BaseModel):
     base_url: str | None = None
     instruction: str
     json_schema: dict[str, Any]
-    input_format: InputFormat = "content_markdown"
 
     # openapi-generator not supporting this option with optional fields
     # model_config = ConfigDict(extra="allow")
@@ -58,27 +56,11 @@ class ExtractRequest(BaseModel):
         ]
 
     def _make_contents(self, crawled_content: CrawledContent) -> list[dict[str, str]]:
-        scrape_results: list[ScrapeResult] = [
-            scrape_result
+        return [
+            scrape_result.model_dump(include={"url", "title", "content"})
             for e in crawled_content
             for scrape_result in (e if isinstance(e, list) else [e])
         ]
-        return [self._format_scrape_result(sr) for sr in scrape_results]
-
-    def _format_scrape_result(self, scrape_result: ScrapeResult) -> dict[str, str]:
-        match self.input_format:
-            case "content_markdown":
-                return scrape_result.model_dump(include={"url", "title", "summary_md"})
-            case "full_markdown":
-                return scrape_result.model_dump(include={"url", "title", "markdown"})
-            case "content_html":
-                return scrape_result.model_dump(
-                    include={"url", "title", "summary_html"}
-                )
-            case "full_html":
-                return scrape_result.model_dump(include={"url", "title", "html"})
-            case _:
-                raise ValueError(f"Invalid input_format: {self.input_format}")
 
     def make_response_format(self) -> dict[str, Any]:
         return {
