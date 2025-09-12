@@ -27,7 +27,7 @@ class CrawlConfig(BaseModel):
     max_depth: int | None = 1
     max_pages: int | None = None
     concurrently: int = 2
-    output_format: OutputFormat = OutputFormat.MAIN_MARKDOWN
+    output_format: OutputFormat = OutputFormat.FULL_MARKDOWN
 
 
 class CrawlRequest(BaseModel):

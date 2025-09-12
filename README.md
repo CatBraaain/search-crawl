@@ -10,7 +10,7 @@ If desired, you can also extract structured content from the crawled pages using
 - **Search, Crawl, and Extract in a Single Step**
   Perform search queries, crawl resulting websites, and extract content using custom instructions with LLMs—all in one request.
   You can specify the format for passing crawled results to the LLM.
-  By default, only the main content is extracted in Markdown, significantly reducing token usage.
+  By default, the entire page content is provided in Markdown format.
 
 - **Undetected search**
   Powered by [SearXNG](https://github.com/searxng/searxng) for stealthy, meta search.
