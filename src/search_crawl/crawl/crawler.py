@@ -10,41 +10,46 @@ from .utils import URL, Navigation, Readable
 
 class Crawler:
     browser: Browser
+    crawl_config: CrawlConfig
+    cache_config: CacheConfig
 
-    def __init__(self, browser: Browser) -> None:
+    def __init__(
+        self,
+        browser: Browser,
+        crawl_config: CrawlConfig,
+        cache_config: CacheConfig,
+    ) -> None:
         self.browser = browser
+        self.crawl_config = crawl_config
+        self.cache_config = cache_config
 
     async def crawl(
         self,
         requested_url: str,
         sem: asyncio.Semaphore,
-        crawl_config: CrawlConfig,
-        cache_config: CacheConfig,
     ) -> list[ScrapeResult]:
         visited: list[URL] = []
         results: list[ScrapeResult] = []
 
         async def _crawl(_url: str, current_depth: int = 0) -> None:
+            max_pages = self.crawl_config.max_pages
             should_scrape_this = _url not in visited and (
-                crawl_config.max_pages is None or len(visited) < crawl_config.max_pages
+                max_pages is None or len(visited) < max_pages
             )
             if not should_scrape_this:
                 return
             visited.append(URL(_url))
 
             async with sem:
-                result = await self.scrape(
-                    _url, crawl_config.output_format, cache_config
-                )
+                result = await self.scrape(_url)
                 results.append(result)
 
-            should_scrape_more = (
-                crawl_config.max_depth is None or current_depth < crawl_config.max_depth
-            )
+            max_depth = self.crawl_config.max_depth
+            should_scrape_more = max_depth is None or current_depth < max_depth
             if not should_scrape_more:
                 return
 
-            match crawl_config.crawl_scope:
+            match self.crawl_config.crawl_scope:
                 case CrawlScope.PAGINATION:
                     target_links = result.pagination_links
                 case CrawlScope.INTERNAL:
@@ -52,7 +57,9 @@ class Crawler:
                 case CrawlScope.ALL:
                     target_links = result.links
                 case _:
-                    raise ValueError(f"Invalid CrawlScope: {crawl_config.crawl_scope}")
+                    raise ValueError(
+                        f"Invalid CrawlScope: {self.crawl_config.crawl_scope}"
+                    )
             await asyncio.gather(
                 *[
                     _crawl(pagination_link, current_depth + 1)
@@ -66,10 +73,8 @@ class Crawler:
     async def scrape(
         self,
         requested_url: str,
-        output_format: OutputFormat,
-        cache_config: CacheConfig,
     ) -> ScrapeResult:
-        scrape_with_cache = cache_config.wrap_with_cache(
+        scrape_with_cache = self.cache_config.wrap_with_cache(
             cache_key=f"scrape:{requested_url}",
             func=self.scrape_raw,
         )
@@ -79,6 +84,7 @@ class Crawler:
         readable = Readable(raw_html)
         navigation = Navigation(raw_html, url)
 
+        output_format = self.crawl_config.output_format
         match output_format:
             case OutputFormat.FULL_HTML:
                 content = readable.raw_html

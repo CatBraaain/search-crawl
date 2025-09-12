@@ -3,7 +3,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
-from patchright.async_api import async_playwright
+from patchright.async_api import Browser, async_playwright
 
 from search_crawl.search.router import search
 
@@ -20,15 +20,14 @@ from .schemas import (
 router = APIRouter()
 
 
-crawler: Crawler
+browser: Browser
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:  # noqa: ARG001
-    global crawler  # noqa: PLW0603
+    global browser  # noqa: PLW0603
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        crawler = Crawler(browser)
         yield
 
 
@@ -40,7 +39,11 @@ async def crawl(
     req: CrawlRequestWithUrl,
 ) -> list[ScrapeResult]:
     sem = asyncio.Semaphore(req.crawl_config.concurrently)
-    return await crawler.crawl(req.url, sem, req.crawl_config, req.cache_config)
+    return await Crawler(
+        browser,
+        req.crawl_config,
+        req.cache_config,
+    ).crawl(req.url, sem)
 
 
 @router.post("/crawl-many")
@@ -50,7 +53,11 @@ async def crawl_many(
     sem = asyncio.Semaphore(req.crawl_config.concurrently)
     return await asyncio.gather(
         *(
-            crawler.crawl(url, sem, req.crawl_config, req.cache_config)
+            Crawler(
+                browser,
+                req.crawl_config,
+                req.cache_config,
+            ).crawl(url, sem)
             for url in req.urls
         )
     )
