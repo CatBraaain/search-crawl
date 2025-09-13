@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from search_crawl_client import (
     CacheConfig,
@@ -27,8 +27,7 @@ class Country(BaseModel):
     population: int
     area: float
 
-    class Config:
-        title = "Country"
+    model_config = ConfigDict(title="Country")
 
 
 async def test_crawl_extract(api: DefaultApi):
@@ -66,11 +65,10 @@ class DatetimeModel(BaseModel):
     minute: int = 0
     second: int = 0
 
-    class Config:
-        title = "utc datetime"
+    model_config = ConfigDict(title="utc datetime")
 
     @property
-    def datetime(self):
+    def datetime(self) -> datetime:
         return datetime(
             year=self.year,
             month=self.month,

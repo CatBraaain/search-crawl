@@ -11,13 +11,13 @@ from search_crawl_client import (
     SearchCrawlRequest,
     SearchRequest,
 )
-from tests.conftest import TestSite
+from tests.conftest import SiteEnum
 
 
 async def test_crawl(api: DefaultApi, cache_config: CacheConfig):
     res = await api.crawl(
         CrawlRequestWithUrl(
-            url=TestSite.EXAMPLE,
+            url=SiteEnum.EXAMPLE,
             cache_config=cache_config,
         )
     )
@@ -28,8 +28,8 @@ async def test_crawl_many(api: DefaultApi, cache_config: CacheConfig):
     crawl_results = await api.crawl_many(
         CrawlRequestWithUrls(
             urls=[
-                TestSite.EXAMPLE,
-                TestSite.PRODUCTS,
+                SiteEnum.EXAMPLE,
+                SiteEnum.PRODUCTS,
             ],
             crawl_config=CrawlConfig(crawl_scope=CrawlScope.PAGINATION),
             cache_config=cache_config,

@@ -29,7 +29,7 @@ def cache_config(request: pytest.FixtureRequest):
     return request.param
 
 
-class TestSite(StrEnum):
+class SiteEnum(StrEnum):
     EXAMPLE = "https://example.com/"
     QUOTES = "https://quotes.toscrape.com/"
     COUNTRY = "https://www.scrapethissite.com/pages/simple/"

@@ -7,15 +7,15 @@ from search_crawl_client import (
     CrawlScope,
     DefaultApi,
 )
-from tests.conftest import TestSite
+from tests.conftest import SiteEnum
 
 
 @pytest.mark.parametrize(
     ("url", "max_depth", "expected_page_length"),
     [
-        (TestSite.QUOTES, 1, 2),
-        (TestSite.QUOTES, 3, 4),
-        (TestSite.QUOTES, None, 10),
+        (SiteEnum.QUOTES, 1, 2),
+        (SiteEnum.QUOTES, 3, 4),
+        (SiteEnum.QUOTES, None, 10),
     ],
 )
 async def test_crawl_max_depth(
@@ -40,9 +40,9 @@ async def test_crawl_max_depth(
 @pytest.mark.parametrize(
     ("url", "max_pages", "expected_page_length"),
     [
-        (TestSite.QUOTES, 1, 1),
-        (TestSite.QUOTES, 3, 3),
-        (TestSite.QUOTES, None, 10),
+        (SiteEnum.QUOTES, 1, 1),
+        (SiteEnum.QUOTES, 3, 3),
+        (SiteEnum.QUOTES, None, 10),
     ],
 )
 async def test_crawl_max_pages(
@@ -68,14 +68,14 @@ async def test_crawl_max_pages(
 @pytest.mark.parametrize(
     ("url", "scope", "expected_page_length"),
     [
-        (TestSite.EXAMPLE, CrawlScope.PAGINATION, 1),
-        (TestSite.EXAMPLE, CrawlScope.INTERNAL, 1),
-        (TestSite.EXAMPLE, CrawlScope.ALL, 2),
-        (TestSite.COUNTRY, CrawlScope.PAGINATION, 1),
-        (TestSite.COUNTRY, CrawlScope.INTERNAL, 6),
-        (TestSite.COUNTRY, CrawlScope.ALL, 7),
-        (TestSite.PRODUCTS, CrawlScope.PAGINATION, 5),
-        (TestSite.HOCKEY, CrawlScope.PAGINATION, 6),
+        (SiteEnum.EXAMPLE, CrawlScope.PAGINATION, 1),
+        (SiteEnum.EXAMPLE, CrawlScope.INTERNAL, 1),
+        (SiteEnum.EXAMPLE, CrawlScope.ALL, 2),
+        (SiteEnum.COUNTRY, CrawlScope.PAGINATION, 1),
+        (SiteEnum.COUNTRY, CrawlScope.INTERNAL, 6),
+        (SiteEnum.COUNTRY, CrawlScope.ALL, 7),
+        (SiteEnum.PRODUCTS, CrawlScope.PAGINATION, 5),
+        (SiteEnum.HOCKEY, CrawlScope.PAGINATION, 6),
     ],
 )
 async def test_crawl_scope(
