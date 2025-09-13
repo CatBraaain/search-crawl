@@ -14,3 +14,13 @@ gen:
 
 _gen openapi_path package_name:
   uv run openapi-generator-cli generate -i {{openapi_path}} -g python --library asyncio -o ./{{package_name}} --package-name {{package_name}}
+
+test:
+  just run
+  just gen
+  uv run pytest
+
+lint:
+  uv run ruff format --check
+  uv run ruff check
+  uv run pyright

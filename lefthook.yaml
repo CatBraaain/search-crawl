@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: ruff
+      glob: "*.{py,pyi}"
+      run: |
+        uv run ruff format --check {staged_files}
+        uv run ruff check {staged_files}
+    - name: pyright
+      glob: "*.{py,pyi}"
+      run: uv run pyright {staged_files}
+    - name: uv-lock
+      glob: "*{uv.lock,pyproject.toml,uv.toml}"
+      run: uv lock --check
