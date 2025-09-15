@@ -5,8 +5,8 @@ _:
 
 run:
   docker compose up --build --wait
-  # curl http://localhost:8000/search/general --json '{"q":"hello world"}' -s -o /dev/null  # warm-up request
-  curl http://localhost:8000/search/general --json "{\"q\": \"ping\"}" -s -o nul  # warm-up request
+  # curl http://localhost:8000/search --json '{"q":"hello world"}' -s -o /dev/null  # warm-up request
+  curl http://localhost:8000/search --json "{\"q\": \"ping\"}" -s -o nul  # warm-up request
 
 gen:
   just _gen "http://localhost:8000/openapi.json" "search_crawl_client"
