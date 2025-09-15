@@ -20,7 +20,9 @@ test:
   just gen
   uv run pytest
 
-lint:
+alias q := qa
+qa:
+  uv lock --check
   uv run ruff format --check
   uv run ruff check
   uv run pyright
