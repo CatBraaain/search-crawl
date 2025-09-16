@@ -1,0 +1,16 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6.5
+        with:
+          enable-cache: true
+      - uses: extractions/setup-just@v3
+      - run: just ci
