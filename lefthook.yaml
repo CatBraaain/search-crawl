@@ -1,9 +1,9 @@
 pre-commit:
   parallel: true
   jobs:
-    - name: uv-lock
+    - name: uv
       glob: "*{uv.lock,pyproject.toml,uv.toml}"
-      run: uv lock --check
+      run: uv sync --locked --no-progress
     - name: ruff
       glob: "*.{py,pyi}"
       run: |
