@@ -16,6 +16,7 @@ gen:
 
 _gen openapi_path package_name:
   uv run openapi-generator-cli generate -i {{openapi_path}} -g python --library asyncio -o ./{{package_name}} --package-name {{package_name}}
+  rm -rf {{package_name}}/test
 
 [parallel]
 ci: lint test

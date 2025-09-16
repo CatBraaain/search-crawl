@@ -1,5 +1,7 @@
 from datetime import UTC, datetime
 
+import dotenv
+import pytest
 from pydantic import BaseModel, ConfigDict
 
 from search_crawl_client import (
@@ -13,6 +15,11 @@ from search_crawl_client import (
     OutputFormat,
     SearchCrawlExtractRequest,
     SearchRequest,
+)
+
+pytestmark = pytest.mark.skipif(
+    dotenv.get_key(".env", "LLM_API_KEY") is None,
+    reason="LLM_API_KEY not set",
 )
 
 
